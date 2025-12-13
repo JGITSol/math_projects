@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circuit Equations & Bode Plots | Applied Mathematics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-dark: #115e59;
+            --surface: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --input-bg: #ffffff;
+            --grid-line: #e2e8f0;
+            --grid-bg: #f8fafc;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --primary: #2dd4bf;
+            --primary-light: #5eead4;
+            --primary-dark: #14b8a6;
+            --surface: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --input-bg: #1e293b;
+            --grid-line: #334155;
+            --grid-bg: #0f172a;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--surface);
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-light);
+        }
+
+        button:active {
+            background-color: var(--primary-dark);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            margin-bottom: 16px;
+        }
+
+        .info-section {
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .info-section h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        .info-section p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            margin: 8px 0;
+            overflow-x: auto;
+        }
+
+        .dual-chart {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .chart-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .comparison-item {
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .comparison-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: var(--surface);
+            color: var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 8px;
+        }
+
+        .engineering-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border: 2px solid var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .engineering-box h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .engineering-box p {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .value-display {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-dark);
+        }
+
+        .circuit-schematic {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        canvas.schematic {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .parameter-box {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 8px 0;
+            font-size: 0.85rem;
+            border-left: 3px solid var(--primary-light);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px;">
+                <button id="themeToggle" onclick="app.toggleTheme()"
+                    style="width: auto; padding: 8px; background: transparent; color: var(--text-main); border: 1px solid var(--border);">
+                    <i data-lucide="moon" size="16"></i>
+                </button>
+                <select id="langSelect" onchange="app.setLang(this.value)" style="width: auto; padding: 6px 12px;">
+                    <option value="en">English</option>
+                    <option value="pl">Polski</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ua">Українська</option>
+                    <option value="be">Беларуская</option>
+                </select>
+            </div>
+            <h1 data-i18n="title">⚡ Circuit Equations & Bode Plots</h1>
+            <p class="subtitle" data-i18n="subtitle">RLC circuits, transfer functions, resonance, and frequency response
+                analysis</p>
+        </header>
+
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card">
+                <div class="card-header">⚙️ Configuration</div>
+
+                <!-- Circuit Topology -->
+                <div class="form-group">
+                    <label for="topology">Circuit Topology</label>
+                    <select id="topology">
+                        <option value="series">Series RLC</option>
+                        <option value="parallel">Parallel RLC</option>
+                        <option value="rl">RL Only (1st Order)</option>
+                        <option value="rc">RC Only (1st Order)</option>
+                    </select>
+                </div>
+
+                <!-- Input Signal Type -->
+                <div class="form-group">
+                    <label for="inputType">Input Signal</label>
+                    <select id="inputType">
+                        <option value="step">Step Input</option>
+                        <option value="impulse">Impulse Input</option>
+                        <option value="sine">Sinusoid (Sweep)</option>
+                    </select>
+                </div>
+
+                <!-- Resistance -->
+                <div class="form-group">
+                    <label>Resistance R (Ω): <span id="valR">10</span></label>
+                    <input type="range" id="sliderR" min="1" max="100" step="1" value="10">
+                </div>
+
+                <!-- Inductance -->
+                <div class="form-group" id="groupL">
+                    <label>Inductance L (H): <span id="valL">0.1</span></label>
+                    <input type="range" id="sliderL" min="0.01" max="1" step="0.01" value="0.1">
+                </div>
+
+                <!-- Capacitance -->
+                <div class="form-group" id="groupC">
+                    <label>Capacitance C (F): <span id="valC">0.001</span></label>
+                    <input type="range" id="sliderC" min="0.0001" max="0.01" step="0.0001" value="0.001">
+                </div>
+
+                <!-- Voltage Input -->
+                <div class="form-group">
+                    <label>Input Voltage (V): <span id="valVin">10</span></label>
+                    <input type="range" id="sliderVin" min="1" max="50" step="1" value="10">
+                </div>
+
+                <!-- Analysis Type -->
+                <div class="form-group">
+                    <label for="analysis">Analysis Type</label>
+                    <select id="analysis">
+                        <option value="transient">Time-Domain Response</option>
+                        <option value="frequency">Frequency Response (Bode)</option>
+                    </select>
+                </div>
+
+                <button id="btnSimulate" data-i18n="simulateBtn">Simulate & Analyze</button>
+
+                <div class="badge" data-i18n="badgeTF">Transfer Function</div>
+                <div class="badge" data-i18n="badgeBode">Bode Plot</div>
+                <div class="badge" data-i18n="badgeResonance">Resonance</div>
+            </div>
+
+            <!-- Visualization & Analysis -->
+            <div>
+                <!-- Circuit Schematic -->
+                <div class="card">
+                    <div class="card-header">🔌 Circuit Topology</div>
+                    <div class="circuit-schematic">
+                        <canvas id="schematicCanvas" class="schematic"></canvas>
+                    </div>
+                </div>
+
+                <!-- Bode Plot & Transient Response -->
+                <div class="card">
+                    <div class="card-header">📊 Frequency Response (Bode Plot)</div>
+                    <div class="dual-chart">
+                        <div>
+                            <div class="chart-label">Magnitude (dB)</div>
+                            <div class="chart-container">
+                                <canvas id="magnitudeChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="chart-label">Phase (degrees)</div>
+                            <div class="chart-container">
+                                <canvas id="phaseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time-Domain Response -->
+                <div class="card">
+                    <div class="card-header">⏱️ Time-Domain Response</div>
+                    <div class="chart-container">
+                        <canvas id="transientChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Transfer Function & Equations -->
+                <div class="card">
+                    <div class="card-header">📐 Transfer Function & Differential Equations</div>
+                    <div id="tfDisplay"></div>
+                    <div class="info-section">
+                        <h3>Governing Differential Equation</h3>
+                        <p id="deDisplay"></p>
+                    </div>
+                    <div id="resonanceSection" class="info-section">
+                        <h3>Resonance Properties</h3>
+                        <div id="resonanceDisplay"></div>
+                    </div>
+                </div>
+
+                <!-- Engineering Application -->
+                <div class="card">
+                    <div class="card-header">⚡ Real-World Impact</div>
+                    <div id="engineeringApp" class="engineering-box"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "⚡ Circuit Equations & Bode Plots",
+                subtitle: "RLC circuits, transfer functions, resonance, and frequency response analysis",
+                config: "⚙️ Configuration",
+                topology: "Circuit Topology",
+                inputSignal: "Input Signal",
+                resistance: "Resistance R (Ω)",
+                inductance: "Inductance L (H)",
+                capacitance: "Capacitance C (F)",
+                inputVoltage: "Input Voltage (V)",
+                analysisType: "Analysis Type",
+                simulateBtn: "Simulate & Analyze",
+                badgeTF: "Transfer Function",
+                badgeBode: "Bode Plot",
+                badgeResonance: "Resonance",
+
+                circuitDiagram: "🔌 Circuit Topology",
+                freqResponse: "📊 Frequency Response (Bode Plot)",
+                magLabel: "Magnitude (dB)",
+                phaseLabel: "Phase (degrees)",
+                timeResponse: "⏱️ Time-Domain Response",
+                tfTitle: "📐 Transfer Function & Equations",
+                governingEq: "Governing Differential Equation",
+                resonanceProps: "Resonance Properties",
+                realWorld: "⚡ Real-World Impact",
+
+                // Selects
+                series: "Series RLC",
+                parallel: "Parallel RLC",
+                rl: "RL Only (1st Order)",
+                rc: "RC Only (1st Order)",
+                step: "Step Input",
+                impulse: "Impulse Input",
+                sine: "Sinusoid (Sweep)",
+                transient: "Time-Domain Response",
+                frequency: "Frequency Response (Bode)",
+
+                // Contexts
+                truss: "Truss Joint Analysis",
+                beam: "Beam Support Reactions",
+                pulley: "Pulley & Cable Systems",
+                landing: "Landing Gear Impact Forces"
+            },
+            pl: {
+                title: "⚡ Równania Obwodów i Wykresy Bodego",
+                subtitle: "Obwody RLC, transmitancje, rezonans i analiza częstotliwościowa",
+                config: "⚙️ Konfiguracja",
+                topology: "Topologia Obwodu",
+                inputSignal: "Sygnał Wejściowy",
+                resistance: "Rezystancja R (Ω)",
+                inductance: "Indukcyjność L (H)",
+                capacitance: "Pojemność C (F)",
+                inputVoltage: "Napięcie Wejściowe (V)",
+                analysisType: "Typ Analizy",
+                simulateBtn: "Symuluj i Analizuj",
+                badgeTF: "Transmitancja",
+                badgeBode: "Wykres Bodego",
+                badgeResonance: "Rezonans",
+                circuitDiagram: "🔌 Schemat Obwodu",
+                freqResponse: "📊 Odpowiedź Częstotliwościowa",
+                magLabel: "Amplituda (dB)",
+                phaseLabel: "Faza (stopnie)",
+                timeResponse: "⏱️ Odpowiedź Czasowa",
+                tfTitle: "📐 Transmitancja i Równania",
+                governingEq: "Równanie Różniczkowe",
+                resonanceProps: "Właściwości Rezonansowe",
+                realWorld: "⚡ Zastosowanie Praktyczne",
+                series: "Szeregowy RLC",
+                parallel: "Równoległy RLC",
+                rl: "Tylko RL (1. rzędu)",
+                rc: "Tylko RC (1. rzędu)",
+                step: "Skok Jednostkowy",
+                impulse: "Impuls Diraca",
+                sine: "Sinusoida",
+                transient: "Analiza Czasowa",
+                frequency: "Analiza Częstotliwościowa"
+            },
+            fr: {
+                title: "⚡ Équations de Circuit & Diagrammes de Bode",
+                subtitle: "Circuits RLC, fonctions de transfert, résonance et réponse fréquentielle",
+                config: "⚙️ Configuration",
+                topology: "Topologie du Circuit",
+                inputSignal: "Signal d'Entrée",
+                resistance: "Résistance R (Ω)",
+                inductance: "Inductance L (H)",
+                capacitance: "Capacité C (F)",
+                inputVoltage: "Tension d'Entrée (V)",
+                analysisType: "Type d'Analyse",
+                simulateBtn: "Simuler & Analyser",
+                badgeTF: "Fonction de Transfert",
+                badgeBode: "Diagramme de Bode",
+                badgeResonance: "Résonance",
+                circuitDiagram: "🔌 Schéma du Circuit",
+                freqResponse: "📊 Réponse Fréquentielle",
+                magLabel: "Magnitude (dB)",
+                phaseLabel: "Phase (degrés)",
+                timeResponse: "⏱️ Réponse Temporelle",
+                tfTitle: "📐 Fonction de Transfert",
+                governingEq: "Équation Différentielle",
+                resonanceProps: "Propriétés de Résonance",
+                realWorld: "⚡ Impact Réel",
+                series: "RLC Série",
+                parallel: "RLC Parallèle",
+                rl: "RL Seul (1er Ordre)",
+                rc: "RC Seul (1er Ordre)",
+                step: "Échelon",
+                impulse: "Impulsion",
+                sine: "Sinusoïde",
+                transient: "Réponse Temporelle",
+                frequency: "Réponse Fréquentielle"
+            },
+            es: {
+                title: "⚡ Ecuaciones de Circuito y Diagramas de Bode",
+                subtitle: "Circuitos RLC, funciones de transferencia, resonancia y análisis de respuesta en frecuencia",
+                config: "⚙️ Configuración",
+                topology: "Topología del Circuito",
+                inputSignal: "Señal de Entrada",
+                resistance: "Resistencia R (Ω)",
+                inductance: "Inductancia L (H)",
+                capacitance: "Capacitancia C (F)",
+                inputVoltage: "Voltaje de Entrada (V)",
+                analysisType: "Tipo de Análisis",
+                simulateBtn: "Simular y Analizar",
+                badgeTF: "Función de Transferencia",
+                badgeBode: "Diagrama de Bode",
+                badgeResonance: "Resonancia",
+                circuitDiagram: "🔌 Esquema del Circuito",
+                freqResponse: "📊 Respuesta en Frecuencia",
+                magLabel: "Magnitud (dB)",
+                phaseLabel: "Fase (grados)",
+                timeResponse: "⏱️ Respuesta Temporal",
+                tfTitle: "📐 Función de Transferencia",
+                governingEq: "Ecuación Diferencial",
+                resonanceProps: "Propiedades de Resonancia",
+                realWorld: "⚡ Impacto en el Mundo Real",
+                series: "RLC Serie",
+                parallel: "RLC Paralelo",
+                rl: "Solo RL (1er Orden)",
+                rc: "Solo RC (1er Orden)",
+                step: "Entrada Escalón",
+                impulse: "Entrada Impulso",
+                sine: "Sinusoide",
+                transient: "Respuesta Temporal",
+                frequency: "Respuesta en Frecuencia"
+            },
+            pt: {
+                title: "⚡ Equações de Circuito e Diagramas de Bode",
+                subtitle: "Circuitos RLC, funções de transferência, ressonância e análise de resposta em frequência",
+                config: "⚙️ Configuração",
+                topology: "Topologia do Circuito",
+                inputSignal: "Sinal de Entrada",
+                resistance: "Resistência R (Ω)",
+                inductance: "Indutância L (H)",
+                capacitance: "Capacitância C (F)",
+                inputVoltage: "Tensão de Entrada (V)",
+                analysisType: "Tipo de Análise",
+                simulateBtn: "Simular e Analisar",
+                badgeTF: "Função de Transferência",
+                badgeBode: "Diagrama de Bode",
+                badgeResonance: "Ressonância",
+                circuitDiagram: "🔌 Esquema do Circuito",
+                freqResponse: "📊 Resposta em Frequência",
+                magLabel: "Magnitude (dB)",
+                phaseLabel: "Fase (graus)",
+                timeResponse: "⏱️ Resposta Temporal",
+                tfTitle: "📐 Função de Transferência",
+                governingEq: "Equação Diferencial",
+                resonanceProps: "Propriedades de Ressonância",
+                realWorld: "⚡ Impacto no Mundo Real",
+                series: "RLC Série",
+                parallel: "RLC Paralelo",
+                rl: "Apenas RL (1ª Ordem)",
+                rc: "Apenas RC (1ª Ordem)",
+                step: "Degrau",
+                impulse: "Impulso",
+                sine: "Senóide",
+                transient: "Resposta Temporal",
+                frequency: "Resposta em Frequência"
+            },
+            de: {
+                title: "⚡ Schaltungsgleichungen & Bode-Diagramme",
+                subtitle: "RLC-Schaltungen, Übertragungsfunktionen, Resonanz und Frequenzgangsanalyse",
+                config: "⚙️ Konfiguration",
+                topology: "Schaltungstopologie",
+                inputSignal: "Eingangssignal",
+                resistance: "Widerstand R (Ω)",
+                inductance: "Induktivität L (H)",
+                capacitance: "Kapazität C (F)",
+                inputVoltage: "Eingangsspannung (V)",
+                analysisType: "Analysetyp",
+                simulateBtn: "Simulieren & Analysieren",
+                badgeTF: "Übertragungsfunktion",
+                badgeBode: "Bode-Diagramm",
+                badgeResonance: "Resonanz",
+                circuitDiagram: "🔌 Schaltplan",
+                freqResponse: "📊 Frequenzgang",
+                magLabel: "Betrag (dB)",
+                phaseLabel: "Phase (Grad)",
+                timeResponse: "⏱️ Zeitbereichsantwort",
+                tfTitle: "📐 Übertragungsfunktion",
+                governingEq: "Differentialgleichung",
+                resonanceProps: "Resonanzeigenschaften",
+                realWorld: "⚡ Reale Anwendungen",
+                series: "RLC Serie",
+                parallel: "RLC Parallel",
+                rl: "Nur RL (1. Ordnung)",
+                rc: "Nur RC (1. Ordnung)",
+                step: "Sprungfunktion",
+                impulse: "Impuls",
+                sine: "Sinus",
+                transient: "Zeitbereich",
+                frequency: "Frequenzgang"
+            },
+            ua: {
+                title: "⚡ Рівняння Кіл та Діаграми Боде",
+                subtitle: "RLC кола, передавальні функції, резонанс та частотний аналіз",
+                config: "⚙️ Конфігурація",
+                topology: "Топологія Кола",
+                inputSignal: "Вхідний Сигнал",
+                resistance: "Опір R (Ом)",
+                inductance: "Індуктивність L (Гн)",
+                capacitance: "Ємність C (Ф)",
+                inputVoltage: "Вхідна Напруга (В)",
+                analysisType: "Тип Аналізу",
+                simulateBtn: "Симулювати та Аналізувати",
+                badgeTF: "Передавальна Функція",
+                badgeBode: "Діаграма Боде",
+                badgeResonance: "Резонанс",
+                circuitDiagram: "🔌 Схема Кола",
+                freqResponse: "📊 Частотна Характеристика",
+                magLabel: "Амплітуда (дБ)",
+                phaseLabel: "Фаза (градуси)",
+                timeResponse: "⏱️ Часова Характеристика",
+                tfTitle: "📐 Передавальна Функція",
+                governingEq: "Диференціальне Рівняння",
+                resonanceProps: "Резонансні Властивості",
+                realWorld: "⚡ Практичне Застосування",
+                series: "Послідовне RLC",
+                parallel: "Паралельне RLC",
+                rl: "Тільки RL",
+                rc: "Тільки RC",
+                step: "Сходинка",
+                impulse: "Імпульс",
+                sine: "Синусоїда",
+                transient: "Часовий Аналіз",
+                frequency: "Частотний Аналіз"
+            },
+            be: {
+                title: "⚡ Ракнанні Ланцугоў і Дыяграмы Бодэ",
+                subtitle: "RLC ланцугі, перадаткавыя функцыі, рэзананс і частотны аналіз",
+                config: "⚙️ Канфігурацыя",
+                topology: "Тапалогія Ланцуга",
+                inputSignal: "Уваходны Сігнал",
+                resistance: "Супраціўленне R (Ом)",
+                inductance: "Індуктыўнасць L (Гн)",
+                capacitance: "Ёмістасць C (Ф)",
+                inputVoltage: "Уваходнае Напружанне (В)",
+                analysisType: "Тып Аналізу",
+                simulateBtn: "Сімуляваць і Аналізаваць",
+                badgeTF: "Перадаткавая Функцыя",
+                badgeBode: "Дыяграма Бодэ",
+                badgeResonance: "Рэзананс",
+                circuitDiagram: "🔌 Схема Ланцуга",
+                freqResponse: "📊 Частотная Характарыстыка",
+                magLabel: "Амплітуда (дБ)",
+                phaseLabel: "Фаза (градусы)",
+                timeResponse: "⏱️ Часавая Характарыстыка",
+                tfTitle: "📐 Перадаткавая Функцыя",
+                governingEq: "Дыферэнцыяльнае Раўнанне",
+                resonanceProps: "Рэзанансныя Ўласцівасці",
+                realWorld: "⚡ Практычнае Ужыванне",
+                series: "Паслядоўнае RLC",
+                parallel: "Паралельнае RLC",
+                rl: "Толькі RL",
+                rc: "Толькі RC",
+                step: "Прыступка",
+                impulse: "Імпульс",
+                sine: "Сінусоіда",
+                transient: "Часавы Аналіз",
+                frequency: "Частотны Аналіз"
+            }
+        };
+
+        const app = {
+            magChart: null,
+            phaseChart: null,
+            transientChart: null,
+            schematicCtx: null,
+            state: {
+                topology: 'series',
+                inputType: 'step',
+                R: 10,
+                L: 0.1,
+                C: 0.001,
+                Vin: 10,
+                analysis: 'transient'
+            },
+            lang: 'en',
+            theme: 'light',
+
+            // Calculate transfer function parameters
+            getTransferFunction: () => {
+                const R = app.state.R;
+                const L = app.state.L;
+                const C = app.state.C;
+                const topology = app.state.topology;
+
+                let tf = {};
+
+                if (topology === 'series') {
+                    // Series RLC: H(s) = 1 / (LCs^2 + RCs + 1)
+                    tf.b = [1];
+                    tf.a = [L * C, R * C, 1];
+                    tf.wn = Math.sqrt(1 / (L * C)); // Natural frequency
+                    tf.zeta = (R * C) / (2 * Math.sqrt(L / C)); // Damping ratio
+                    tf.wd = tf.wn * Math.sqrt(Math.max(0, 1 - tf.zeta * tf.zeta)); // Damped frequency
+                } else if (topology === 'parallel') {
+                    // Parallel RLC: H(s) = R / (1 + RCs + LRs + LCs^2) simplified
+                    tf.b = [1];
+                    tf.a = [L * C, R * C, 1];
+                    tf.wn = Math.sqrt(1 / (L * C));
+                    tf.zeta = (R * C) / (2 * Math.sqrt(L / C));
+                    tf.wd = tf.wn * Math.sqrt(Math.max(0, 1 - tf.zeta * tf.zeta));
+                } else if (topology === 'rl') {
+                    // RL: H(s) = 1 / (Ls + R)
+                    tf.b = [1];
+                    tf.a = [L, R];
+                    tf.wn = R / L;
+                    tf.zeta = 1;
+                    tf.wd = 0;
+                } else if (topology === 'rc') {
+                    // RC: H(s) = 1 / (RCs + 1)
+                    tf.b = [1];
+                    tf.a = [R * C, 1];
+                    tf.wn = 1 / (R * C);
+                    tf.zeta = 1;
+                    tf.wd = 0;
+                }
+
+                return tf;
+            },
+
+            // Evaluate transfer function at complex frequency s = jw
+            evaluateTF: (tf, w) => {
+                const s = { real: 0, imag: w };
+                let num_real = tf.b[0];
+                let num_imag = 0;
+                let den_real = tf.a[0] * s.real * s.real - tf.a[0] * s.imag * s.imag;
+                let den_imag = 2 * tf.a[0] * s.real * s.imag;
+
+                for (let i = 1; i < tf.a.length; i++) {
+                    den_real += tf.a[i] * s.real;
+                    den_imag += tf.a[i] * s.imag;
+                }
+
+                // Complex division: num / den
+                const den_mag_sq = den_real * den_real + den_imag * den_imag;
+                const real = (num_real * den_real + num_imag * den_imag) / den_mag_sq;
+                const imag = (num_imag * den_real - num_real * den_imag) / den_mag_sq;
+
+                const magnitude = Math.sqrt(real * real + imag * imag);
+                const phase = Math.atan2(imag, real) * 180 / Math.PI;
+
+                return { magnitude, phase };
+            },
+
+            // Generate time-domain response
+            generateTransientResponse: () => {
+                const tf = app.getTransferFunction();
+                const t_end = 1;
+                const dt = 0.001;
+                const t_points = Math.ceil(t_end / dt);
+                const response = [];
+                const time = [];
+
+                const K = tf.b[0] / tf.a[tf.a.length - 1];
+
+                for (let i = 0; i < t_points; i++) {
+                    const t = i * dt;
+                    time.push(t);
+
+                    let y = K * app.state.Vin;
+                    const zeta = tf.zeta;
+
+                    if (zeta > 1) {
+                        // Overdamped
+                        const r1 = -tf.wn * (zeta - Math.sqrt(zeta * zeta - 1));
+                        const r2 = -tf.wn * (zeta + Math.sqrt(zeta * zeta - 1));
+                        y *= (1 + (r2 * Math.exp(r1 * t) - r1 * Math.exp(r2 * t)) / (r1 - r2));
+                    } else if (zeta === 1) {
+                        // Critically damped
+                        y *= (1 - Math.exp(-tf.wn * t) * (1 + tf.wn * t));
+                    } else {
+                        // Underdamped
+                        const decay = Math.exp(-zeta * tf.wn * t);
+                        const phase = Math.atan2(tf.wd, zeta * tf.wn);
+                        y *= (1 - decay * Math.cos(tf.wd * t - phase) / Math.cos(phase));
+                    }
+
+                    response.push(y);
+                }
+
+                return { time, response };
+            },
+
+            init: () => {
+                app.schematicCtx = document.getElementById('schematicCanvas').getContext('2d');
+
+                document.getElementById('topology').addEventListener('change', (e) => {
+                    app.state.topology = e.target.value;
+                    app.updateFormDisplay();
+                    app.update();
+                });
+
+                document.getElementById('inputType').addEventListener('change', (e) => {
+                    app.state.inputType = e.target.value;
+                    app.update();
+                });
+
+                document.getElementById('analysis').addEventListener('change', (e) => {
+                    app.state.analysis = e.target.value;
+                    app.update();
+                });
+
+                document.getElementById('sliderR').addEventListener('input', (e) => {
+                    app.state.R = parseFloat(e.target.value);
+                    document.getElementById('valR').textContent = app.state.R.toFixed(1);
+                    app.update();
+                });
+
+                document.getElementById('sliderL').addEventListener('input', (e) => {
+                    app.state.L = parseFloat(e.target.value);
+                    document.getElementById('valL').textContent = app.state.L.toFixed(3);
+                    app.update();
+                });
+
+                document.getElementById('sliderC').addEventListener('input', (e) => {
+                    app.state.C = parseFloat(e.target.value);
+                    document.getElementById('valC').textContent = app.state.C.toFixed(5);
+                    app.update();
+                });
+
+                document.getElementById('sliderVin').addEventListener('input', (e) => {
+                    app.state.Vin = parseFloat(e.target.value);
+                    document.getElementById('valVin').textContent = app.state.Vin.toFixed(1);
+                    app.update();
+                });
+
+                // Initialize Theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                app.setTheme(savedTheme);
+
+                // Initialize Lang
+                const savedLang = localStorage.getItem('lang') || 'en';
+                document.getElementById('langSelect').value = savedLang;
+                app.setLang(savedLang);
+
+                app.updateFormDisplay();
+                app.initCharts();
+                app.update();
+                lucide.createIcons();
+            },
+
+            setTheme: (t) => {
+                app.theme = t;
+                document.documentElement.setAttribute('data-theme', t);
+                localStorage.setItem('theme', t);
+                const icon = t === 'dark' ? 'sun' : 'moon';
+                const el = document.getElementById('themeToggle');
+                if (el) {
+                    el.innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
+                    if (window.lucide) lucide.createIcons();
+                }
+                app.update(); // Re-render charts
+            },
+
+            setLang: (l) => {
+                app.lang = l;
+                localStorage.setItem('lang', l);
+                app.updateTranslations();
+                app.update();
+            },
+
+            updateTranslations: () => {
+                const t = translations[app.lang];
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerHTML = t[key];
+                });
+            },
+
+            updateFormDisplay: () => {
+                const t = app.state.topology;
+                const showL = t === 'series' || t === 'parallel' || t === 'rl';
+                const showC = t === 'series' || t === 'parallel' || t === 'rc';
+                document.getElementById('groupL').classList.toggle('hidden', !showL);
+                document.getElementById('groupC').classList.toggle('hidden', !showC);
+            },
+
+            getChartColors: () => {
+                const isDark = app.theme === 'dark';
+                return {
+                    text: isDark ? '#94a3b8' : '#64748b',
+                    grid: isDark ? '#334155' : '#e2e8f0',
+                    primary: isDark ? '#2dd4bf' : '#0f766e',
+                    primaryBg: isDark ? 'rgba(45, 212, 191, 0.1)' : 'rgba(15, 118, 110, 0.1)',
+                    secondary: isDark ? '#5eead4' : '#14b8a6',
+                    secondaryBg: isDark ? 'rgba(94, 234, 212, 0.6)' : 'rgba(20, 184, 166, 0.6)',
+                    success: '#10b981',
+                    successBg: 'rgba(16, 185, 129, 0.1)'
+                };
+            },
+
+            initCharts: () => {
+                const colors = app.getChartColors();
+                const commonOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true, labels: { color: colors.text } } },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Frequency (Hz)', color: colors.text },
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.text }
+                        },
+                        y: {
+                            title: { display: true, text: 'Value', color: colors.text },
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.text }
+                        }
+                    }
+                };
+
+                const magCtx = document.getElementById('magnitudeChart').getContext('2d');
+                app.magChart = new Chart(magCtx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Magnitude', data: [], borderColor: colors.primary, backgroundColor: colors.primaryBg, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'Frequency (Hz) - Log Scale', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } },
+                            y: { title: { display: true, text: translations[app.lang]?.magLabel || 'Gain (dB)', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } }
+                        }
+                    }
+                });
+
+                const phaseCtx = document.getElementById('phaseChart').getContext('2d');
+                app.phaseChart = new Chart(phaseCtx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Phase', data: [], borderColor: colors.secondary, backgroundColor: colors.secondaryBg, borderWidth: 2, fill: false, tension: 0.4, pointRadius: 0 }] },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'Frequency (Hz) - Log Scale', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } },
+                            y: { title: { display: true, text: translations[app.lang]?.phaseLabel || 'Phase (degrees)', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } }
+                        }
+                    }
+                });
+
+                const transCtx = document.getElementById('transientChart').getContext('2d');
+                app.transientChart = new Chart(transCtx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Output', data: [], borderColor: colors.success, backgroundColor: colors.successBg, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'Time (s)', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } },
+                            y: { title: { display: true, text: 'Output Voltage (V)', color: colors.text }, grid: { color: colors.grid }, ticks: { color: colors.text } }
+                        }
+                    }
+                });
+            },
+
+            update: () => {
+                app.drawSchematic();
+                app.generateBodePlot();
+                app.generateTransientPlot();
+                app.displayTransferFunction();
+                app.displayEngineering();
+            },
+
+            drawSchematic: () => {
+                const canvas = document.getElementById('schematicCanvas');
+                const ctx = app.schematicCtx;
+                if (!ctx) return;
+
+                const w = canvas.clientWidth;
+                const h = canvas.clientHeight;
+                canvas.width = w;
+                canvas.height = h;
+
+                // Use CSS variables for colors
+                const bgColor = getComputedStyle(document.body).getPropertyValue('--grid-bg').trim();
+                const strokeColor = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
+                const primaryColor = getComputedStyle(document.body).getPropertyValue('--primary').trim();
+                const textColor = getComputedStyle(document.body).getPropertyValue('--text-light').trim();
+
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, w, h);
+
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = 2;
+
+                ctx.font = 'bold 14px Inter';
+                ctx.fillStyle = primaryColor;
+
+                const t = app.state.topology;
+                if (t === 'series') {
+                    ctx.fillText(translations[app.lang]?.series || 'Series RLC Circuit', w / 2 - 60, 30);
+                    // Simple representation
+                    ctx.beginPath();
+                    ctx.moveTo(50, 100);
+                    ctx.lineTo(w - 50, 100);
+                    ctx.stroke();
+
+                    // Components (simplified boxes)
+                    ctx.fillStyle = bgColor;
+
+                    // R
+                    ctx.fillRect(80, 90, 40, 20);
+                    ctx.strokeRect(80, 90, 40, 20);
+
+                    // L
+                    ctx.fillRect(180, 90, 40, 20);
+                    ctx.strokeRect(180, 90, 40, 20);
+
+                    // C
+                    ctx.fillRect(280, 90, 40, 20);
+                    ctx.strokeRect(280, 90, 40, 20);
+
+                    ctx.fillStyle = primaryColor;
+                    ctx.fillText('R', 95, 80);
+                    ctx.fillText('L', 195, 80);
+                    ctx.fillText('C', 295, 80);
+                } else if (t === 'parallel') {
+                    ctx.fillText(translations[app.lang]?.parallel || 'Parallel RLC Circuit', w / 2 - 70, 30);
+                    ctx.font = '12px Inter';
+                    ctx.fillStyle = textColor;
+                    ctx.fillText('(All branches share voltage)', w / 2 - 80, 50);
+
+                    // Draw Parallel Lines
+                    ctx.beginPath();
+                    ctx.moveTo(50, 100); ctx.lineTo(350, 100);
+                    ctx.moveTo(50, 200); ctx.lineTo(350, 200);
+
+                    // Branches
+                    ctx.moveTo(100, 100); ctx.lineTo(100, 200); // R
+                    ctx.moveTo(200, 100); ctx.lineTo(200, 200); // L
+                    ctx.moveTo(300, 100); ctx.lineTo(300, 200); // C
+                    ctx.strokeStyle = strokeColor;
+                    ctx.stroke();
+
+                    ctx.fillStyle = primaryColor;
+                    ctx.font = 'bold 14px Inter';
+                    ctx.fillText('R', 105, 95);
+                    ctx.fillText('L', 205, 95);
+                    ctx.fillText('C', 305, 95);
+
+                } else if (t === 'rl') {
+                    ctx.fillText(translations[app.lang]?.rl || 'RL Circuit', w / 2 - 40, 30);
+
+                    ctx.beginPath();
+                    ctx.moveTo(50, 100); ctx.lineTo(250, 100);
+                    ctx.fillStyle = bgColor;
+                    ctx.fillRect(100, 90, 40, 20); // R
+                    ctx.strokeRect(100, 90, 40, 20);
+                    ctx.fillRect(200, 90, 40, 20); // L
+                    ctx.strokeRect(200, 90, 40, 20);
+                    ctx.stroke();
+
+                    ctx.fillStyle = primaryColor;
+                    ctx.fillText('R', 115, 80);
+                    ctx.fillText('L', 215, 80);
+                } else if (t === 'rc') {
+                    ctx.fillText(translations[app.lang]?.rc || 'RC Circuit', w / 2 - 40, 30);
+
+                    ctx.beginPath();
+                    ctx.moveTo(50, 100); ctx.lineTo(250, 100);
+                    ctx.fillStyle = bgColor;
+                    ctx.fillRect(100, 90, 40, 20); // R
+                    ctx.strokeRect(100, 90, 40, 20);
+                    ctx.fillRect(200, 90, 40, 20); // C
+                    ctx.strokeRect(200, 90, 40, 20);
+                    ctx.stroke();
+
+                    ctx.fillStyle = primaryColor;
+                    ctx.fillText('R', 115, 80);
+                    ctx.fillText('C', 215, 80);
+                }
+
+                ctx.font = '12px Inter';
+                ctx.fillStyle = textColor;
+                ctx.fillText(`R=${app.state.R.toFixed(1)}Ω`, 50, 240);
+                if (t !== 'rc') ctx.fillText(`L=${app.state.L.toFixed(3)}H`, 50, 260);
+                if (t !== 'rl') ctx.fillText(`C=${app.state.C.toFixed(5)}F`, 50, 280);
+                ctx.fillText(`Vin=${app.state.Vin.toFixed(1)}V`, 50, 300);
+            },
+
+            generateBodePlot: () => {
+                const tf = app.getTransferFunction();
+                const freqs = [];
+                const mags = [];
+                const phases = [];
+
+                for (let i = 0.1; i <= 1000; i *= 1.1) {
+                    const w = 2 * Math.PI * i;
+                    const response = app.evaluateTF(tf, w);
+                    const magdB = 20 * Math.log10(Math.max(response.magnitude, 0.001));
+
+                    freqs.push(i.toFixed(1));
+                    mags.push(magdB);
+                    phases.push(response.phase);
+                }
+
+                app.magChart.data.labels = freqs;
+                app.magChart.data.datasets[0].data = mags;
+                app.magChart.update();
+
+                app.phaseChart.data.labels = freqs;
+                app.phaseChart.data.datasets[0].data = phases;
+                app.phaseChart.update();
+            },
+
+            generateTransientPlot: () => {
+                const resp = app.generateTransientResponse();
+
+                app.transientChart.data.labels = resp.time.map(t => t.toFixed(3));
+                app.transientChart.data.datasets[0].data = resp.response;
+                app.transientChart.update();
+            },
+
+            displayTransferFunction: () => {
+                const tf = app.getTransferFunction();
+                const t = app.state.topology;
+
+                let tfStr = '';
+                let deStr = '';
+
+                if (t === 'series') {
+                    tfStr = `H(s) = 1 / (${app.state.L.toFixed(3)}s² + ${app.state.R.toFixed(1)}s + ${(1 / app.state.C).toFixed(1)})`;
+                    deStr = `L·d²V/dt² + R·dV/dt + (1/C)·V = Vin`;
+                } else if (t === 'parallel') {
+                    tfStr = `H(s) = 1 / (${app.state.L.toFixed(3)}s² + ${app.state.R.toFixed(1)}s + ${(1 / app.state.C).toFixed(1)})`;
+                    deStr = `L·d²I/dt² + R·dI/dt + (1/C)·I = dVin/dt`;
+                } else if (t === 'rl') {
+                    tfStr = `H(s) = 1 / (${app.state.L.toFixed(3)}s + ${app.state.R.toFixed(1)})`;
+                    deStr = `L·dI/dt + R·I = Vin`;
+                } else if (t === 'rc') {
+                    tfStr = `H(s) = 1 / (${app.state.R.toFixed(1)}·${app.state.C.toFixed(5)}·s + 1)`;
+                    deStr = `RC·dV/dt + V = Vin`;
+                }
+
+                document.getElementById('tfDisplay').innerHTML = `<div class="formula"><strong>Transfer Function:</strong><br/>${tfStr}</div>`;
+                document.getElementById('deDisplay').textContent = deStr;
+
+                // Resonance info
+                if (t === 'series' || t === 'parallel') {
+                    const wn = tf.wn;
+                    const fn = wn / (2 * Math.PI);
+                    const Q = wn / (app.state.R / app.state.L);
+                    const BW = wn / Q;
+
+                    let resHTML = `
+                        <div class="parameter-box">
+                            <strong>Natural Frequency (f₀):</strong> ${fn.toFixed(2)} Hz
+                        </div>
+                        <div class="parameter-box">
+                            <strong>Damping Ratio (ζ):</strong> ${tf.zeta.toFixed(3)}
+                        </div>
+                        <div class="parameter-box">
+                            <strong>Quality Factor (Q):</strong> ${Q.toFixed(3)}
+                        </div>
+                        <div class="parameter-box">
+                            <strong>Bandwidth:</strong> ${BW.toFixed(2)} rad/s
+                        </div>
+                    `;
+                    document.getElementById('resonanceDisplay').innerHTML = resHTML;
+                } else {
+                    const tau = app.state.R * app.state.C || app.state.L / app.state.R;
+                    document.getElementById('resonanceDisplay').innerHTML = `<div class="parameter-box"><strong>Time Constant (τ):</strong> ${tau.toFixed(4)} s</div>`;
+                }
+            },
+
+            displayEngineering: () => {
+                let html = '';
+                const zeta = app.getTransferFunction().zeta;
+                const t = app.state.topology;
+
+                if (t === 'series') {
+                    if (zeta > 1) {
+                        html = '<strong>⚠️ Overdamped Response:</strong> Slow response, no overshoot. Used in applications requiring smooth transitions (power supplies, audio filters).';
+                    } else if (Math.abs(zeta - 1) < 0.01) {
+                        html = '<strong>✓ Critically Damped:</strong> Fastest response without overshoot. Ideal for instrumentation and control systems.';
+                    } else {
+                        html = `<strong>🔄 Underdamped (Oscillatory):</strong> Overshoot ~${(100 * Math.exp(-Math.PI * zeta / Math.sqrt(1 - zeta * zeta))).toFixed(0)}%. Used in circuits requiring faster settling (switched-mode PSUs).`;
+                    }
+                } else if (t === 'rl' || t === 'rc') {
+                    html = '<strong>1st Order Response:</strong> No resonance peak. Single time constant determines response speed. Common in filters and voltage regulators.';
+                } else {
+                    html = '<strong>Parallel RLC:</strong> Current-mode analysis. Used in impedance matching and tuned circuits.';
+                }
+
+                html += `<p style="margin-top: 12px; color: var(--text-main);">Current damping ratio ζ = ${zeta.toFixed(3)}. Adjust R, L, C sliders to modify circuit response.</p>`;
+
+                document.getElementById('engineeringApp').innerHTML = html;
+            }
+        };
+
+        window.onload = app.init;
+    </script>
+</body>
+
+</html>

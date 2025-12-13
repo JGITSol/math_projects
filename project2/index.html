@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrices as Transformations | Applied Mathematics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-dark: #115e59;
+            --surface: #f0fdfa;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --input-bg: #ffffff;
+            --text-on-primary: #ffffff;
+            --grid-line: #e2e8f0;
+            --grid-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --primary: #2dd4bf;
+            --primary-light: #5eead4;
+            --primary-dark: #14b8a6;
+            --surface: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --input-bg: #0f172a;
+            --text-on-primary: #1e293b;
+            --grid-line: #334155;
+            --grid-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--surface);
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-light);
+        }
+
+        button:active {
+            background-color: var(--primary-dark);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .info-section {
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .info-section h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        .info-section p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .matrix-display {
+            background: var(--surface);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            margin: 8px 0;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .property-item {
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .property-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: var(--surface);
+            color: var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 8px;
+        }
+
+        .engineering-box {
+            background: var(--surface);
+            border: 2px solid var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .engineering-box h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .engineering-box p {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .value-display {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header style="position: relative;">
+            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
+                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="pl">🇵🇱 PL</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="uk">🇺🇦 UK</option>
+                    <option value="be">🇧🇾 BE</option>
+                </select>
+                <button id="themeToggle"
+                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
+                    <i data-lucide="moon" size="16"></i>
+                </button>
+            </div>
+            <h1><i data-lucide="box-select"
+                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
+                    data-i18n="title">Matrices as Transformations</span></h1>
+            <p class="subtitle" data-i18n="subtitle">Visualize 2D/3D matrix transformations: rotations, scalings,
+                projections, and engineering applications</p>
+        </header>
+
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card">
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
+                        data-i18n="config">Configuration</span></div>
+
+                <!-- Matrix Type -->
+                <div class="form-group">
+                    <label for="matrixType" data-i18n="type">Matrix Type</label>
+                    <select id="matrixType">
+                        <option value="diagonal">Diagonal (Scaling)</option>
+                        <option value="rotation">Rotation (2D)</option>
+                        <option value="shear">Shear (Skew)</option>
+                        <option value="projection">Projection (Orthogonal)</option>
+                        <option value="reflection">Reflection</option>
+                        <option value="custom">Custom Matrix</option>
+                    </select>
+                </div>
+
+                <!-- Dimension Toggle -->
+                <div class="form-group">
+                    <label for="dimension" data-i18n="dim">Dimension</label>
+                    <select id="dimension">
+                        <option value="2d">2D Visualization</option>
+                        <option value="3d">3D Visualization</option>
+                    </select>
+                </div>
+
+                <!-- Engineering Context -->
+                <div class="form-group">
+                    <label for="context" data-i18n="context">Engineering Context</label>
+                    <select id="context">
+                        <option value="generic">Generic Transformation</option>
+                        <option value="robotics">Robotics (Joint Angles)</option>
+                        <option value="circuit">Circuit (State Variables)</option>
+                        <option value="mechanical">Mechanical (Forces)</option>
+                        <option value="graphics">Graphics (Rendering)</option>
+                    </select>
+                </div>
+
+                <!-- Matrix Entry Parameters -->
+                <div class="form-group">
+                    <label><span data-i18n="scaleX">Scale X</span>: <span id="valScaleX">1.0</span></label>
+                    <input type="range" id="sliderScaleX" min="0.5" max="2" step="0.1" value="1">
+                </div>
+
+                <div class="form-group">
+                    <label><span data-i18n="scaleY">Scale Y</span>: <span id="valScaleY">1.0</span></label>
+                    <input type="range" id="sliderScaleY" min="0.5" max="2" step="0.1" value="1">
+                </div>
+
+                <div class="form-group" id="groupAngle">
+                    <label><span data-i18n="angle">Rotation Angle (°)</span>: <span id="valAngle">0</span></label>
+                    <input type="range" id="sliderAngle" min="0" max="360" step="5" value="0">
+                </div>
+
+                <div class="form-group" id="groupShear">
+                    <label><span data-i18n="shear">Shear Factor</span>: <span id="valShear">0.0</span></label>
+                    <input type="range" id="sliderShear" min="-1" max="1" step="0.1" value="0">
+                </div>
+
+                <button id="btnUpdate" data-i18n="update">Update Visualization</button>
+
+                <div class="badge">Matrix</div>
+                <div class="badge">Transformation</div>
+            </div>
+
+            <!-- Visualization & Analysis -->
+            <div>
+                <div class="card">
+                    <div class="card-header"><i data-lucide="monitor" style="margin-right: 8px;"></i> <span
+                            data-i18n="transformViz">Transformation
+                            Visualization</span></div>
+                    <div class="canvas-container">
+                        <canvas id="transformCanvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- Math Traceability -->
+                <div class="card">
+                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
+                            data-i18n="calcDetails">Calculation
+                            Details</span></div>
+                    <div id="mathTrace" class="matrix-display"
+                        style="text-align: left; font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main);">
+                        <!-- Content populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Matrix Display -->
+                <div class="card">
+                    <div class="card-header"><i data-lucide="layout-grid" style="margin-right: 8px;"></i> <span
+                            data-i18n="matrixProps">Matrix &
+                            Properties</span></div>
+                    <div id="matrixDisplay" class="matrix-display"></div>
+                    <div class="info-section">
+                        <h3 data-i18n="desc">Matrix Type Description</h3>
+                        <p id="matrixDescription"></p>
+                    </div>
+                    <div class="properties-grid">
+                        <div class="property-item">
+                            <strong data-i18n="det">Determinant</strong>
+                            <span id="propDeterminant">1.0</span>
+                        </div>
+                        <div class="property-item">
+                            <strong data-i18n="trace">Trace</strong>
+                            <span id="propTrace">2.0</span>
+                        </div>
+                        <div class="property-item">
+                            <strong data-i18n="eig1">Eigenvalue 1</strong>
+                            <span id="propEigen1">1.0</span>
+                        </div>
+                        <div class="property-item">
+                            <strong data-i18n="eig2">Eigenvalue 2</strong>
+                            <span id="propEigen2">1.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engineering Application -->
+                <div class="card">
+                    <div class="card-header"><i data-lucide="zap" style="margin-right: 8px;"></i> <span
+                            data-i18n="engApps">Engineering
+                            Applications</span></div>
+                    <div id="engineeringApp" class="engineering-box"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Matrices as Transformations",
+                subtitle: "Visualize 2D/3D matrix transformations.",
+                config: "Configuration",
+                type: "Matrix Type",
+                dim: "Dimension",
+                context: "Engineering Context",
+                update: "Update Visualization",
+                transformViz: "Transformation Visualization",
+                calcDetails: "Calculation Details",
+                matrixProps: "Matrix & Properties",
+                desc: "Matrix Type Description",
+                det: "Determinant",
+                trace: "Trace",
+                eig1: "Eigenvalue 1",
+                eig2: "Eigenvalue 2",
+                engApps: "Engineering Applications",
+                scaleX: "Scale X", scaleY: "Scale Y", angle: "Rotation Angle (°)", shear: "Shear Factor",
+                t_diagonal: "Diagonal (Scaling)", t_rotation: "Rotation (2D)", t_shear: "Shear (Skew)", t_projection: "Projection", t_reflection: "Reflection", t_custom: "Custom Matrix",
+                c_generic: "Generic", c_robotics: "Robotics (Joint Angles)", c_circuit: "Circuits", c_mech: "Mechanical Stress", c_graph: "Computer Graphics"
+            },
+            pl: {
+                title: "Macierze jako Przekształcenia",
+                subtitle: "Wizualizacja przekształceń macierzowych 2D/3D.",
+                config: "Konfiguracja",
+                type: "Typ Macierzy",
+                dim: "Wymiar",
+                context: "Kontekst Inżynierski",
+                update: "Aktualizuj",
+                transformViz: "Wizualizacja Przekształcenia",
+                calcDetails: "Szczegóły Obliczeń",
+                matrixProps: "Właściwości Macierzy",
+                desc: "Opis Typu",
+                det: "Wyznacznik",
+                trace: "Ślad",
+                eig1: "Wartość Własna 1",
+                eig2: "Wartość Własna 2",
+                engApps: "Zastosowania Inżynierskie",
+                scaleX: "Skala X", scaleY: "Skala Y", angle: "Kąt Obrotu (°)", shear: "Współczynnik Ścinania",
+                t_diagonal: "Diagonalna (Skalowanie)", t_rotation: "Obrót (2D)", t_shear: "Ścinanie", t_projection: "Rzutowanie", t_reflection: "Odbicie", t_custom: "Własna",
+                c_generic: "Ogólne", c_robotics: "Robotyka", c_circuit: "Obwody", c_mech: "Naprężenia", c_graph: "Grafika Komputerowa"
+            },
+            fr: { title: "Matrices et Transformations", subtitle: "Visualiser les transformations 2D/3D.", config: "Configuration", type: "Type de Matrice", dim: "Dimension", context: "Contexte", update: "Mettre à jour", transformViz: "Visualisation", calcDetails: "Détails", matrixProps: "Propriétés", desc: "Description", det: "Déterminant", trace: "Trace", eig1: "Valeur Propre 1", eig2: "Valeur Propre 2", engApps: "Applications", scaleX: "Échelle X", scaleY: "Échelle Y", angle: "Angle", shear: "Cisaillement", t_diagonal: "Diagonale", t_rotation: "Rotation", t_shear: "Cisaillement", t_projection: "Projection", t_reflection: "Réflexion", t_custom: "Personnalisé", c_generic: "Générique", c_robotics: "Robotique", c_circuit: "Circuits", c_mech: "Mécanique", c_graph: "Infographie" },
+            es: { title: "Matrices como Transformaciones", subtitle: "Visualizar transformaciones 2D/3D.", config: "Configuración", type: "Tipo de Matriz", dim: "Dimensión", context: "Ingeniería", update: "Actualizar", transformViz: "Visualización", calcDetails: "Detalles", matrixProps: "Propiedades", desc: "Descripción", det: "Determinante", trace: "Traza", eig1: "Valor Propio 1", eig2: "Valor Propio 2", engApps: "Aplicaciones", scaleX: "Escala X", scaleY: "Escala Y", angle: "Ángulo", shear: "Cizallamiento", t_diagonal: "Diagonal", t_rotation: "Rotación", t_shear: "Cizallamiento", t_projection: "Proyección", t_reflection: "Reflexión", t_custom: "Personalizada", c_generic: "Genérico", c_robotics: "Robótica", c_circuit: "Circuitos", c_mech: "Mecánica", c_graph: "Gráficos" },
+            pt: { title: "Matrizes como Transformações", subtitle: "Visualizar transformações 2D/3D.", config: "Configuração", type: "Tipo de Matriz", dim: "Dimensão", context: "Engenharia", update: "Atualizar", transformViz: "Visualização", calcDetails: "Detalhes", matrixProps: "Propriedades", desc: "Descrição", det: "Determinante", trace: "Traço", eig1: "Autovalor 1", eig2: "Autovalor 2", engApps: "Aplicações", scaleX: "Escala X", scaleY: "Escala Y", angle: "Ângulo", shear: "Cisalhamento", t_diagonal: "Diagonal", t_rotation: "Rotação", t_shear: "Cisalhamento", t_projection: "Projeção", t_reflection: "Reflexão", t_custom: "Personalizada", c_generic: "Genérico", c_robotics: "Robótica", c_circuit: "Circuitos", c_mech: "Mecânica", c_graph: "Computação Gráfica" },
+            de: { title: "Matrizen als Transformationen", subtitle: "2D/3D Transformationen visualisieren.", config: "Konfiguration", type: "Matrixtyp", dim: "Dimension", context: "Technik", update: "Aktualisieren", transformViz: "Visualisierung", calcDetails: "Details", matrixProps: "Matrix Eigenschaften", desc: "Beschreibung", det: "Determinante", trace: "Spur", eig1: "Eigenwert 1", eig2: "Eigenwert 2", engApps: "Anwendungen", scaleX: "Skalierung X", scaleY: "Skalierung Y", angle: "Winkel", shear: "Scherung", t_diagonal: "Diagonal", t_rotation: "Rotation", t_shear: "Scherung", t_projection: "Projektion", t_reflection: "Spiegelung", t_custom: "Benutzerdefiniert", c_generic: "Allgemein", c_robotics: "Robotik", c_circuit: "Schaltungen", c_mech: "Mechanik", c_graph: "Computergrafik" },
+            uk: { title: "Матриці як Перетворення", subtitle: "Візуалізація 2D/3D перетворень.", config: "Конфігурація", type: "Тип Матриці", dim: "Вимір", context: "Інженерія", update: "Оновити", transformViz: "Візуалізація", calcDetails: "Деталі", matrixProps: "Властивості", desc: "Опис", det: "Визначник", trace: "Слід", eig1: "Власне число 1", eig2: "Власне число 2", engApps: "Застосування", scaleX: "Масштаб X", scaleY: "Масштаб Y", angle: "Кут", shear: "Зсув", t_diagonal: "Діагональна", t_rotation: "Обертання", t_shear: "Зсув", t_projection: "Проекція", t_reflection: "Відображення", t_custom: "Власна", c_generic: "Загальні", c_robotics: "Робототехніка", c_circuit: "Схеми", c_mech: "Механіка", c_graph: "Комп'ютерна Графіка" },
+            be: { title: "Матрыцы як Пераўтварэнні", subtitle: "Візуалізацыя 2D/3D пераўтварэнняў.", config: "Канфігурацыя", type: "Тып Матрыцы", dim: "Вымярэнне", context: "Інжынерыя", update: "Абнавіць", transformViz: "Візуалізацыя", calcDetails: "Дэталі", matrixProps: "Уласцівасці", desc: "Апісанне", det: "Вызначнік", trace: "След", eig1: "Уласны лік 1", eig2: "Уласны лік 2", engApps: "Прымяненне", scaleX: "Маштаб X", scaleY: "Маштаб Y", angle: "Вугал", shear: "Зрух", t_diagonal: "Дыяганальная", t_rotation: "Вярчэнне", t_shear: "Зрух", t_projection: "Праекцыя", t_reflection: "Адлюстраванне", t_custom: "Уласная", c_generic: "Агульныя", c_robotics: "Робататэхніка", c_circuit: "Схемы", c_mech: "Механіка", c_graph: "Камп'ютарная Графіка" }
+        };
+
+        const app = {
+            lang: 'en',
+            theme: 'light',
+
+            setTheme: (t) => {
+                app.theme = t;
+                document.documentElement.setAttribute('data-theme', t);
+                localStorage.setItem('theme', t);
+                const icon = t === 'dark' ? 'sun' : 'moon';
+                document.getElementById('themeToggle').innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
+                lucide.createIcons();
+                app.update(); // Redraw canvas
+            },
+
+            setLang: (l) => {
+                app.lang = l;
+                localStorage.setItem('lang', l);
+                document.getElementById('langSelect').value = l;
+                app.updateTranslations();
+                app.update(); // Trigger re-render of canvas labels if any? No, mostly DOM.
+            },
+
+            updateTranslations: () => {
+                const t = translations[app.lang];
+                // Static Elements
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.textContent = t[key];
+                });
+
+                // Update Select Options (Manual sync)
+                const selType = document.getElementById('matrixType');
+                selType.options[0].text = t.t_diagonal;
+                selType.options[1].text = t.t_rotation;
+                selType.options[2].text = t.t_shear;
+                selType.options[3].text = t.t_projection;
+                selType.options[4].text = t.t_reflection;
+                selType.options[5].text = t.t_custom;
+            },
+            canvas: null,
+            ctx: null,
+            state: {
+                matrixType: 'diagonal',
+                dimension: '2d',
+                context: 'generic',
+                scaleX: 1,
+                scaleY: 1,
+                angle: 0,
+                shear: 0
+            },
+
+            // Generate transformation matrix
+            getMatrix: () => {
+                const t = app.state.matrixType;
+                const sx = app.state.scaleX;
+                const sy = app.state.scaleY;
+                const angle = (app.state.angle * Math.PI) / 180;
+                const sh = app.state.shear;
+
+                let M = [[1, 0], [0, 1]];
+
+                if (t === 'diagonal') {
+                    M = [[sx, 0], [0, sy]];
+                } else if (t === 'rotation') {
+                    const c = Math.cos(angle);
+                    const s = Math.sin(angle);
+                    M = [[c, -s], [s, c]];
+                } else if (t === 'shear') {
+                    M = [[1, sh], [0, 1]];
+                } else if (t === 'projection') {
+                    M = [[1, 0], [0, 0]]; // Project onto x-axis
+                } else if (t === 'reflection') {
+                    M = [[1, 0], [0, -1]]; // Reflect across x-axis
+                } else if (t === 'custom') {
+                    const c = Math.cos(angle);
+                    const s = Math.sin(angle);
+                    M = [[sx * c, -sy * s], [sx * s, sy * c]];
+                }
+
+                return M;
+            },
+
+            // 3D Matrix Generation
+            getMatrix3D: () => {
+                const t = app.state.matrixType;
+                const sx = app.state.scaleX;
+                const sy = app.state.scaleY;
+                const sz = (sx + sy) / 2; // Simple heuristic for Z scale
+                const angle = (app.state.angle * Math.PI) / 180;
+
+                // Identity
+                let M = [
+                    [1, 0, 0],
+                    [0, 1, 0],
+                    [0, 0, 1]
+                ];
+
+                if (t === 'diagonal') {
+                    M = [
+                        [sx, 0, 0],
+                        [0, sy, 0],
+                        [0, 0, sz]
+                    ];
+                } else if (t === 'rotation') {
+                    // Rotate around Z axis (standard 2D rotation extended)
+                    const c = Math.cos(angle);
+                    const s = Math.sin(angle);
+                    M = [
+                        [c, -s, 0],
+                        [s, c, 0],
+                        [0, 0, 1]
+                    ];
+                } else if (t === 'shear') {
+                    // Shear X relative to Y
+                    M = [
+                        [1, app.state.shear, 0],
+                        [0, 1, 0],
+                        [0, 0, 1]
+                    ];
+                } else if (t === 'projection') {
+                    // Project onto XY plane (collapse Z)
+                    M = [
+                        [1, 0, 0],
+                        [0, 1, 0],
+                        [0, 0, 0]
+                    ];
+                } else if (t === 'reflection') {
+                    // Reflect across XY plane (invert Z)
+                    M = [
+                        [1, 0, 0],
+                        [0, 1, 0],
+                        [0, 0, -1]
+                    ];
+                } else if (t === 'custom') {
+                    const c = Math.cos(angle);
+                    const s = Math.sin(angle);
+                    M = [
+                        [sx * c, -sy * s, 0],
+                        [sx * s, sy * c, 0],
+                        [0, 0, sz]
+                    ];
+                }
+                return M;
+            },
+
+            // 3D Matrix Vector Multiplication
+            matVecMul3D: (M, v) => {
+                return [
+                    M[0][0] * v[0] + M[0][1] * v[1] + M[0][2] * v[2],
+                    M[1][0] * v[0] + M[1][1] * v[1] + M[1][2] * v[2],
+                    M[2][0] * v[0] + M[2][1] * v[1] + M[2][2] * v[2]
+                ];
+            },
+
+            // Matrix-vector multiplication
+            matVecMul: (M, v) => {
+                return [
+                    M[0][0] * v[0] + M[0][1] * v[1],
+                    M[1][0] * v[0] + M[1][1] * v[1]
+                ];
+            },
+
+            // Calculate determinant (2x2)
+            determinant: (M) => {
+                return M[0][0] * M[1][1] - M[0][1] * M[1][0];
+            },
+
+            // Calculate trace
+            trace: (M) => {
+                return M[0][0] + M[1][1];
+            },
+
+            // Calculate eigenvalues (2x2)
+            eigenvalues: (M) => {
+                const tr = app.trace(M);
+                const det = app.determinant(M);
+                const discriminant = tr * tr - 4 * det;
+                const lambda1 = (tr + Math.sqrt(Math.max(0, discriminant))) / 2;
+                const lambda2 = (tr - Math.sqrt(Math.max(0, discriminant))) / 2;
+                return [lambda1, lambda2];
+            },
+
+            init: () => {
+                app.canvas = document.getElementById('transformCanvas');
+                app.ctx = app.canvas.getContext('2d');
+
+                document.getElementById('matrixType').addEventListener('change', (e) => {
+                    app.state.matrixType = e.target.value;
+                    app.updateFormDisplay();
+                    app.update();
+                });
+
+                document.getElementById('dimension').addEventListener('change', (e) => {
+                    app.state.dimension = e.target.value;
+                    app.update();
+                });
+
+                document.getElementById('context').addEventListener('change', (e) => {
+                    app.state.context = e.target.value;
+                    app.update();
+                });
+
+                document.getElementById('sliderScaleX').addEventListener('input', (e) => {
+                    app.state.scaleX = parseFloat(e.target.value);
+                    document.getElementById('valScaleX').textContent = app.state.scaleX.toFixed(1);
+                    app.update();
+                });
+
+                document.getElementById('sliderScaleY').addEventListener('input', (e) => {
+                    app.state.scaleY = parseFloat(e.target.value);
+                    document.getElementById('valScaleY').textContent = app.state.scaleY.toFixed(1);
+                    app.update();
+                });
+
+                document.getElementById('sliderAngle').addEventListener('input', (e) => {
+                    app.state.angle = parseFloat(e.target.value);
+                    document.getElementById('valAngle').textContent = app.state.angle.toFixed(0);
+                    app.update();
+                });
+
+                document.getElementById('sliderShear').addEventListener('input', (e) => {
+                    app.state.shear = parseFloat(e.target.value);
+                    document.getElementById('valShear').textContent = app.state.shear.toFixed(2);
+                    app.update();
+                });
+
+                app.updateFormDisplay();
+                app.update();
+
+                // Init Theme/Lang
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                app.setTheme(savedTheme);
+                const savedLang = localStorage.getItem('lang') || 'en';
+                app.setLang(savedLang);
+
+                document.getElementById('themeToggle').addEventListener('click', () => {
+                    app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
+                });
+                document.getElementById('langSelect').addEventListener('change', (e) => {
+                    app.setLang(e.target.value);
+                });
+
+                lucide.createIcons();
+            },
+
+            updateFormDisplay: () => {
+                const t = app.state.matrixType;
+                document.getElementById('groupAngle').classList.toggle('hidden', t !== 'rotation' && t !== 'custom');
+                document.getElementById('groupShear').classList.toggle('hidden', t !== 'shear');
+            },
+
+            update: () => {
+                app.drawTransformation();
+                app.displayMatrix();
+                app.displayEngineering();
+                app.displayTrace();
+            },
+
+            // New Traceability Logic
+            displayTrace: () => {
+                const M = app.getMatrix();
+                const v = [1, 1]; // Example vector to transform
+                const vP = app.matVecMul(M, v);
+
+                // Determinant Step
+                const det = app.determinant(M);
+                const strM00 = M[0][0].toFixed(2); const strM01 = M[0][1].toFixed(2);
+                const strM10 = M[1][0].toFixed(2); const strM11 = M[1][1].toFixed(2);
+
+                let html = `<strong>Transformation Step:</strong> [M] · v = v'<br>`;
+                html += `$$ \\begin{bmatrix} ${strM00} & ${strM01} \\\\ ${strM10} & ${strM11} \\end{bmatrix} \\begin{bmatrix} 1 \\\\ 1 \\end{bmatrix} = \\begin{bmatrix} (${strM00})(1) + (${strM01})(1) \\\\ (${strM10})(1) + (${strM11})(1) \\end{bmatrix} = \\begin{bmatrix} ${vP[0].toFixed(2)} \\\\ ${vP[1].toFixed(2)} \\end{bmatrix} $$`;
+                html += `<div style="margin-top:12px;"><strong>Determinant (Scaling Factor):</strong></div>`;
+                html += `$$ det(M) = (a \\cdot d) - (b \\cdot c) $$`;
+                html += `$$ (${strM00} \\cdot ${strM11}) - (${strM01} \\cdot ${strM10}) = ${(M[0][0] * M[1][1]).toFixed(2)} - ${(M[0][1] * M[1][0]).toFixed(2)} = ${det.toFixed(2)} $$`;
+
+                document.getElementById('mathTrace').innerHTML = html;
+                if (window.MathJax) MathJax.typesetPromise();
+            },
+
+            drawTransformation: () => {
+                const width = app.canvas.clientWidth;
+                const height = app.canvas.clientHeight;
+                app.canvas.width = width;
+                app.canvas.height = height;
+
+                const centerX = width / 2;
+                const centerY = height / 2;
+                const scale = 60;
+
+                app.ctx.fillStyle = '#f0fdfa';
+                app.ctx.fillRect(0, 0, width, height);
+
+                // --- 3D RENDERING ---
+                if (app.state.dimension === '3d') {
+                    const M3 = app.getMatrix3D();
+                    const project = (v) => {
+                        // Simple Cabinet Projection
+                        const angle = Math.PI / 6;
+                        // z goes into the screen (visual depth)
+                        return {
+                            x: centerX + (v[0] - v[2] * 0.5 * Math.cos(angle)) * scale,
+                            y: centerY - (v[1] - v[2] * 0.5 * Math.sin(angle)) * scale
+                        };
+                    };
+
+                    // Draw XYZ Axes
+                    const axes = [
+                        { v: [2, 0, 0], c: '#ef4444', l: 'X' },
+                        { v: [0, 2, 0], c: '#10b981', l: 'Y' },
+                        { v: [0, 0, 2], c: '#3b82f6', l: 'Z' }
+                    ];
+
+                    // Draw Grid (on XY plane, z=0)
+                    app.ctx.strokeStyle = '#e2e8f0';
+                    app.ctx.lineWidth = 1;
+                    for (let i = -3; i <= 3; i++) {
+                        const p1 = project([i, -3, 0]); const p2 = project([i, 3, 0]);
+                        app.ctx.beginPath(); app.ctx.moveTo(p1.x, p1.y); app.ctx.lineTo(p2.x, p2.y); app.ctx.stroke();
+
+                        const p3 = project([-3, i, 0]); const p4 = project([3, i, 0]);
+                        app.ctx.beginPath(); app.ctx.moveTo(p3.x, p3.y); app.ctx.lineTo(p4.x, p4.y); app.ctx.stroke();
+                    }
+
+                    // Draw Transformed Cube (Wireframe)
+                    const corners = [
+                        [0, 0, 0], [1, 0, 0], [1, 1, 0], [0, 1, 0],
+                        [0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]
+                    ];
+                    const edges = [
+                        [0, 1], [1, 2], [2, 3], [3, 0], // base
+                        [4, 5], [5, 6], [6, 7], [7, 4], // top
+                        [0, 4], [1, 5], [2, 6], [3, 7]  // pillars
+                    ];
+
+                    app.ctx.strokeStyle = '#14b8a6'; // Primary Light
+                    app.ctx.lineWidth = 2;
+
+                    edges.forEach(edge => {
+                        // Apply transformation M3 to corners
+                        const v1 = app.matVecMul3D(M3, corners[edge[0]]);
+                        const v2 = app.matVecMul3D(M3, corners[edge[1]]);
+
+                        const p1 = project(v1);
+                        const p2 = project(v2);
+
+                        app.ctx.beginPath();
+                        app.ctx.moveTo(p1.x, p1.y);
+                        app.ctx.lineTo(p2.x, p2.y);
+                        app.ctx.stroke();
+                    });
+
+                    // Draw Transformed Basis Vectors (stronger)
+                    const basis = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+                    const colors = ['#ef4444', '#10b981', '#3b82f6']; // RGB
+                    const origin = project([0, 0, 0]); // Transformation fixes origin at 0 usually
+
+                    basis.forEach((b, i) => {
+                        const tb = app.matVecMul3D(M3, b);
+                        const pt = project([tb[0] * 1.5, tb[1] * 1.5, tb[2] * 1.5]); // Scale up a bit
+
+                        app.ctx.strokeStyle = colors[i];
+                        app.ctx.lineWidth = 3;
+                        app.ctx.beginPath();
+                        app.ctx.moveTo(origin.x, origin.y);
+                        app.ctx.lineTo(pt.x, pt.y);
+                        app.ctx.stroke();
+                    });
+
+                    app.ctx.fillStyle = '#334155';
+                    app.ctx.fillText('3D Mode: Wireframe Cube + Basis', 10, 20);
+
+                    return; // Skip 2D drawing
+                }
+
+                // --- 2D RENDERING ---
+                // Draw grid
+                app.ctx.strokeStyle = '#e2e8f0';
+                app.ctx.lineWidth = 1;
+                for (let i = -4; i <= 4; i++) {
+                    app.ctx.beginPath();
+                    app.ctx.moveTo(centerX + i * scale, centerY - 5 * scale);
+                    app.ctx.lineTo(centerX + i * scale, centerY + 5 * scale);
+                    app.ctx.stroke();
+
+                    app.ctx.beginPath();
+                    app.ctx.moveTo(centerX - 5 * scale, centerY + i * scale);
+                    app.ctx.lineTo(centerX + 5 * scale, centerY + i * scale);
+                    app.ctx.stroke();
+                }
+
+                // Draw axes
+                app.ctx.strokeStyle = '#64748b';
+                app.ctx.lineWidth = 2;
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX - 5 * scale, centerY);
+                app.ctx.lineTo(centerX + 5 * scale, centerY);
+                app.ctx.stroke();
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX, centerY - 5 * scale);
+                app.ctx.lineTo(centerX, centerY + 5 * scale);
+                app.ctx.stroke();
+
+                const M = app.getMatrix();
+
+                // Draw original basis (light)
+                app.ctx.strokeStyle = 'rgba(15, 118, 110, 0.3)';
+                app.ctx.lineWidth = 2;
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX, centerY);
+                app.ctx.lineTo(centerX + scale, centerY);
+                app.ctx.stroke();
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX, centerY);
+                app.ctx.lineTo(centerX, centerY - scale);
+                app.ctx.stroke();
+
+                // Draw transformed basis (bright)
+                const e1 = app.matVecMul(M, [1, 0]);
+                const e2 = app.matVecMul(M, [0, 1]);
+
+                app.ctx.strokeStyle = 'rgb(15, 118, 110)';
+                app.ctx.lineWidth = 3;
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX, centerY);
+                app.ctx.lineTo(centerX + e1[0] * scale, centerY - e1[1] * scale);
+                app.ctx.stroke();
+
+                app.ctx.strokeStyle = 'rgb(20, 184, 166)';
+                app.ctx.beginPath();
+                app.ctx.moveTo(centerX, centerY);
+                app.ctx.lineTo(centerX + e2[0] * scale, centerY - e2[1] * scale);
+                app.ctx.stroke();
+
+                // Draw transformed grid/square
+                app.ctx.fillStyle = 'rgba(20, 184, 166, 0.15)';
+                app.ctx.strokeStyle = 'rgb(20, 184, 166)';
+                app.ctx.lineWidth = 2;
+
+                const corners = [
+                    [1, 1], [1, -1], [-1, -1], [-1, 1]
+                ];
+
+                app.ctx.beginPath();
+                const firstCorner = app.matVecMul(M, corners[0]);
+                app.ctx.moveTo(centerX + firstCorner[0] * scale, centerY - firstCorner[1] * scale);
+
+                for (let i = 1; i < corners.length; i++) {
+                    const c = app.matVecMul(M, corners[i]);
+                    app.ctx.lineTo(centerX + c[0] * scale, centerY - c[1] * scale);
+                }
+                app.ctx.stroke();
+
+                // Labels (2D only)
+                app.ctx.fillStyle = '#334155';
+                app.ctx.font = 'bold 14px Inter';
+                app.ctx.fillText('Original (light)', centerX + 10, centerY - scale - 10);
+                app.ctx.fillStyle = '#0f766e';
+                app.ctx.fillText('Transformed (bright)', centerX + 10, centerY + scale + 20);
+            },
+
+            displayMatrix: () => {
+                const M = app.getMatrix();
+                const t = app.state.matrixType;
+
+                let desc = '';
+                if (t === 'diagonal') {
+                    desc = `Diagonal matrix scales axes independently. Preserves orthogonality. Used in scaling transformations, principal component analysis.`;
+                } else if (t === 'rotation') {
+                    desc = `Rotation matrix preserves lengths and angles. Orthogonal: M^T·M = I. Determinant = 1. Essential in robot arm kinematics.`;
+                } else if (t === 'shear') {
+                    desc = `Shear matrix skews space while preserving area. Determinant = 1 (area-preserving). Used in strain analysis and deformation.`;
+                } else if (t === 'projection') {
+                    desc = `Projection matrix collapses one dimension. Determinant = 0 (singular). Used in computer graphics and dimensionality reduction.`;
+                } else if (t === 'reflection') {
+                    desc = `Reflection matrix flips across an axis. Orthogonal with determinant = -1. Used in mirror operations and symmetry analysis.`;
+                } else if (t === 'custom') {
+                    desc = `Combined transformation: rotation + scaling. Shows how eigenvalues represent scaling directions.`;
+                }
+
+                const matrixHTML = `M = [${M[0][0].toFixed(3)}, ${M[0][1].toFixed(3)}]<br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[${M[1][0].toFixed(3)}, ${M[1][1].toFixed(3)}]`;
+                document.getElementById('matrixDisplay').innerHTML = matrixHTML;
+                document.getElementById('matrixDescription').textContent = desc;
+
+                // Calculate properties
+                const det = app.determinant(M);
+                const tr = app.trace(M);
+                const [l1, l2] = app.eigenvalues(M);
+
+                document.getElementById('propDeterminant').textContent = det.toFixed(4);
+                document.getElementById('propTrace').textContent = tr.toFixed(4);
+                document.getElementById('propEigen1').textContent = l1.toFixed(4);
+                document.getElementById('propEigen2').textContent = l2.toFixed(4);
+            },
+
+            displayEngineering: () => {
+                const ctx = app.state.context;
+                const t = app.state.matrixType;
+                let html = '';
+
+                const contextScenarios = {
+                    generic: {
+                        diagonal: '<strong>Volume Scaling:</strong> Eigenvalues represent scaling factors. Product of eigenvalues = determinant = volume change.',
+                        rotation: '<strong>Preserves Shape:</strong> All eigenvalues have magnitude 1. No volume/area change, only rotation.',
+                        shear: '<strong>Area Preservation:</strong> Determinant = 1 means area unchanged. Used in fluid mechanics for strain rate.',
+                        projection: '<strong>Dimensionality Reduction:</strong> Eigenvalue 0 means collapse along that direction. Applied in PCA.',
+                        reflection: '<strong>Symmetry Operation:</strong> One eigenvalue = -1 (flip direction), other = 1. Volume change by -1.',
+                        custom: '<strong>Combined Effects:</strong> Eigenvalues show amplification/damping. Eigenvectors show primary transformation axes.'
+                    },
+                    robotics: {
+                        diagonal: '<strong>Joint Speeds:</strong> Scaling matrix represents velocity ratios between joints. Critical for trajectory planning.',
+                        rotation: '<strong>Arm Kinematics:</strong> Rotation matrices describe end-effector orientation from joint angles. DH parameters.',
+                        shear: '<strong>Workspace Distortion:</strong> Non-orthogonal workspace transformation in redundant manipulators.',
+                        projection: '<strong>Task-Space Projection:</strong> Project 6-DOF arm configuration to 3-DOF task subspace.',
+                        reflection: '<strong>Symmetric Arm:</strong> Reflection matrix models symmetric robotic arms or workspace boundaries.',
+                        custom: '<strong>Arm Transformation:</strong> Full forward kinematics combining rotation + scaling from joint parameters.'
+                    },
+                    circuit: {
+                        diagonal: '<strong>Decoupled States:</strong> Diagonal state-transition matrix: independent RC circuits or L/C decay rates.',
+                        rotation: '<strong>Oscillatory Behavior:</strong> Complex eigenvalues cause oscillations. LC circuit resonance frequency.',
+                        shear: '<strong>Coupled Dynamics:</strong> Shear coupling between state variables. Energy transfer between capacitors.',
+                        projection: '<strong>State Reduction:</strong> Project full state to measurable outputs. Observable subspace.',
+                        reflection: '<strong>Phase Inversion:</strong> Negative feedback in circuit, inverting signal phase.',
+                        custom: '<strong>RLC Response:</strong> Combined damping (scaling) and oscillation (rotation) in RLC transient response.'
+                    },
+                    mechanical: {
+                        diagonal: '<strong>Principal Stresses:</strong> Diagonal stress tensor: normal stresses on principal axes. No shear on diagonals.',
+                        rotation: '<strong>Coordinate Rotation:</strong> Transform stress tensor to different material orientation. Failure analysis.',
+                        shear: '<strong>Shear Stress:</strong> Off-diagonal elements represent shear components. Critical for material fatigue.',
+                        projection: '<strong>Effective Load:</strong> Project force onto load-bearing member. Stress concentration factor.',
+                        reflection: '<strong>Symmetry Plane:</strong> Reflect stress field across symmetry axis. Reduce problem complexity.',
+                        custom: '<strong>Combined Loading:</strong> General stress state: normal + shear. Mohr\'s circle visualization.'
+                    },
+                    graphics: {
+                        diagonal: '<strong>Non-Uniform Scale:</strong> Stretch vertices along axes. Used for sprite scaling in games.',
+                        rotation: '<strong>2D Rotation:</strong> Rotate sprites, cameras, viewports. Fundamental for game transformations.',
+                        shear: '<strong>Skew Effect:</strong> Create perspective-like distortion. Used in fake 3D sprite rendering.',
+                        projection: '<strong>Orthographic Projection:</strong> Project 3D scene to 2D. Parallel lines stay parallel.',
+                        reflection: '<strong>Mirror Rendering:</strong> Horizontal/vertical flip for symmetric sprites. Water reflection effect.',
+                        custom: '<strong>Composite Transform:</strong> Combined scaling + rotation. Applied to camera transform matrix.'
+                    }
+                };
+
+                const scenarios = contextScenarios[ctx];
+                const engineeringText = scenarios[t];
+
+                html += `<h4>⚡ ${app.state.context.charAt(0).toUpperCase() + app.state.context.slice(1)} Application</h4>`;
+                html += `<p>${engineeringText}</p>`;
+
+                // Add property interpretation
+                const det = app.determinant(app.getMatrix());
+                const [l1, l2] = app.eigenvalues(app.getMatrix());
+
+                html += `<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(20, 184, 166, 0.3);">`;
+                html += `<strong>Current Transformation Properties:</strong><br/>`;
+                html += `<span class="value-display">det(M) = ${det.toFixed(4)} (volume scale)</span>`;
+                html += `<span class="value-display">λ₁ = ${l1.toFixed(4)}, λ₂ = ${l2.toFixed(4)} (eigenvalues)</span>`;
+                if (det < 0.1) {
+                    html += `<p style="color: var(--warning); margin-top: 8px;"><strong>⚠️</strong> Singular matrix detected (det ≈ 0). Dimension collapsed.</p>`;
+                }
+                html += `</div>`;
+
+                document.getElementById('engineeringApp').innerHTML = html;
+            }
+        };
+
+        window.onload = app.init;
+    </script>
+</body>
+
+</html>

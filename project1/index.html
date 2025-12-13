@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Derivatives Explorer | Applied Mathematics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-dark: #115e59;
+            --surface: #f0fdfa;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --input-bg: #ffffff;
+            --text-on-primary: #ffffff;
+            --grid-line: #e2e8f0;
+            --grid-bg: #f8fafc;
+        }
+
+        [data-theme="dark"] {
+            --primary: #2dd4bf;
+            --primary-light: #5eead4;
+            --primary-dark: #14b8a6;
+            --surface: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --input-bg: #0f172a;
+            --text-on-primary: #1e293b;
+            --grid-line: #334155;
+            --grid-bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--surface);
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-light);
+        }
+
+        button:active {
+            background-color: var(--primary-dark);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 24px;
+        }
+
+        .info-section {
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .info-section h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        .info-section p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: var(--surface);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            margin: 8px 0;
+            overflow-x: auto;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .comparison-item {
+            padding: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .comparison-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: var(--surface);
+            color: var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 8px;
+        }
+
+        .engineering-box {
+            background: var(--surface);
+            border: 2px solid var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .engineering-box h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .engineering-box p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .value-display {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header style="position: relative;">
+            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
+                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
+                    <option value="en">🇺🇸 EN</option>
+                    <option value="pl">🇵🇱 PL</option>
+                    <option value="fr">🇫🇷 FR</option>
+                    <option value="es">🇪🇸 ES</option>
+                    <option value="pt">🇵🇹 PT</option>
+                    <option value="de">🇩🇪 DE</option>
+                    <option value="uk">🇺🇦 UK</option>
+                    <option value="be">🇧🇾 BE</option>
+                </select>
+                <button id="themeToggle"
+                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
+                    <i data-lucide="moon" size="16"></i>
+                </button>
+            </div>
+            <h1><i data-lucide="microscope"
+                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
+                    data-i18n="title">The Calculus Lab</span>
+            </h1>
+            <p class="subtitle" data-i18n="subtitle">Crash Course: From Slopes to Areas. Visualize standard Calculus I &
+                II concepts.</p>
+        </header>
+
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card">
+                <div class="card-header">
+                    <i data-lucide="settings-2" style="margin-right: 8px;"></i> <span>Lab Controls</span>
+                </div>
+
+                <!-- Mode Switcher -->
+                <div class="form-group"
+                    style="background: var(--surface); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+                    <label
+                        style="color: var(--primary-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
+                        <i data-lucide="flask-conical" size="16"></i> Experiment Mode
+                    </label>
+                    <div style="display: flex; gap: 8px;">
+                        <button id="modeDeriv"
+                            style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <i data-lucide="trending-up" size="16"></i> <span
+                                style="color: var(--text-on-primary)">Slope</span>
+                        </button>
+                        <button id="modeInteg"
+                            style="margin: 0; background-color: var(--text-light); display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <i data-lucide="area-chart" size="16"></i> Area
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Function Selection -->
+                <div class="form-group">
+                    <label for="functionType">Target Function f(x)</label>
+                    <select id="functionType">
+                        <option value="quadratic">Quadratic: ax² + bx + c</option>
+                        <option value="cubic">Cubic: ax³ + bx + c</option>
+                        <option value="sine">Wave: a·sin(bx)</option>
+                        <option value="exponential">Growth/Decay: a·e^(bx)</option>
+                    </select>
+                </div>
+
+                <!-- Interactive Slider -->
+                <div class="form-group">
+                    <label><span data-i18n="explorePoint">Explore Point (x)</span>: <span id="valX">0.0</span></label>
+                    <input type="range" id="sliderX" min="-5" max="5" step="0.1" value="0">
+                </div>
+
+                <!-- Integral Controls (Hidden by default) -->
+                <div id="controlsInteg" class="hidden">
+                    <div class="form-group">
+                        <label><span data-i18n="lowerLimit">Lower Limit (a)</span>: <span
+                                id="valLimitA">0</span></label>
+                        <input type="range" id="limitA" min="-5" max="5" step="0.5" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label><span data-i18n="upperLimit">Upper Limit (b)</span>: <span
+                                id="valLimitB">2</span></label>
+                        <input type="range" id="limitB" min="-5" max="5" step="0.5" value="2">
+                    </div>
+                </div>
+
+                <!-- Derivative Controls (Hidden by default) -->
+                <div id="controlsDeriv">
+                    <p style="font-size: 0.8rem; color: var(--text-light);">Drag the slider or hover over the chart to
+                        see the Tangent Line (Slope).</p>
+                </div>
+
+                <div style="margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;">
+                    <label data-i18n="parameters">Parameters</label>
+                    <div style="display: flex; gap: 8px; font-size: 0.8rem;">
+                        <div style="flex: 1; min-width: 0;">a: <input type="number" id="numA" value="1" step="0.1"
+                                style="width: 100%; box-sizing: border-box;"></div>
+                        <div style="flex: 1; min-width: 0;">b: <input type="number" id="numB" value="0" step="0.1"
+                                style="width: 100%; box-sizing: border-box;"></div>
+                        <div style="flex: 1; min-width: 0;">c: <input type="number" id="numC" value="0" step="0.1"
+                                style="width: 100%; box-sizing: border-box;"></div>
+                    </div>
+                </div>
+
+                <div class="badge" id="badgeMode">Derivative</div>
+            </div>
+
+            <!-- Visualization -->
+            <div>
+                <div class="card">
+                    <div class="card-header"><i data-lucide="monitor" style="margin-right: 8px;"></i> <span
+                            data-i18n="visualizer">Visualizer</span></div>
+                    <div class="chart-container">
+                        <canvas id="calcCanvas"></canvas>
+                        <div id="visualOverlay"
+                            style="position: absolute; top: 10px; right: 10px; background: var(--card-bg); color: var(--text-main); padding: 8px; border-radius: 4px; pointer-events: none; border: 1px solid var(--border); font-size: 0.85rem;">
+                            <span id="overlayText">Slope = 0.0</span>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; font-size: 0.75rem; color: var(--text-light); background: var(--card-bg); opacity: 0.8; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border);"
+                            data-i18n="scrollZoom">
+                            Scroll to Zoom • Drag to Pan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Math Traceability -->
+                <div class="card">
+                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
+                            data-i18n="calcDetails">Calculation
+                            Details</span></div>
+                    <div id="mathTrace" class="formula"
+                        style="font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main);">
+                        <!-- Content populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div class="card">
+                    <div class="card-header"><i data-lucide="brain-circuit" style="margin-right: 8px;"></i> <span
+                            data-i18n="intuition">Intuition</span>
+                    </div>
+                    <div class="info-section">
+                        <h3 id="explainTitle">The Slope (Rate of Change)</h3>
+                        <p id="explainText">The derivative tells you how steep the hill is at any point. If the slope is
+                            zero, you are at a peak or a valley!</p>
+                    </div>
+
+                    <div id="engineeringApp" class="engineering-box">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <script>
+            const translations = {
+                en: {
+                    title: "The Calculus Lab",
+                    subtitle: "Crash Course: From Slopes to Areas. Visualize standard Calculus I & II concepts.",
+                    labControls: "Lab Controls",
+                    experimentMode: "Experiment Mode",
+                    slope: "Slope",
+                    area: "Area",
+                    targetFunction: "Target Function f(x)",
+                    explorePoint: "Explore Point (x)",
+                    lowerLimit: "Lower Limit (a)",
+                    upperLimit: "Upper Limit (b)",
+                    parameters: "Parameters",
+                    visualizer: "Visualizer",
+                    scrollZoom: "Scroll to Zoom • Drag to Pan",
+                    calcDetails: "Calculation Details",
+                    intuition: "Intuition",
+                    slopeTitle: "The Slope (Rate of Change)",
+                    slopeText: "The derivative tells you how steep the hill is at any point. If the slope is zero, you are at a peak or a valley!",
+                    areaTitle: "The Area (Accumulation)",
+                    areaText: "The integral adds up all the tiny slices under the curve. It represents Accumulation. If the graph is Velocity, the Area is the Total Distance Traveled.",
+                    engContext: "Engineering Context",
+                    engVel: "Velocity",
+                    engVelDesc: "How fast position changes.",
+                    engCost: "Marginal Cost",
+                    engCostDesc: "Cost to produce 'one more' item.",
+                    engFlux: "Heat Flux",
+                    engFluxDesc: "Temperature gradient creates heat flow.",
+                    engDist: "Distance",
+                    engDistDesc: "Sum of velocity over time.",
+                    engWork: "Work",
+                    engWorkDesc: "Sum of Force over distance (W = ∫F dx).",
+                    engBat: "Battery Charge",
+                    engBatDesc: "Sum of Current over time."
+                },
+                pl: {
+                    title: "Laboratorium Analizy Matematycznej",
+                    subtitle: "Kurs przyspieszony: Od pochodnych do całek. Wizualizacja pojęć z Analizy I i II.",
+                    labControls: "Panel Sterowania",
+                    experimentMode: "Tryb Eksperymentu",
+                    slope: "Pochodna",
+                    area: "Całka",
+                    targetFunction: "Funkcja Celu f(x)",
+                    explorePoint: "Punkt (x)",
+                    lowerLimit: "Dolna Granica (a)",
+                    upperLimit: "Górna Granica (b)",
+                    parameters: "Parametry",
+                    visualizer: "Wizualizacja",
+                    scrollZoom: "Scroll: Powiększ • Przeciągnij: Przesuń",
+                    calcDetails: "Szczegóły Obliczeń",
+                    intuition: "Intuicja",
+                    slopeTitle: "Pochodna (Tempo Zmian)",
+                    slopeText: "Pochodna mówi, jak strome jest zbocze w danym punkcie. Jeśli nachylenie wynosi zero, jesteś na szczycie lub w dolinie!",
+                    areaTitle: "Pole (Akumulacja)",
+                    areaText: "Całka sumuje wszystkie małe wycinki pod krzywą. Reprezentuje akumulację.",
+                    engContext: "Kontekst Inżynierski",
+                    engVel: "Prędkość",
+                    engVelDesc: "Szybkość zmiany położenia.",
+                    engCost: "Koszt Krańcowy",
+                    engCostDesc: "Koszt wyprodukowania 'jeszcze jednej' sztuki.",
+                    engFlux: "Strumień Ciepła",
+                    engFluxDesc: "Gradient temperatury tworzy przepływ ciepła.",
+                    engDist: "Dystans",
+                    engDistDesc: "Suma prędkości w czasie.",
+                    engWork: "Praca",
+                    engWorkDesc: "Suma siły na dystansie (W = ∫F dx).",
+                    engBat: "Naładowanie Baterii",
+                    engBatDesc: "Suma prądu w czasie."
+                },
+                fr: { title: "Labo de Calcul Différentiel", subtitle: "Des pentes aux surfaces. Concepts de base visualisés.", labControls: "Contrôles", experimentMode: "Mode", slope: "Pente", area: "Surface", targetFunction: "Fonction Cible", explorePoint: "Point (x)", lowerLimit: "Limite Inf (a)", upperLimit: "Limite Sup (b)", parameters: "Paramètres", visualizer: "Visualiseur", scrollZoom: "Scroll pour Zoomer • Glisser pour Bouger", calcDetails: "Détails du Calcul", intuition: "Intuition", slopeTitle: "La Pente (Taux de Variation)", slopeText: "La dérivée indique la raideur de la pente.", areaTitle: "La Surface (Accumulation)", areaText: "L'intégrale additionne toutes les tranches sous la courbe.", engContext: "Contexte Ingénierie", engVel: "Vitesse", engVelDesc: "Changement de position.", engCost: "Coût Marginal", engCostDesc: "Coût de l'unité suivante.", engFlux: "Flux", engFluxDesc: "Gradient thermique.", engDist: "Distance", engDistDesc: "Somme de la vitesse.", engWork: "Travail", engWorkDesc: "Force sur distance.", engBat: "Charge", engBatDesc: "Somme du courant." },
+                es: { title: "Laboratorio de Cálculo", subtitle: "De pendientes a áreas. Visualización de conceptos clave.", labControls: "Controles", experimentMode: "Modo", slope: "Pendiente", area: "Área", targetFunction: "Función Objetivo", explorePoint: "Punto (x)", lowerLimit: "Límite Inf (a)", upperLimit: "Límite Sup (b)", parameters: "Parámetros", visualizer: "Visualizador", scrollZoom: "Rueda: Zoom • Arrastrar: Mover", calcDetails: "Detalles del Cálculo", intuition: "Intuición", slopeTitle: "La Pendiente (Tasa de Cambio)", slopeText: "La derivada indica qué tan empinada es la colina.", areaTitle: "El Área (Acumulación)", areaText: "La integral suma todas las rebanadas bajo la curva.", engContext: "Ingeniería", engVel: "Velocidad", engVelDesc: "Cambio de posición.", engCost: "Costo Marginal", engCostDesc: "Costo de la siguiente unidad.", engFlux: "Flujo", engFluxDesc: "Gradiente térmico.", engDist: "Distancia", engDistDesc: "Suma de velocidad.", engWork: "Trabajo", engWorkDesc: "Fuerza por distancia.", engBat: "Carga", engBatDesc: "Suma de corriente." },
+                pt: { title: "Laboratório de Cálculo", subtitle: "De inclinações a áreas. Conceitos visualizados.", labControls: "Controles", experimentMode: "Modo", slope: "Inclinação", area: "Área", targetFunction: "Função Alvo", explorePoint: "Ponto (x)", lowerLimit: "Limite Inf (a)", upperLimit: "Limite Sup (b)", parameters: "Parâmetros", visualizer: "Visualizador", scrollZoom: "Role para Zoom • Arraste para Mover", calcDetails: "Detalhes do Cálculo", intuition: "Intuição", slopeTitle: "A Inclinação (Taxa de Variação)", slopeText: "A derivada diz o quão íngreme é a colina.", areaTitle: "A Área (Acumulação)", areaText: "A integral soma todas as fatias sob a curva.", engContext: "Engenharia", engVel: "Velocidade", engVelDesc: "Mudança de posição.", engCost: "Custo Marginal", engCostDesc: "Custo da próxima unidade.", engFlux: "Fluxo", engFluxDesc: "Gradiente térmico.", engDist: "Distância", engDistDesc: "Soma da velocidade.", engWork: "Trabalho", engWorkDesc: "Força sobre distância.", engBat: "Carga", engBatDesc: "Soma da corrente." },
+                de: { title: "Analysis-Labor", subtitle: "Von Steigungen zu Flächen. Konzepte visualisiert.", labControls: "Steuerung", experimentMode: "Modus", slope: "Steigung", area: "Fläche", targetFunction: "Zielfunktion f(x)", explorePoint: "Punkt (x)", lowerLimit: "Untere Grenze (a)", upperLimit: "Obere Grenze (b)", parameters: "Parameter", visualizer: "Visualisierer", scrollZoom: "Scrollen: Zoom • Ziehen: Pan", calcDetails: "Berechnungsdetails", intuition: "Intuition", slopeTitle: "Die Steigung (Änderungsrate)", slopeText: "Die Ableitung sagt, wie steil der Berg ist.", areaTitle: "Die Fläche (Akkumulation)", areaText: "Das Integral summiert alle Scheiben unter der Kurve.", engContext: "Technik", engVel: "Geschwindigkeit", engVelDesc: "Änderung der Position.", engCost: "Grenzkosten", engCostDesc: "Kosten für 'ein weiteres' Stück.", engFlux: "Wärmefluss", engFluxDesc: "Temperaturgradient.", engDist: "Distanz", engDistDesc: "Summe der Geschwindigkeit.", engWork: "Arbeit", engWorkDesc: "Kraft über Weg.", engBat: "Ladung", engBatDesc: "Summe des Stroms." },
+                uk: { title: "Лабораторія Матаналізу", subtitle: "Від нахилів до площ. Візуалізація концепцій.", labControls: "Управління", experimentMode: "Режим", slope: "Нахил", area: "Площа", targetFunction: "Функція f(x)", explorePoint: "Точка (x)", lowerLimit: "Нижня межа (a)", upperLimit: "Верхня межа (b)", parameters: "Параметри", visualizer: "Візуалізатор", scrollZoom: "Скрол: Зум • Перетягни: Рух", calcDetails: "Деталі розрахунків", intuition: "Інтуїція", slopeTitle: "Нахил (Швидкість зміни)", slopeText: "Похідна показує крутизну схилу.", areaTitle: "Площа (Накопичення)", areaText: "Інтеграл підсумовує всі смужки під кривою.", engContext: "Інженерія", engVel: "Швидкість", engVelDesc: "Зміна положення.", engCost: "Граничні витрати", engCostDesc: "Вартість наступної одиниці.", engFlux: "Потік тепла", engFluxDesc: "Температурний градієнт.", engDist: "Відстань", engDistDesc: "Сума швидкості.", engWork: "Робота", engWorkDesc: "Сила на відстань.", engBat: "Заряд", engBatDesc: "Сума струму." },
+                be: { title: "Лабараторыя Матаналізу", subtitle: "Ад нахілаў да плошчаў. Візуалізацыя канцэпцый.", labControls: "Кіраванне", experimentMode: "Рэжым", slope: "Нахіл", area: "Плошча", targetFunction: "Функцыя f(x)", explorePoint: "Кропка (x)", lowerLimit: "Ніжняя мяжа (a)", upperLimit: "Верхняя мяжа (b)", parameters: "Параметры", visualizer: "Візуалізатар", scrollZoom: "Скрол: Зум • Перацягні: Рух", calcDetails: "Дэталі разлікаў", intuition: "Інтуіцыя", slopeTitle: "Нахіл (Хуткасць змены)", slopeText: "Вытворная паказвае крутасць схілу.", areaTitle: "Плошча (Назапашванне)", areaText: "Інтэграл падсумоўвае ўсе палоскі пад крывой.", engContext: "Інжынерыя", engVel: "Хуткасць", engVelDesc: "Змена становішча.", engCost: "Гпанічныя выдаткі", engCostDesc: "Кошт наступнай адзінкі.", engFlux: "Паток цяпла", engFluxDesc: "Тэмпературны градыент.", engDist: "Адлегласць", engDistDesc: "Сума хуткасці.", engWork: "Праца", engWorkDesc: "Сіла на адлегласць.", engBat: "Зарад", engBatDesc: "Сума току." }
+            };
+
+            const app = {
+                lang: 'en',
+                theme: 'light',
+
+                setTheme: (t) => {
+                    app.theme = t;
+                    document.documentElement.setAttribute('data-theme', t);
+                    localStorage.setItem('theme', t);
+                    const icon = t === 'dark' ? 'sun' : 'moon';
+                    // Update icon
+                    document.getElementById('themeToggle').innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
+                    lucide.createIcons();
+                    app.draw(); // Redraw canvas on theme change
+                },
+
+                setLang: (l) => {
+                    app.lang = l;
+                    localStorage.setItem('lang', l);
+                    document.getElementById('langSelect').value = l;
+                    app.updateTranslations();
+                    app.displayInfo(); // Trigger content update
+                },
+
+                updateTranslations: () => {
+                    const t = translations[app.lang];
+                    document.querySelectorAll('[data-i18n]').forEach(el => {
+                        const key = el.getAttribute('data-i18n');
+                        if (t[key]) el.textContent = t[key];
+                    });
+                },
+                canvas: null,
+                ctx: null,
+                state: {
+                    mode: 'derivative', // or 'integral'
+                    func: 'quadratic',
+                    x: 0,
+                    a: 1, b: 0, c: 0,
+                    limitA: 0,
+                    limitB: 2,
+
+                    // Viewport
+                    scale: 40, // pixels per unit
+                    offsetX: 0, // physics units
+                    offsetY: 0,
+                    isDragging: false,
+                    lastX: 0,
+                    lastY: 0
+                },
+
+                // Math Functions
+                funcs: {
+                    quadratic: (x, s) => s.a * x * x + s.b * x + s.c,
+                    cubic: (x, s) => s.a * x * x * x + s.b * x + s.c,
+                    sine: (x, s) => s.a * Math.sin(s.b * x),
+                    exponential: (x, s) => s.a * Math.exp(s.b * x)
+                },
+
+                // Analytics (Derivatives/Integrals)
+                math: {
+                    quadratic: {
+                        dt: (x, s) => 2 * s.a * x + s.b,
+                        int: (x, s) => (s.a * x * x * x) / 3 + (s.b * x * x) / 2 + s.c * x
+                    },
+                    cubic: {
+                        dt: (x, s) => 3 * s.a * x * x + s.b,
+                        int: (x, s) => (s.a * Math.pow(x, 4)) / 4 + (s.b * x * x) / 2 + s.c * x
+                    },
+                    sine: {
+                        dt: (x, s) => s.a * s.b * Math.cos(s.b * x),
+                        int: (x, s) => (s.b != 0) ? -(s.a / s.b) * Math.cos(s.b * x) : 0
+                    },
+                    exponential: {
+                        dt: (x, s) => s.a * s.b * Math.exp(s.b * x),
+                        int: (x, s) => (s.b != 0) ? (s.a / s.b) * Math.exp(s.b * x) : s.a * x
+                    }
+                },
+
+                init: () => {
+                    app.canvas = document.getElementById('calcCanvas');
+                    app.ctx = app.canvas.getContext('2d');
+
+                    // Resolution
+                    const container = app.canvas.parentElement;
+                    app.canvas.width = container.clientWidth;
+                    app.canvas.height = container.clientHeight;
+
+                    // Center Origin initially
+                    app.state.offsetX = 0;
+                    app.state.offsetY = 0;
+
+                    app.setupListeners();
+
+                    // Init Theme/Lang
+                    const savedTheme = localStorage.getItem('theme') || 'light';
+                    app.setTheme(savedTheme);
+                    const savedLang = localStorage.getItem('lang') || 'en';
+                    app.setLang(savedLang);
+
+                    app.draw();
+                    // app.displayInfo(); // Called by setLang
+                    lucide.createIcons();
+                },
+
+                setupListeners: () => {
+                    // Theme/Lang
+                    document.getElementById('themeToggle').addEventListener('click', () => {
+                        app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
+                    });
+                    document.getElementById('langSelect').addEventListener('change', (e) => {
+                        app.setLang(e.target.value);
+                    });
+
+                    // Mode Toggle
+                    // Mode Toggle
+                    document.getElementById('modeDeriv').addEventListener('click', () => app.setMode('derivative'));
+                    document.getElementById('modeInteg').addEventListener('click', () => app.setMode('integral'));
+
+                    // Inputs
+                    ['numA', 'numB', 'numC'].forEach(id => {
+                        document.getElementById(id).addEventListener('input', (e) => {
+                            app.state[id.replace('num', '').toLowerCase()] = parseFloat(e.target.value);
+                            app.draw();
+                            app.displayInfo();
+                        });
+                    });
+
+                    document.getElementById('functionType').addEventListener('change', (e) => {
+                        app.state.func = e.target.value;
+                        app.draw();
+                        app.displayInfo();
+                    });
+
+                    // Sliders
+                    document.getElementById('sliderX').addEventListener('input', (e) => {
+                        app.state.x = parseFloat(e.target.value);
+                        document.getElementById('valX').textContent = app.state.x.toFixed(1);
+                        app.draw();
+                        app.displayInfo();
+                    });
+
+                    document.getElementById('limitA').addEventListener('input', (e) => {
+                        app.state.limitA = parseFloat(e.target.value);
+                        document.getElementById('valLimitA').textContent = app.state.limitA.toFixed(1);
+                        app.draw();
+                        app.displayInfo();
+                    });
+
+                    document.getElementById('limitB').addEventListener('input', (e) => {
+                        app.state.limitB = parseFloat(e.target.value);
+                        document.getElementById('valLimitB').textContent = app.state.limitB.toFixed(1);
+                        app.draw();
+                        app.displayInfo();
+                    });
+
+                    // Canvas Interaction (Zoom/Pan)
+                    const c = app.canvas;
+
+                    c.addEventListener('wheel', (e) => {
+                        e.preventDefault();
+                        const zoomIntensity = 0.1;
+                        const delta = e.deltaY > 0 ? (1 - zoomIntensity) : (1 + zoomIntensity);
+
+                        // Zoom towards mouse pointer logic could go here, 
+                        // but simple center zoom is easier for start.
+                        // Let's just zoom scale.
+                        app.state.scale *= delta;
+                        // Clamp
+                        if (app.state.scale < 10) app.state.scale = 10;
+                        if (app.state.scale > 200) app.state.scale = 200;
+
+                        app.draw();
+                    }, { passive: false });
+
+                    c.addEventListener('mousedown', (e) => {
+                        app.state.isDragging = true;
+                        app.state.lastX = e.clientX;
+                        app.state.lastY = e.clientY;
+                        c.style.cursor = 'grabbing';
+                    });
+
+                    window.addEventListener('mousemove', (e) => {
+                        if (app.state.isDragging) {
+                            const dx = e.clientX - app.state.lastX;
+                            const dy = e.clientY - app.state.lastY;
+                            app.state.lastX = e.clientX;
+                            app.state.lastY = e.clientY;
+
+                            // Pan moves the viewport center
+                            app.state.offsetX -= dx / app.state.scale;
+                            app.state.offsetY += dy / app.state.scale;
+                            app.draw();
+                        } else {
+                            // Hover logic for updating 'x' can go here if we want mouse-follow
+                        }
+                    });
+
+                    window.addEventListener('mouseup', () => {
+                        app.state.isDragging = false;
+                        c.style.cursor = 'crosshair';
+                    });
+                },
+
+                setMode: (m) => {
+                    app.state.mode = m;
+                    const isDeriv = m === 'derivative';
+
+                    // Toggle Buttons
+                    document.getElementById('modeDeriv').style.backgroundColor = isDeriv ? 'var(--primary)' : 'var(--text-light)';
+                    document.getElementById('modeInteg').style.backgroundColor = isDeriv ? 'var(--text-light)' : 'var(--primary)';
+
+                    // Toggle Controls
+                    document.getElementById('controlsDeriv').classList.toggle('hidden', !isDeriv);
+                    document.getElementById('controlsInteg').classList.toggle('hidden', isDeriv);
+
+                    document.getElementById('badgeMode').textContent = isDeriv ? 'Derivative' : 'Integral / Area';
+
+                    app.draw();
+                    app.displayInfo();
+                },
+
+                draw: () => {
+                    const w = app.canvas.width;
+                    const h = app.canvas.height;
+                    const ctx = app.ctx;
+                    const s = app.state;
+
+                    // Clear
+                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--grid-bg');
+                    ctx.fillRect(0, 0, w, h);
+
+                    const cx = w / 2;
+                    const cy = h / 2;
+
+                    // Local to Screen transform
+                    // px = cx + (x - offsetX)*scale
+                    // py = cy - (y - offsetY)*scale
+                    const toScreenX = (x) => cx + (x - s.offsetX) * s.scale;
+                    const toScreenY = (y) => cy - (y - s.offsetY) * s.scale;
+
+                    // Draw Grid
+                    ctx.lineWidth = 1;
+
+                    // Calculate grid spacing based on scale
+                    let step = 1;
+                    if (s.scale > 80) step = 0.5;
+                    if (s.scale > 150) step = 0.1;
+                    if (s.scale < 30) step = 2;
+                    if (s.scale < 15) step = 5;
+
+                    // Viewport bounds in math units
+                    const xMin = s.offsetX - cx / s.scale;
+                    const xMax = s.offsetX + cx / s.scale;
+                    const yMin = s.offsetY - cy / s.scale;
+                    const yMax = s.offsetY + cy / s.scale;
+
+                    // Snap start to step
+                    const startX = Math.floor(xMin / step) * step;
+                    const startY = Math.floor(yMin / step) * step;
+
+                    // Grid Lines
+                    const gridColor = getComputedStyle(document.body).getPropertyValue('--grid-line');
+                    ctx.strokeStyle = gridColor; // Minor
+                    ctx.beginPath();
+                    for (let x = startX; x <= xMax; x += step) {
+                        // Check if major (integer)
+                        const isMajor = Math.abs(x % 1) < 0.001 || Math.abs(x % 5) < 0.001;
+                        ctx.moveTo(toScreenX(x), 0);
+                        ctx.lineTo(toScreenX(x), h);
+                    }
+                    for (let y = startY; y <= yMax; y += step) {
+                        ctx.moveTo(0, toScreenY(y));
+                        ctx.lineTo(w, toScreenY(y));
+                    }
+                    ctx.stroke();
+
+                    // Axes
+                    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    // Y Axis (x=0)
+                    if (xMin <= 0 && xMax >= 0) {
+                        ctx.moveTo(toScreenX(0), 0);
+                        ctx.lineTo(toScreenX(0), h);
+                    }
+                    // X Axis (y=0)
+                    if (yMin <= 0 && yMax >= 0) {
+                        ctx.moveTo(0, toScreenY(0));
+                        ctx.lineTo(w, toScreenY(0));
+                    }
+                    ctx.stroke();
+
+                    const f = app.funcs[s.func];
+
+                    // Draw Area (Integral Mode)
+                    if (s.mode === 'integral') {
+                        const la = Math.min(s.limitA, s.limitB);
+                        const lb = Math.max(s.limitA, s.limitB);
+
+                        ctx.fillStyle = 'rgba(20, 184, 166, 0.2)';
+                        ctx.beginPath();
+
+                        // We need to fill under curve from la to lb
+                        // Start at (la, 0)
+                        ctx.moveTo(toScreenX(la), toScreenY(0));
+
+                        const dx = 1 / s.scale; // 1 pixel step
+                        for (let x = la; x <= lb; x += 0.05) { // Use fixed small step for smooth curve
+                            ctx.lineTo(toScreenX(x), toScreenY(f(x, s)));
+                        }
+                        ctx.lineTo(toScreenX(lb), toScreenY(f(lb, s)));
+                        ctx.lineTo(toScreenX(lb), toScreenY(0));
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    // Draw Function
+                    ctx.strokeStyle = '#0f766e'; ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    // Draw only within view + padding
+                    const drawStep = Math.max(0.01, 1 / s.scale * 2);
+                    for (let x = xMin - 1; x <= xMax + 1; x += drawStep) {
+                        const y = f(x, s);
+                        const px = toScreenX(x);
+                        const py = toScreenY(y);
+                        if (x === xMin - 1) ctx.moveTo(px, py);
+                        else ctx.lineTo(px, py);
+                    }
+                    ctx.stroke();
+
+                    // Draw Tangent/Point (Derivative Mode)
+                    if (s.mode === 'derivative') {
+                        const cx = s.x;
+                        const cy = f(cx, s);
+                        const slope = app.math[s.func].dt(cx, s);
+
+                        const tx = toScreenX(cx);
+                        const ty = toScreenY(cy);
+
+                        // Specific point
+                        ctx.fillStyle = '#ef4444';
+                        ctx.beginPath(); ctx.arc(tx, ty, 6, 0, 2 * Math.PI); ctx.fill();
+
+                        // Tangent
+                        const dx = 2.0; // Draw tangent 2 units wide
+                        const x1 = cx - dx; const y1 = cy - slope * dx;
+                        const x2 = cx + dx; const y2 = cy + slope * dx;
+
+                        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(toScreenX(x1), toScreenY(y1));
+                        ctx.lineTo(toScreenX(x2), toScreenY(y2));
+                        ctx.stroke();
+
+                        document.getElementById('visualOverlay').innerHTML = `slope f'(x) = <strong>${slope.toFixed(2)}</strong>`;
+                    } else {
+                        // Integral Result
+                        const math = app.math[s.func];
+                        // Calculate F(b) - F(a) strictly
+                        const area = math.int(s.limitB, s) - math.int(s.limitA, s);
+                        document.getElementById('visualOverlay').innerHTML = `∫ Area = <strong>${area.toFixed(3)}</strong>`;
+                    }
+
+                    // Draw Labels for Grid ?? (Optional polish)
+                },
+
+                displayInfo: () => {
+                    const s = app.state;
+                    const box = document.getElementById('engineeringApp');
+                    const title = document.getElementById('explainTitle');
+                    const text = document.getElementById('explainText');
+
+                    if (s.mode === 'derivative') {
+                        // Traceability for Derivative
+                        const cx = s.x;
+                        const slope = app.math[s.func].dt(cx, s);
+
+                        let traceHtml = '';
+                        if (s.func === 'quadratic') {
+                            traceHtml = `<strong>f(x)</strong> = ${s.a}x² + ${s.b}x + ${s.c}<br>`;
+                            traceHtml += `<strong>f'(x)</strong> = 2(${s.a})x + ${s.b} <span style="color:var(--text-light);">(Power Rule)</span><br>`;
+                            traceHtml += `<strong>Eval at x=${cx.toFixed(1)}</strong>: 2(${s.a})(${cx.toFixed(1)}) + ${s.b}<br>`;
+                            traceHtml += `<strong>Result</strong> = ${slope.toFixed(2)}`;
+                        } else if (s.func === 'cubic') {
+                            traceHtml = `<strong>f(x)</strong> = ${s.a}x³ + ${s.b}x + ${s.c}<br>`;
+                            traceHtml += `<strong>f'(x)</strong> = 3(${s.a})x² + ${s.b}<br>`;
+                            traceHtml += `<strong>Eval at x=${cx.toFixed(1)}</strong>: 3(${s.a})(${cx.toFixed(1)})² + ${s.b}<br>`;
+                            traceHtml += `<strong>Result</strong> = ${slope.toFixed(2)}`;
+                        } else if (s.func === 'sine') {
+                            traceHtml = `<strong>f(x)</strong> = ${s.a}sin(${s.b}x)<br>`;
+                            traceHtml += `<strong>f'(x)</strong> = ${s.a} · ${s.b} · cos(${s.b}x)<br>`;
+                            traceHtml += `<strong>Eval at x=${cx.toFixed(1)}</strong>: ${(s.a * s.b).toFixed(2)} · cos(${s.b}*${cx.toFixed(1)})<br>`;
+                            traceHtml += `<strong>Result</strong> = ${slope.toFixed(2)}`;
+                        }
+
+                        document.getElementById('mathTrace').innerHTML = traceHtml;
+
+                        // Title/Text handled by i18n logic unless dynamic? 
+                        // No, static text updates via updateTranslations primarily, but here we switch dynamic content.
+                        // We need to use translation keys for this dynamic switch too.
+                        const t = translations[app.lang];
+
+                        title.innerText = t.slopeTitle;
+                        text.innerText = t.slopeText;
+
+                        box.innerHTML = `
+                        <h4>${t.engContext}</h4>
+                        <ul>
+                           <li><strong>${t.engVel}:</strong> ${t.engVelDesc}</li>
+                           <li><strong>${t.engCost}:</strong> ${t.engCostDesc}</li>
+                           <li><strong>${t.engFlux}:</strong> ${t.engFluxDesc}</li>
+                        </ul>
+                    `;
+                    } else {
+                        // Traceability for Integral
+                        const math = app.math[s.func];
+                        const la = s.limitA;
+                        const lb = s.limitB;
+                        const valA = math.int(la, s);
+                        const valB = math.int(lb, s);
+                        const area = valB - valA;
+
+                        let traceHtml = `<strong>Area</strong> = F(b) - F(a) <span style="color:var(--text-light);">(Fund. Thm. of Calculus)</span><br>`;
+                        traceHtml += `<strong>Bounds</strong>: a=${la}, b=${lb}<br>`;
+                        traceHtml += `<strong>F(b)</strong> = ${valB.toFixed(3)}<br>`;
+                        traceHtml += `<strong>F(a)</strong> = ${valA.toFixed(3)}<br>`;
+                        traceHtml += `<strong>Calculation</strong>: ${valB.toFixed(3)} - (${valA.toFixed(3)})<br>`;
+                        traceHtml += `<strong>Result</strong> = ${area.toFixed(3)}`;
+
+                        document.getElementById('mathTrace').innerHTML = traceHtml;
+
+                        const t = translations[app.lang];
+                        // Update Mode Switcher Visuals
+                        document.getElementById('modeDeriv').style.backgroundColor = 'var(--surface)';
+                        document.getElementById('modeDeriv').style.color = 'var(--text-main)';
+                        document.getElementById('modeInteg').style.backgroundColor = 'var(--primary)';
+                        document.getElementById('modeInteg').style.color = 'white';
+
+                        title.innerText = t.areaTitle;
+                        text.innerText = t.areaText;
+
+                        box.innerHTML = `
+                        <h4>${t.engContext}</h4>
+                        <ul>
+                           <li><strong>${t.engDist}:</strong> ${t.engDistDesc}</li>
+                           <li><strong>${t.engWork}:</strong> ${t.engWorkDesc}</li>
+                           <li><strong>${t.engBat}:</strong> ${t.engBatDesc}</li>
+                        </ul>
+                    `;
+                    }
+                }
+            };
+
+            window.onload = app.init;
+        </script>
+</body>
+
+</html>

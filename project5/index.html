@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signals & Fourier Playground | Applied Mathematics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-dark: #115e59;
+            --surface: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --input-bg: #ffffff;
+            --grid-line: #e2e8f0;
+            --grid-bg: #f8fafc;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --primary: #2dd4bf;
+            --primary-light: #5eead4;
+            --primary-dark: #14b8a6;
+            --surface: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-light: #94a3b8;
+            --border: #334155;
+            --input-bg: #1e293b;
+            --grid-line: #334155;
+            --grid-bg: #0f172a;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--surface);
+            padding-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background-color: var(--primary-light);
+        }
+
+        button:active {
+            background-color: var(--primary-dark);
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            margin-bottom: 16px;
+        }
+
+        .info-section {
+            background-color: var(--surface);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .info-section h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        .info-section p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .formula {
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            margin: 8px 0;
+            overflow-x: auto;
+        }
+
+        .dual-chart {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .chart-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .comparison-item {
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .comparison-item strong {
+            color: var(--primary);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: var(--surface);
+            color: var(--primary-dark);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 8px;
+        }
+
+        .engineering-box {
+            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+            border: 2px solid var(--primary-light);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .engineering-box h4 {
+            margin: 0 0 8px 0;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .engineering-box p {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .value-display {
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            background: var(--surface);
+            border-radius: 6px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-dark);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .spectrum-bar {
+            height: 100%;
+            background: linear-gradient(to top, rgba(20, 184, 166, 0.7), rgba(20, 184, 166, 0.3));
+            border-radius: 4px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px;">
+                <button id="themeToggle" onclick="app.toggleTheme()"
+                    style="width: auto; padding: 8px; background: transparent; color: var(--text-main); border: 1px solid var(--border);">
+                    <i data-lucide="moon" size="16"></i>
+                </button>
+                <select id="langSelect" onchange="app.setLang(this.value)" style="width: auto; padding: 6px 12px;">
+                    <option value="en">English</option>
+                    <option value="pl">Polski</option>
+                    <option value="fr">Français</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="de">Deutsch</option>
+                    <option value="ua">Українська</option>
+                    <option value="be">Беларуская</option>
+                </select>
+            </div>
+            <h1 data-i18n="title">🌊 Signals & Fourier Playground</h1>
+            <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and
+                signal filtering in real-world applications</p>
+        </header>
+
+        <div class="grid">
+            <!-- Control Panel -->
+            <div class="card">
+                <div class="card-header">⚙️ Configuration</div>
+
+                <!-- Signal Type -->
+                <div class="form-group">
+                    <label for="signalType">Signal Type</label>
+                    <select id="signalType">
+                        <option value="sine">Pure Sine Wave</option>
+                        <option value="composite">Composite (Multi-Freq)</option>
+                        <option value="square">Square Wave</option>
+                        <option value="sawtooth">Sawtooth Wave</option>
+                        <option value="noise">White Noise</option>
+                    </select>
+                </div>
+
+                <!-- Frequency 1 -->
+                <div class="form-group">
+                    <label>Primary Freq (Hz): <span id="valFreq1">10</span></label>
+                    <input type="range" id="sliderFreq1" min="1" max="50" step="1" value="10">
+                </div>
+
+                <!-- Frequency 2 (for composite) -->
+                <div class="form-group" id="groupFreq2">
+                    <label>Secondary Freq (Hz): <span id="valFreq2">20</span></label>
+                    <input type="range" id="sliderFreq2" min="1" max="50" step="1" value="20">
+                </div>
+
+                <!-- Amplitude -->
+                <div class="form-group">
+                    <label>Amplitude: <span id="valAmplitude">1.0</span></label>
+                    <input type="range" id="sliderAmplitude" min="0.1" max="2" step="0.1" value="1">
+                </div>
+
+                <!-- Filter Type -->
+                <div class="form-group">
+                    <label for="filterType">Filter Type</label>
+                    <select id="filterType">
+                        <option value="none">No Filter</option>
+                        <option value="lowpass">Low-Pass (Cut High)</option>
+                        <option value="highpass">High-Pass (Cut Low)</option>
+                        <option value="bandpass">Band-Pass (Isolate Mid)</option>
+                    </select>
+                </div>
+
+                <!-- Filter Cutoff -->
+                <div class="form-group" id="groupCutoff">
+                    <label>Cutoff Freq (Hz): <span id="valCutoff">15</span></label>
+                    <input type="range" id="sliderCutoff" min="1" max="40" step="1" value="15">
+                </div>
+
+                <!-- Application Context -->
+                <div class="form-group">
+                    <label for="context">Application</label>
+                    <select id="context">
+                        <option value="audio">Audio & Music</option>
+                        <option value="motor">Motor Control (PWM)</option>
+                        <option value="sensor">Sensor Filtering</option>
+                        <option value="communication">Communication Signals</option>
+                        <option value="vibration">Vibration Analysis</option>
+                    </select>
+                </div>
+
+                <button id="btnUpdate" data-i18n="updateBtn">Update Visualization</button>
+
+                <div class="badge" data-i18n="badgeSignal">Signal</div>
+                <div class="badge" data-i18n="badgeFourier">Fourier</div>
+                <div class="badge" data-i18n="badgeFilter">Filter</div>
+            </div>
+
+            <!-- Visualization & Analysis -->
+            <div>
+                <!-- Time & Frequency Domain Plots -->
+                <div class="card">
+                    <div class="card-header">📊 Time Domain & Frequency Spectrum</div>
+
+                    <div class="dual-chart">
+                        <div>
+                            <div class="chart-label">Time Domain (Raw Signal)</div>
+                            <div class="chart-container">
+                                <canvas id="timeChart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="chart-label">Frequency Domain (Spectrum)</div>
+                            <div class="chart-container">
+                                <canvas id="freqChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtered Signal -->
+                <div class="card">
+                    <div class="card-header">🔧 Filtered Signal (Time Domain)</div>
+                    <div class="chart-container">
+                        <canvas id="filteredChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Mathematical Concepts -->
+                <div class="card">
+                    <div class="card-header">📐 Signal Processing Concepts</div>
+                    <div id="formulaDisplay"></div>
+                    <div class="info-section">
+                        <h3>Fourier Transform Explained</h3>
+                        <p id="conceptExplanation"></p>
+                    </div>
+                    <div id="filterInfo" class="info-section">
+                        <h3>Filter Response</h3>
+                        <p id="filterDescription"></p>
+                    </div>
+                </div>
+
+                <!-- Engineering Application -->
+                <div class="card">
+                    <div class="card-header">⚡ Real-World Applications</div>
+                    <div id="engineeringApp" class="engineering-box"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "🌊 Signals & Fourier Playground",
+                subtitle: "Explore time-domain signals, frequency-domain transforms, and real-world applications",
+                config: "⚙️ Configuration",
+                signalType: "Signal Type",
+                freq1: "Primary Freq (Hz)",
+                freq2: "Secondary Freq (Hz)",
+                amplitude: "Amplitude",
+                filterType: "Filter Type",
+                cutoff: "Cutoff Freq (Hz)",
+                appContext: "Application",
+                updateBtn: "Update Visualization",
+                badgeSignal: "Signal",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filter",
+                timeDomain: "Time Domain (Raw Signal)",
+                freqDomain: "Frequency Domain (Spectrum)",
+                filteredSignal: "Filtered Signal (Time Domain)",
+                concepts: "📐 Signal Processing Concepts",
+                applications: "⚡ Real-World Applications",
+
+                // Select options
+                sine: "Pure Sine Wave",
+                composite: "Composite (Multi-Freq)",
+                square: "Square Wave",
+                sawtooth: "Sawtooth Wave",
+                noise: "White Noise",
+
+                none: "No Filter",
+                lowpass: "Low-Pass (Cut High)",
+                highpass: "High-Pass (Cut Low)",
+                bandpass: "Band-Pass (Isolate Mid)",
+
+                audio: "Audio & Music",
+                motor: "Motor Control (PWM)",
+                sensor: "Sensor Filtering",
+                communication: "Communication Signals",
+                vibration: "Vibration Analysis"
+            },
+            pl: {
+                title: "🌊 Sygnały i Fourier",
+                subtitle: "Eksploruj sygnały w dziedzinie czasu, transformaty częstotliwościowe i filtrowanie",
+                config: "⚙️ Konfiguracja",
+                signalType: "Typ Sygnału",
+                freq1: "Częst. Podstawowa (Hz)",
+                freq2: "Częst. Wtórna (Hz)",
+                amplitude: "Amplituda",
+                filterType: "Typ Filtra",
+                cutoff: "Częst. Odcięcia (Hz)",
+                appContext: "Zastosowanie",
+                updateBtn: "Aktualizuj Wizualizację",
+                badgeSignal: "Sygnał",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filtr",
+                timeDomain: "Dziedzina Czasu (Sygnał Surowy)",
+                freqDomain: "Dziedzina Częstotliwości (Widmo)",
+                filteredSignal: "Sygnał Przefiltrowany",
+                concepts: "📐 Koncepcje Przetwarzania Sygnałów",
+                applications: "⚡ Zastosowania Praktyczne",
+                sine: "Czysta Sinusoida",
+                composite: "Sygnał Złożony",
+                square: "Fala Prostokątna",
+                sawtooth: "Fala Piłokształtna",
+                noise: "Biały Szum",
+                none: "Brak Filtra",
+                lowpass: "Dolnoprzepustowy",
+                highpass: "Górnoprzepustowy",
+                bandpass: "Pasmowoprzepustowy",
+                audio: "Audio i Muzyka",
+                motor: "Sterowanie Silnikiem (PWM)",
+                sensor: "Filtrowanie Czujników",
+                communication: "Sygnały Komunikacyjne",
+                vibration: "Analiza Wibracji"
+            },
+            fr: {
+                title: "🌊 Signaux et Fourier",
+                subtitle: "Explorez les signaux temporels, les transformées fréquentielles et le filtrage",
+                config: "⚙️ Configuration",
+                signalType: "Type de Signal",
+                freq1: "Fréq. Primaire (Hz)",
+                freq2: "Fréq. Secondaire (Hz)",
+                amplitude: "Amplitude",
+                filterType: "Type de Filtre",
+                cutoff: "Fréq. de Coupure (Hz)",
+                appContext: "Application",
+                updateBtn: "Mettre à jour",
+                badgeSignal: "Signal",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filtre",
+                timeDomain: "Domaine Temporel",
+                freqDomain: "Domaine Fréquentiel",
+                filteredSignal: "Signal Filtré",
+                concepts: "📐 Concepts de Traitement du Signal",
+                applications: "⚡ Applications Réelles",
+                sine: "Onde Sinusoïdale",
+                composite: "Signal Composite",
+                square: "Onde Carrée",
+                sawtooth: "Onde en Dents de Scie",
+                noise: "Bruit Blanc",
+                none: "Aucun Filtre",
+                lowpass: "Passe-Bas",
+                highpass: "Passe-Haut",
+                bandpass: "Passe-Bande",
+                audio: "Audio & Musique",
+                motor: "Contrôle Moteur (PWM)",
+                sensor: "Filtrage de Capteurs",
+                communication: "Signaux de Communication",
+                vibration: "Analyse Vibratoire"
+            },
+            es: {
+                title: "🌊 Señales y Fourier",
+                subtitle: "Explora señales en el dominio del tiempo, transformadas de frecuencia y filtrado",
+                config: "⚙️ Configuración",
+                signalType: "Tipo de Señal",
+                freq1: "Frec. Primaria (Hz)",
+                freq2: "Frec. Secundaria (Hz)",
+                amplitude: "Amplitud",
+                filterType: "Tipo de Filtro",
+                cutoff: "Frec. de Corte (Hz)",
+                appContext: "Aplicación",
+                updateBtn: "Actualizar",
+                badgeSignal: "Señal",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filtro",
+                timeDomain: "Dominio del Tiempo",
+                freqDomain: "Dominio de Frecuencia",
+                filteredSignal: "Señal Filtrada",
+                concepts: "📐 Conceptos de Procesamiento de Señales",
+                applications: "⚡ Aplicaciones Reales",
+                sine: "Onda Senoidal",
+                composite: "Señal Compuesta",
+                square: "Onda Cuadrada",
+                sawtooth: "Onda Dientes de Sierra",
+                noise: "Ruido Blanco",
+                none: "Sin Filtro",
+                lowpass: "Paso Bajo",
+                highpass: "Paso Alto",
+                bandpass: "Paso Banda",
+                audio: "Audio y Música",
+                motor: "Control de Motor (PWM)",
+                sensor: "Filtrado de Sensores",
+                communication: "Señales de Comunicación",
+                vibration: "Análisis de Vibraciones"
+            },
+            pt: {
+                title: "🌊 Sinais e Fourier",
+                subtitle: "Explore sinais no domínio do tempo, transformadas de frequência e filtragem",
+                config: "⚙️ Configuração",
+                signalType: "Tipo de Sinal",
+                freq1: "Freq. Primária (Hz)",
+                freq2: "Freq. Secundária (Hz)",
+                amplitude: "Amplitude",
+                filterType: "Tipo de Filtro",
+                cutoff: "Freq. de Corte (Hz)",
+                appContext: "Aplicação",
+                updateBtn: "Atualizar Visualização",
+                badgeSignal: "Sinal",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filtro",
+                timeDomain: "Domínio do Tempo",
+                freqDomain: "Domínio da Frequência",
+                filteredSignal: "Sinal Filtrado",
+                concepts: "📐 Conceitos de Processamento de Sinais",
+                applications: "⚡ Aplicações Reais",
+                sine: "Onda Senoidal Pura",
+                composite: "Sinal Composto",
+                square: "Onda Quadrada",
+                sawtooth: "Onda Dente de Serra",
+                noise: "Ruído Branco",
+                none: "Sem Filtro",
+                lowpass: "Passa-Baixa",
+                highpass: "Passa-Alta",
+                bandpass: "Passa-Banda",
+                audio: "Áudio e Música",
+                motor: "Controle de Motor (PWM)",
+                sensor: "Filtragem de Sensores",
+                communication: "Sinais de Comunicação",
+                vibration: "Análise de Vibração"
+            },
+            de: {
+                title: "🌊 Signale & Fourier",
+                subtitle: "Erkunden Sie Zeitsignale, Frequenztransformationen und Filtertechnik",
+                config: "⚙️ Konfiguration",
+                signalType: "Signaltyp",
+                freq1: "Primärfrequenz (Hz)",
+                freq2: "Sekundärfrequenz (Hz)",
+                amplitude: "Amplitude",
+                filterType: "Filtertyp",
+                cutoff: "Grenzfrequenz (Hz)",
+                appContext: "Anwendung",
+                updateBtn: "Visualisierung Aktualisieren",
+                badgeSignal: "Signal",
+                badgeFourier: "Fourier",
+                badgeFilter: "Filter",
+                timeDomain: "Zeitbereich (Rohsignal)",
+                freqDomain: "Frequenzbereich (Spektrum)",
+                filteredSignal: "Gefiltertes Signal",
+                concepts: "📐 Signalverarbeitungskonzepte",
+                applications: "⚡ Reale Anwendungen",
+                sine: "Reine Sinuswelle",
+                composite: "Zusammengesetztes Signal",
+                square: "Rechteckwelle",
+                sawtooth: "Sägezahnwelle",
+                noise: "Weißes Rauschen",
+                none: "Kein Filter",
+                lowpass: "Tiefpass",
+                highpass: "Hochpass",
+                bandpass: "Bandpass",
+                audio: "Audio & Musik",
+                motor: "Motorsteuerung (PWM)",
+                sensor: "Sensorfilterung",
+                communication: "Kommunikationssignale",
+                vibration: "Vibrationsanalyse"
+            },
+            ua: {
+                title: "🌊 Сигнали та Фур'є",
+                subtitle: "Досліджуйте сигнали у часовій області, частотні перетворення та фільтрацію",
+                config: "⚙️ Конфігурація",
+                signalType: "Тип Сигналу",
+                freq1: "Основна Частота (Гц)",
+                freq2: "Вторинна Частота (Гц)",
+                amplitude: "Амплітуда",
+                filterType: "Тип Фільтру",
+                cutoff: "Частота Зрізу (Гц)",
+                appContext: "Застосування",
+                updateBtn: "Оновити Візуалізацію",
+                badgeSignal: "Сигнал",
+                badgeFourier: "Фур'є",
+                badgeFilter: "Фільтр",
+                timeDomain: "Часова Область",
+                freqDomain: "Частотна Область",
+                filteredSignal: "Відфільтрований Сигнал",
+                concepts: "📐 Концепції Обробки Сигналів",
+                applications: "⚡ Практичні Застосування",
+                sine: "Чиста Синусоїда",
+                composite: "Складний Сигнал",
+                square: "Прямокутна Хвиля",
+                sawtooth: "Пилкоподібна Хвиля",
+                noise: "Білий Шум",
+                none: "Без Фільтру",
+                lowpass: "Низькі Частоти",
+                highpass: "Високі Частоти",
+                bandpass: "Смуговий Фільтр",
+                audio: "Аудіо та Музика",
+                motor: "Керування Двигуном (PWM)",
+                sensor: "Фільтрація Датчиків",
+                communication: "Сигнали Зв'язку",
+                vibration: "Аналіз Вібрацій"
+            },
+            be: {
+                title: "🌊 Сігналы і Фур'е",
+                subtitle: "Даследуйце сігналы ў часавой вобласці, частотныя пераўтварэнні і фільтрацыю",
+                config: "⚙️ Канфігурацыя",
+                signalType: "Тып Сігналу",
+                freq1: "Асноўная Частата (Гц)",
+                freq2: "Другасная Частата (Гц)",
+                amplitude: "Амплітуда",
+                filterType: "Тып Фільтра",
+                cutoff: "Частата Зрэзу (Гц)",
+                appContext: "Ужыванне",
+                updateBtn: "Абнавіць Візуалізацыю",
+                badgeSignal: "Сігнал",
+                badgeFourier: "Фур'е",
+                badgeFilter: "Фільтр",
+                timeDomain: "Часавая Вобласць",
+                freqDomain: "Частотная Вобласць",
+                filteredSignal: "Атфільтраваны Сігнал",
+                concepts: "📐 Канцэпцыі Апрацоўкі Сігналаў",
+                applications: "⚡ Практычнае Ужыванне",
+                sine: "Чыстая Сінусоіда",
+                composite: "Складаны Сігнал",
+                square: "Прастакутная Хваля",
+                sawtooth: "Пілападобная Хваля",
+                noise: "Белы Шум",
+                none: "Без Фільтра",
+                lowpass: "Нізкія Частоты",
+                highpass: "Высокія Частоты",
+                bandpass: "Паласавы Фільтр",
+                audio: "Аўдыё і Музыка",
+                motor: "Кіраванне Рухавіком (PWM)",
+                sensor: "Фільтрацыя Датчыкаў",
+                communication: "Сігналы Сувязі",
+                vibration: "Аналіз Вібрацый"
+            }
+        };
+
+        const app = {
+            timeChart: null,
+            freqChart: null,
+            filteredChart: null,
+            state: {
+                signalType: 'sine',
+                freq1: 10,
+                freq2: 20,
+                amplitude: 1,
+                filterType: 'none',
+                cutoff: 15,
+                context: 'audio'
+            },
+            lang: 'en',
+            theme: 'light',
+
+            // Generate time-domain signal
+            generateSignal: (t) => {
+                const f1 = app.state.freq1;
+                const f2 = app.state.freq2;
+                const A = app.state.amplitude;
+                const type = app.state.signalType;
+
+                let signal = 0;
+                if (type === 'sine') {
+                    signal = A * Math.sin(2 * Math.PI * f1 * t);
+                } else if (type === 'composite') {
+                    signal = A * (0.6 * Math.sin(2 * Math.PI * f1 * t) + 0.4 * Math.sin(2 * Math.PI * f2 * t));
+                } else if (type === 'square') {
+                    const period = 1 / f1;
+                    const tMod = t % period;
+                    signal = A * (tMod < period / 2 ? 1 : -1);
+                } else if (type === 'sawtooth') {
+                    const period = 1 / f1;
+                    signal = A * 2 * (t / period - Math.floor(t / period + 0.5));
+                } else if (type === 'noise') {
+                    signal = A * (Math.random() - 0.5) * 2;
+                }
+                return signal;
+            },
+
+            // Simple FFT approximation (frequency bin analysis)
+            computeSpectrum: (timeData, fs = 100) => {
+                const spectrum = [];
+                const maxFreq = fs / 2;
+                const freqBins = 50;
+
+                for (let k = 0; k < freqBins; k++) {
+                    const freq = (k / freqBins) * maxFreq;
+                    let realPart = 0, imagPart = 0;
+
+                    for (let n = 0; n < timeData.length; n++) {
+                        const angle = -2 * Math.PI * freq * n / fs;
+                        realPart += timeData[n] * Math.cos(angle);
+                        imagPart += timeData[n] * Math.sin(angle);
+                    }
+
+                    const magnitude = Math.sqrt(realPart * realPart + imagPart * imagPart) / timeData.length;
+                    spectrum.push({ freq, magnitude });
+                }
+                return spectrum;
+            },
+
+            // Simple filter (frequency cutoff)
+            applyFilter: (spectrum) => {
+                const filtered = spectrum.map(bin => {
+                    const f = bin.freq;
+                    const fc = app.state.cutoff;
+                    const type = app.state.filterType;
+
+                    let response = 1;
+                    if (type === 'lowpass') {
+                        response = f < fc ? 1 : Math.max(0, 1 - (f - fc) / 20);
+                    } else if (type === 'highpass') {
+                        response = f > fc ? 1 : Math.max(0, (f) / fc);
+                    } else if (type === 'bandpass') {
+                        const bw = 10;
+                        response = Math.abs(f - fc) < bw ? 1 : Math.max(0, 1 - Math.abs(f - fc) / 20);
+                    }
+
+                    return {
+                        freq: bin.freq,
+                        magnitude: bin.magnitude * response,
+                        response: response
+                    };
+                });
+                return filtered;
+            },
+
+            // Inverse approximate (recreate filtered signal)
+            inverseSpectrum: (filteredSpectrum, duration = 1, fs = 100) => {
+                const timePoints = Math.round(duration * fs);
+                const signal = [];
+
+                for (let n = 0; n < timePoints; n++) {
+                    const t = n / fs;
+                    let value = 0;
+
+                    for (const bin of filteredSpectrum) {
+                        value += bin.magnitude * Math.cos(2 * Math.PI * bin.freq * t);
+                    }
+
+                    signal.push(value);
+                }
+                return signal;
+            },
+
+            init: () => {
+                document.getElementById('signalType').addEventListener('change', (e) => {
+                    app.state.signalType = e.target.value;
+                    app.updateFormDisplay();
+                    app.update();
+                });
+
+                document.getElementById('sliderFreq1').addEventListener('input', (e) => {
+                    app.state.freq1 = parseInt(e.target.value);
+                    document.getElementById('valFreq1').textContent = app.state.freq1;
+                    app.update();
+                });
+
+                document.getElementById('sliderFreq2').addEventListener('input', (e) => {
+                    app.state.freq2 = parseInt(e.target.value);
+                    document.getElementById('valFreq2').textContent = app.state.freq2;
+                    app.update();
+                });
+
+                document.getElementById('sliderAmplitude').addEventListener('input', (e) => {
+                    app.state.amplitude = parseFloat(e.target.value);
+                    document.getElementById('valAmplitude').textContent = app.state.amplitude.toFixed(1);
+                    app.update();
+                });
+
+                document.getElementById('filterType').addEventListener('change', (e) => {
+                    app.state.filterType = e.target.value;
+                    app.updateFormDisplay();
+                    app.update();
+                });
+
+                document.getElementById('sliderCutoff').addEventListener('input', (e) => {
+                    app.state.cutoff = parseInt(e.target.value);
+                    document.getElementById('valCutoff').textContent = app.state.cutoff;
+                    app.update();
+                });
+
+                document.getElementById('context').addEventListener('change', (e) => {
+                    app.state.context = e.target.value;
+                    app.update();
+                });
+
+                // Initialize Theme
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                app.setTheme(savedTheme);
+
+                // Initialize Lang
+                const savedLang = localStorage.getItem('lang') || 'en';
+                document.getElementById('langSelect').value = savedLang;
+                app.setLang(savedLang);
+
+                app.updateFormDisplay();
+                app.initCharts();
+                app.update();
+                lucide.createIcons();
+            },
+
+            setTheme: (t) => {
+                app.theme = t;
+                document.documentElement.setAttribute('data-theme', t);
+                localStorage.setItem('theme', t);
+                const icon = t === 'dark' ? 'sun' : 'moon';
+                const el = document.getElementById('themeToggle');
+                if (el) {
+                    el.innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
+                    if (window.lucide) lucide.createIcons();
+                }
+                app.update(); // Re-render charts for theme colors
+            },
+
+            setLang: (l) => {
+                app.lang = l;
+                localStorage.setItem('lang', l);
+                app.updateTranslations();
+                app.update();
+            },
+
+            updateTranslations: () => {
+                const t = translations[app.lang];
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (t[key]) el.innerHTML = t[key];
+                });
+                // Manual updates for selects if needed, or rely on updateFormDisplay
+            },
+
+            updateFormDisplay: () => {
+                const show = app.state.signalType === 'composite';
+                document.getElementById('groupFreq2').classList.toggle('hidden', !show);
+                document.getElementById('groupCutoff').classList.toggle('hidden', app.state.filterType === 'none');
+            },
+
+            getChartColors: () => {
+                const isDark = app.theme === 'dark';
+                return {
+                    text: isDark ? '#94a3b8' : '#64748b',
+                    grid: isDark ? '#334155' : '#e2e8f0',
+                    primary: isDark ? '#2dd4bf' : '#0f766e',
+                    primaryBg: isDark ? 'rgba(45, 212, 191, 0.1)' : 'rgba(15, 118, 110, 0.1)',
+                    secondary: isDark ? '#5eead4' : '#14b8a6',
+                    secondaryBg: isDark ? 'rgba(94, 234, 212, 0.6)' : 'rgba(20, 184, 166, 0.6)',
+                    success: '#10b981',
+                    successBg: 'rgba(16, 185, 129, 0.1)'
+                };
+            },
+
+            initCharts: () => {
+                const colors = app.getChartColors();
+                const commonOptions = {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, labels: { color: colors.text, font: { size: 11 } } }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear', min: 0, max: 1,
+                            title: { display: true, text: translations[app.lang]?.timeDesc || 'Time (s)', color: colors.text },
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.text }
+                        },
+                        y: {
+                            title: { display: true, text: 'Amplitude', color: colors.text },
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.text }
+                        }
+                    }
+                };
+
+                const timeCtx = document.getElementById('timeChart').getContext('2d');
+                app.timeChart = new Chart(timeCtx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Signal', data: [], borderColor: colors.primary, backgroundColor: colors.primaryBg, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] },
+                    options: commonOptions
+                });
+
+                const freqCtx = document.getElementById('freqChart').getContext('2d');
+                app.freqChart = new Chart(freqCtx, {
+                    type: 'bar',
+                    data: { labels: [], datasets: [{ label: 'Magnitude', data: [], backgroundColor: colors.secondaryBg, borderColor: colors.secondary, borderWidth: 1 }] },
+                    options: {
+                        ...commonOptions,
+                        scales: {
+                            x: {
+                                type: 'linear', min: 0, max: 50,
+                                title: { display: true, text: 'Frequency (Hz)', color: colors.text },
+                                grid: { color: colors.grid },
+                                ticks: { color: colors.text }
+                            },
+                            y: {
+                                title: { display: true, text: 'Magnitude', color: colors.text },
+                                grid: { color: colors.grid },
+                                ticks: { color: colors.text }
+                            }
+                        }
+                    }
+                });
+
+                const filtCtx = document.getElementById('filteredChart').getContext('2d');
+                app.filteredChart = new Chart(filtCtx, {
+                    type: 'line',
+                    data: { labels: [], datasets: [{ label: 'Filtered Signal', data: [], borderColor: colors.success, backgroundColor: colors.successBg, borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0 }] },
+                    options: commonOptions
+                });
+            },
+
+            update: () => {
+                app.generatePlots();
+                app.displayConcepts();
+                app.displayEngineering();
+            },
+
+            generatePlots: () => {
+                const fs = 100;
+                const duration = 1;
+                const timePoints = duration * fs;
+
+                // Generate raw time-domain signal
+                const timeData = [];
+                const timeLabels = [];
+                for (let i = 0; i < timePoints; i++) {
+                    const t = i / fs;
+                    timeData.push(app.generateSignal(t));
+                    timeLabels.push(t.toFixed(2));
+                }
+
+                app.timeChart.data.labels = timeLabels;
+                app.timeChart.data.datasets[0].data = timeData;
+                app.timeChart.update();
+
+                // Compute spectrum
+                const spectrum = app.computeSpectrum(timeData, fs);
+                const freqLabels = spectrum.map(b => b.freq.toFixed(1));
+                const freqMagnitudes = spectrum.map(b => b.magnitude);
+
+                app.freqChart.data.labels = freqLabels;
+                app.freqChart.data.datasets[0].data = freqMagnitudes;
+                app.freqChart.update();
+
+                // Apply filter & inverse transform
+                if (app.state.filterType === 'none') {
+                    app.filteredChart.data.labels = timeLabels;
+                    app.filteredChart.data.datasets[0].data = timeData;
+                } else {
+                    const filtered = app.applyFilter(spectrum);
+                    const filteredSignal = app.inverseSpectrum(filtered, duration, fs);
+                    app.filteredChart.data.labels = timeLabels;
+                    app.filteredChart.data.datasets[0].data = filteredSignal;
+                }
+                app.filteredChart.update();
+            },
+
+            displayConcepts: () => {
+                const st = app.state.signalType;
+                const ft = app.state.filterType;
+
+                let concept = '';
+                if (st === 'sine') {
+                    concept = `<strong>Pure Sine Wave:</strong> f(t) = A·sin(2πft)<br/>Single frequency component. Fundamental to all signal processing.`;
+                } else if (st === 'composite') {
+                    concept = `<strong>Composite Signal:</strong> f(t) = 0.6·sin(2πf₁t) + 0.4·sin(2πf₂t)<br/>Multiple frequencies combined. Requires frequency analysis to separate.`;
+                } else if (st === 'square') {
+                    concept = `<strong>Square Wave:</strong> Discontinuous periodic signal.<br/>Fourier series: infinite sum of odd harmonics. Used in digital circuits.`;
+                } else if (st === 'sawtooth') {
+                    concept = `<strong>Sawtooth Wave:</strong> Linear ramp repeating.<br/>Contains all harmonics. Rich frequency spectrum.`;
+                } else if (st === 'noise') {
+                    concept = `<strong>White Noise:</strong> Random signal with uniform frequency distribution.<br/>Flat spectrum. Used in system identification and dithering.`;
+                }
+
+                document.getElementById('formulaDisplay').innerHTML = `<div class="formula">${concept}</div>`;
+
+                let explainer = 'The Fourier Transform decomposes any signal into its frequency components. X(f) = ∫ x(t)e^(-j2πft) dt. This shows what frequencies are present and their amplitudes. Inverse transform reconstructs the time-domain signal from frequency data.';
+                document.getElementById('conceptExplanation').textContent = explainer;
+
+                if (ft !== 'none') {
+                    let filterDesc = '';
+                    if (ft === 'lowpass') {
+                        filterDesc = `Low-Pass Filter: Attenuates high frequencies, passes low frequencies. Cutoff at ${app.state.cutoff} Hz. Used to smooth signals and remove noise.`;
+                    } else if (ft === 'highpass') {
+                        filterDesc = `High-Pass Filter: Attenuates low frequencies, passes high frequencies. Cutoff at ${app.state.cutoff} Hz. Used to remove DC offset and low-frequency drift.`;
+                    } else if (ft === 'bandpass') {
+                        filterDesc = `Band-Pass Filter: Isolates frequencies near ${app.state.cutoff} Hz with ~10 Hz bandwidth. Used in communication and audio equalization.`;
+                    }
+                    document.getElementById('filterDescription').textContent = filterDesc;
+                    document.getElementById('filterInfo').classList.remove('hidden');
+                } else {
+                    document.getElementById('filterInfo').classList.add('hidden');
+                }
+            },
+
+            displayEngineering: () => {
+                const ctx = app.state.context;
+                let html = '';
+
+                const applications = {
+                    audio: {
+                        title: '🎵 Audio & Music Production',
+                        desc: 'Frequency analysis shows audio spectrum. Filters are used in equalizers to boost/cut bass, midrange, treble. Low-pass removes high-frequency noise. High-pass removes rumble and hum.',
+                        example: 'Cutoff at ' + app.state.cutoff + ' Hz affects music character.'
+                    },
+                    motor: {
+                        title: '🔌 Motor Control (PWM)',
+                        desc: 'PWM signals contain fundamental and harmonics. Low-pass filter smooths PWM into analog equivalent. Reduces motor noise and electromagnetic interference (EMI).',
+                        example: 'PWM frequency ~20 kHz; filter cutoff ~' + app.state.cutoff + ' Hz eliminates ripple.'
+                    },
+                    sensor: {
+                        title: '📊 Sensor Data Filtering',
+                        desc: 'Real sensors produce noise across frequency spectrum. Band-pass isolates true signal. Low-pass removes high-frequency measurement noise from accelerometers, temperature sensors.',
+                        example: 'Cutoff ' + app.state.cutoff + ' Hz: balance responsiveness vs noise rejection.'
+                    },
+                    communication: {
+                        title: '📡 Communication Signals',
+                        desc: 'Modulated signals (AM/FM) occupy specific frequency bands. Filters separate channels. Bandwidth determines data rate. Frequency allocation prevents interference.',
+                        example: 'Signal centered at ' + app.state.freq1 + ' Hz ± bandwidth.'
+                    },
+                    vibration: {
+                        title: '📍 Vibration Analysis',
+                        desc: 'Machinery produces characteristic frequencies (bearing defects, imbalance, resonance). FFT reveals which frequencies have high amplitude. Indicates mechanical health and failure modes.',
+                        example: 'Peaks in spectrum at ' + app.state.freq1 + ' Hz and harmonics signal defects.'
+                    }
+                };
+
+                const app_info = applications[ctx];
+                html += `<h4>${app_info.title}</h4>`;
+                html += `<p>${app_info.desc}</p>`;
+                html += `<p><strong>Current Setting:</strong> ${app_info.example}</p>`;
+
+                const spectrum = app.computeSpectrum(
+                    Array.from({ length: 100 }, (_, i) => app.generateSignal(i / 100)), 100
+                );
+                const peakFreq = spectrum.reduce((max, b) => b.magnitude > max.magnitude ? b : max).freq;
+
+                html += `<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(20, 184, 166, 0.3);">`;
+                html += `<strong>Signal Analysis:</strong><br/>`;
+                html += `<span class="value-display">Primary Frequency: ${peakFreq.toFixed(1)} Hz</span>`;
+                html += `<span class="value-display">Filter Type: ${app.state.filterType === 'none' ? 'None (All Frequencies)' : app.state.filterType.toUpperCase()}</span>`;
+                html += `<span class="value-display">Amplitude: ${app.state.amplitude.toFixed(1)}x</span>`;
+                html += `</div>`;
+
+                document.getElementById('engineeringApp').innerHTML = html;
+            }
+        };
+
+        window.onload = app.init;
+    </script>
+</body>
+
+</html>
