@@ -5,12 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D Forces & Equilibrium Analyzer | Mechanics</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script id="MathJax-script" async src="../assets/vendor/mathjax/es5/tex-mml-chtml.js"></script>
+    <script type="module" src="../assets/vendor/lucide/lucide-global.js"></script>
     <style>
         :root {
             --primary: #0f766e;
@@ -136,6 +132,19 @@
             transition: border-color 0.2s;
             background-color: var(--input-bg);
             color: var(--text-main);
+        }
+
+        select,
+        input,
+        textarea {
+            background-color: var(--input-bg);
+            color: var(--text-main);
+        }
+
+        select {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
         }
 
         input[type="number"]:focus {
@@ -616,6 +625,7 @@
         const app = {
             lang: 'en', // Default
             theme: 'light',
+            initialized: false,
 
             setTheme: (t) => {
                 app.theme = t;
@@ -623,17 +633,19 @@
                 localStorage.setItem('theme', t);
                 const icon = t === 'dark' ? 'sun' : 'moon';
                 // Note: Header icons in P4 are Lucide icons, but Toggle button icon needs update
-                document.getElementById('themeToggle').innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
-                lucide.createIcons();
-                app.draw(); // Redraw canvas
+                const themeToggle = document.getElementById('themeToggle');
+                if (themeToggle) themeToggle.innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
+                if (window.lucide) lucide.createIcons();
+                if (app.initialized) app.draw(); // Redraw canvas when ready
             },
 
             setLang: (l) => {
                 app.lang = l;
                 localStorage.setItem('lang', l);
-                document.getElementById('langSelect').value = l;
+                const langSelect = document.getElementById('langSelect');
+                if (langSelect) langSelect.value = l;
                 app.updateTranslations();
-                app.update(); // Trigger re-render of dynamic strings
+                if (app.initialized) app.update(); // Trigger re-render of dynamic strings when ready
             },
 
             updateTranslations: () => {
@@ -666,6 +678,20 @@
             },
 
             init: () => {
+                // Canvas must exist before theme/lang can trigger render
+                app.canvas = document.getElementById('forceCanvas');
+                if (!app.canvas) return;
+                app.ctx = app.canvas.getContext('2d');
+
+                // Set canvas size
+                const container = app.canvas.parentElement;
+                if (container) {
+                    app.canvas.width = container.clientWidth;
+                    app.canvas.height = container.clientHeight;
+                }
+
+                app.initialized = true;
+
                 // Init Theme/Lang
                 const savedTheme = localStorage.getItem('theme') || 'light';
                 app.setTheme(savedTheme);
@@ -678,14 +704,6 @@
                 document.getElementById('langSelect').addEventListener('change', (e) => {
                     app.setLang(e.target.value);
                 });
-
-                app.canvas = document.getElementById('forceCanvas');
-                app.ctx = app.canvas.getContext('2d');
-
-                // Set canvas size
-                const container = app.canvas.parentElement;
-                app.canvas.width = container.clientWidth;
-                app.canvas.height = container.clientHeight;
 
                 // Event listeners for inputs
                 document.getElementById('inputMag').addEventListener('input', (e) => {
@@ -748,7 +766,7 @@
 
                 app.displayEngineering();
                 app.draw();
-                lucide.createIcons();
+                if (window.lucide) lucide.createIcons();
                 app.updateTranslations(); // Initial translation apply
             },
 
@@ -1001,6 +1019,7 @@
             },
 
             draw: () => {
+                if (!app.canvas || !app.ctx) return;
                 const w = app.canvas.width;
                 const h = app.canvas.height;
                 const ctx = app.ctx;

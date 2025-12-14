@@ -1,0 +1,11 @@
+# UI audit artifacts
+/audit/
+# Optional local vendor bundles (keep repo lightweight)
+/assets/vendor/
+# Local tooling (optional)
+/node_modules/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/

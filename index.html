@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applied Math Lab | Cloudflare Pages</title>
+    <meta name="description" content="Hands-on applied math laboratory with interactive calculus, linear algebra, optimization, signal processing, statics, and circuits sandboxes. Ready for Cloudflare Pages hosting.">
+    <link rel="stylesheet" href="./assets/site.css">
+    <script>
+        window.PAGE_TRANSLATIONS = {
+            en: {
+                heroTitle: 'Applied Mathematics Laboratory',
+                heroDesc: 'Seven interactive sandboxes for applied math and engineering fundamentals: calculus, matrix transformations, optimization, statics, Fourier analysis, and circuits (Bode plots). Optimized for mobile and desktop, deployable instantly on Cloudflare Pages.',
+                ctaLaunch: 'Launch a Lab',
+                ctaCfGuide: 'Cloudflare Pages Guide',
+                chipInteractive: 'Interactive Visuals',
+                chipTheme: 'Dark/Light Theme',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Static + Portable',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Deployment checklist <span>Cloudflare Pages</span></h4>',
+                checklist1: 'Root index.html links every lab',
+                checklist2: 'Shared assets in /assets for consistent styling',
+                checklist3: 'Relative paths for offline + CDN hosting',
+                checklist4: 'Theme + language stored in localStorage',
+                ctaDashboard: 'Open Cloudflare Dashboard',
+                ctaReadme: 'README',
+                sectionTitle: 'Laboratory Collection',
+                sectionSubtitle: 'Pick a sandbox to start experimenting',
+                tile1Chip: 'Calculus · Visualization',
+                tile1Title: 'The Calculus Lab',
+                tile1Desc: 'Derivatives and integrals with interactive plots and numerical vs analytical comparisons.',
+                tile2Chip: 'Linear Algebra · Geometry',
+                tile2Title: 'Matrices as Transformations',
+                tile2Desc: '2D/3D matrix transformations: rotations, scaling, shearing, and geometric intuition.',
+                tile3Chip: 'Optimization · GD/Adam',
+                tile3Title: 'Optimization Playground',
+                tile3Desc: 'Gradient descent family and optimizer behavior on 2D surfaces with visual feedback.',
+                tile4Chip: 'Statics · Equilibrium',
+                tile4Title: '2D Forces & Equilibrium',
+                tile4Desc: 'Force vectors, moments, and equilibrium checks using interactive diagrams.',
+                tile5Chip: 'Signals · FFT',
+                tile5Title: 'Signals & Fourier Playground',
+                tile5Desc: 'Time vs frequency domain intuition, FFT-based spectrum exploration and filtering concepts.',
+                tile6Chip: 'Circuits · Bode',
+                tile6Title: 'Circuit Equations & Bode Plots',
+                tile6Desc: 'RLC circuits, transfer functions, resonance and frequency response visualized with Bode plots.',
+                tile7Chip: 'Statics · Analyzer',
+                tile7Title: '2D Forces & Equilibrium Analyzer',
+                tile7Desc: 'Advanced force systems with moments and equilibrium verification for multi-force setups.',
+                openLab: 'Open Lab'
+            },
+            pl: {
+                heroTitle: 'Laboratorium Matematyki Stosowanej',
+                heroDesc: 'Siedem interaktywnych sandboxów matematyki stosowanej i podstaw inżynierii: rachunek, transformacje macierzowe, optymalizacja, statyka, analiza Fouriera oraz obwody (wykresy Bodego). UX dopracowany pod mobile i desktop, gotowe do wdrożenia na Cloudflare Pages.',
+                ctaLaunch: 'Uruchom laboratorium',
+                ctaCfGuide: 'Poradnik Cloudflare Pages',
+                chipInteractive: 'Interaktywne wizualizacje',
+                chipTheme: 'Motyw jasny/ciemny',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Statyczne + przenośne',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Lista wdrożeniowa <span>Cloudflare Pages</span></h4>',
+                checklist1: 'Główny index.html linkuje wszystkie laboratoria',
+                checklist2: 'Wspólne assety w /assets dla spójnego stylu',
+                checklist3: 'Ścieżki względne: offline + CDN',
+                checklist4: 'Motyw i język zapisane w localStorage',
+                ctaDashboard: 'Otwórz panel Cloudflare',
+                ctaReadme: 'README',
+                sectionTitle: 'Kolekcja laboratoriów',
+                sectionSubtitle: 'Wybierz sandbox i zacznij eksperymentować',
+                tile1Chip: 'Rachunek · Wizualizacja',
+                tile1Title: 'Laboratorium rachunku',
+                tile1Desc: 'Pochodne i całki z interaktywnymi wykresami oraz porównaniem numerycznym i analitycznym.',
+                tile2Chip: 'Algebra liniowa · Geometria',
+                tile2Title: 'Macierze jako transformacje',
+                tile2Desc: 'Transformacje macierzowe 2D/3D: obroty, skala, ścinanie i intuicja geometryczna.',
+                tile3Chip: 'Optymalizacja · GD/Adam',
+                tile3Title: 'Plac zabaw optymalizacji',
+                tile3Desc: 'Rodzina gradient descent i zachowanie optymalizatorów na powierzchniach 2D z wizualnym feedbackiem.',
+                tile4Chip: 'Statyka · Równowaga',
+                tile4Title: 'Siły 2D i równowaga',
+                tile4Desc: 'Wektory sił, momenty i sprawdzanie równowagi z użyciem interaktywnych diagramów.',
+                tile5Chip: 'Sygnały · FFT',
+                tile5Title: 'Sygnały i Fourier',
+                tile5Desc: 'Intuicja czasu vs częstotliwości, eksploracja widma FFT i podstawy filtracji.',
+                tile6Chip: 'Obwody · Bode',
+                tile6Title: 'Równania obwodów i Bode',
+                tile6Desc: 'Obwody RLC, transmitancje, rezonans i odpowiedź częstotliwościowa na wykresach Bodego.',
+                tile7Chip: 'Statyka · Analizator',
+                tile7Title: 'Analizator sił 2D i równowagi',
+                tile7Desc: 'Zaawansowane układy sił z momentami i weryfikacją równowagi dla wielu sił.',
+                openLab: 'Otwórz lab'
+            },
+            fr: {
+                heroTitle: 'Laboratoire de mathématiques appliquées',
+                heroDesc: 'Sept sandboxes interactifs pour les fondamentaux : calcul, transformations matricielles, optimisation, statique, Fourier et circuits (diagrammes de Bode). Optimisé mobile/desktop, déployable sur Cloudflare Pages.',
+                ctaLaunch: 'Lancer un labo',
+                ctaCfGuide: 'Guide Cloudflare Pages',
+                chipInteractive: 'Visuels interactifs',
+                chipTheme: 'Thème clair/sombre',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Statique + portable',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Checklist de déploiement <span>Cloudflare Pages</span></h4>',
+                checklist1: 'Le index.html racine relie chaque labo',
+                checklist2: 'Assets partagés dans /assets pour un style cohérent',
+                checklist3: 'Chemins relatifs pour offline + CDN',
+                checklist4: 'Thème et langue stockés dans localStorage',
+                ctaDashboard: 'Ouvrir le tableau de bord Cloudflare',
+                ctaReadme: 'README',
+                sectionTitle: 'Collection de laboratoires',
+                sectionSubtitle: 'Choisissez un sandbox pour commencer',
+                tile1Chip: 'Calcul · Visualisation',
+                tile1Title: 'Le labo de calcul',
+                tile1Desc: 'Dérivées et intégrales avec graphes interactifs et comparaisons numérique vs analytique.',
+                tile2Chip: 'Algèbre linéaire · Géométrie',
+                tile2Title: 'Matrices comme transformations',
+                tile2Desc: 'Transformations 2D/3D : rotation, échelle, cisaillement et intuition géométrique.',
+                tile3Chip: 'Optimisation · GD/Adam',
+                tile3Title: 'Terrain d’optimisation',
+                tile3Desc: 'Famille gradient descent et comportement des optimiseurs sur des surfaces 2D.',
+                tile4Chip: 'Statique · Équilibre',
+                tile4Title: 'Forces 2D & équilibre',
+                tile4Desc: 'Vecteurs de force, moments et vérification d’équilibre via diagrammes interactifs.',
+                tile5Chip: 'Signaux · FFT',
+                tile5Title: 'Signaux & Fourier',
+                tile5Desc: 'Intuition temps/fréquence, exploration FFT et concepts de filtrage.',
+                tile6Chip: 'Circuits · Bode',
+                tile6Title: 'Équations de circuits & Bode',
+                tile6Desc: 'Circuits RLC, fonctions de transfert, résonance et réponse fréquentielle (Bode).',
+                tile7Chip: 'Statique · Analyseur',
+                tile7Title: 'Analyseur forces 2D & équilibre',
+                tile7Desc: 'Systèmes de forces avancés avec moments et vérification d’équilibre multi-forces.',
+                openLab: 'Ouvrir'
+            },
+            es: {
+                heroTitle: 'Laboratorio de matemáticas aplicadas',
+                heroDesc: 'Siete sandboxes interactivos: cálculo, transformaciones matriciales, optimización, estática, Fourier y circuitos (Bode). Optimizado móvil/escritorio, listo para Cloudflare Pages.',
+                ctaLaunch: 'Abrir un lab',
+                ctaCfGuide: 'Guía de Cloudflare Pages',
+                chipInteractive: 'Visuales interactivos',
+                chipTheme: 'Tema claro/oscuro',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Estático + portable',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Checklist de despliegue <span>Cloudflare Pages</span></h4>',
+                checklist1: 'El index.html raíz enlaza cada laboratorio',
+                checklist2: 'Assets compartidos en /assets para estilo consistente',
+                checklist3: 'Rutas relativas para offline + CDN',
+                checklist4: 'Tema e idioma guardados en localStorage',
+                ctaDashboard: 'Abrir panel de Cloudflare',
+                ctaReadme: 'README',
+                sectionTitle: 'Colección de laboratorios',
+                sectionSubtitle: 'Elige un sandbox para empezar',
+                tile1Chip: 'Cálculo · Visualización',
+                tile1Title: 'Laboratorio de cálculo',
+                tile1Desc: 'Derivadas e integrales con gráficos interactivos y comparaciones numérico vs analítico.',
+                tile2Chip: 'Álgebra lineal · Geometría',
+                tile2Title: 'Matrices como transformaciones',
+                tile2Desc: 'Transformaciones 2D/3D: rotación, escala, cizallamiento e intuición geométrica.',
+                tile3Chip: 'Optimización · GD/Adam',
+                tile3Title: 'Playground de optimización',
+                tile3Desc: 'Familia de gradient descent y comportamiento de optimizadores en superficies 2D.',
+                tile4Chip: 'Estática · Equilibrio',
+                tile4Title: 'Fuerzas 2D y equilibrio',
+                tile4Desc: 'Vectores de fuerza, momentos y verificación de equilibrio con diagramas interactivos.',
+                tile5Chip: 'Señales · FFT',
+                tile5Title: 'Señales y Fourier',
+                tile5Desc: 'Intuición tiempo/frecuencia, exploración FFT y conceptos de filtrado.',
+                tile6Chip: 'Circuitos · Bode',
+                tile6Title: 'Ecuaciones de circuitos y Bode',
+                tile6Desc: 'Circuitos RLC, funciones de transferencia, resonancia y respuesta en frecuencia (Bode).',
+                tile7Chip: 'Estática · Analizador',
+                tile7Title: 'Analizador de fuerzas 2D',
+                tile7Desc: 'Sistemas avanzados con momentos y verificación de equilibrio para múltiples fuerzas.',
+                openLab: 'Abrir'
+            },
+            pt: {
+                heroTitle: 'Laboratório de matemática aplicada',
+                heroDesc: 'Sete sandboxes interativos: cálculo, transformações matriciais, otimização, estática, Fourier e circuitos (Bode). Otimizado para mobile/desktop, pronto para Cloudflare Pages.',
+                ctaLaunch: 'Abrir um lab',
+                ctaCfGuide: 'Guia do Cloudflare Pages',
+                chipInteractive: 'Visuais interativos',
+                chipTheme: 'Tema claro/escuro',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Estático + portátil',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Checklist de deploy <span>Cloudflare Pages</span></h4>',
+                checklist1: 'O index.html raiz linka todos os labs',
+                checklist2: 'Assets compartilhados em /assets para estilo consistente',
+                checklist3: 'Caminhos relativos para offline + CDN',
+                checklist4: 'Tema e idioma no localStorage',
+                ctaDashboard: 'Abrir painel da Cloudflare',
+                ctaReadme: 'README',
+                sectionTitle: 'Coleção de laboratórios',
+                sectionSubtitle: 'Escolha um sandbox para começar',
+                tile1Chip: 'Cálculo · Visualização',
+                tile1Title: 'Laboratório de cálculo',
+                tile1Desc: 'Derivadas e integrais com gráficos interativos e comparações numérico vs analítico.',
+                tile2Chip: 'Álgebra linear · Geometria',
+                tile2Title: 'Matrizes como transformações',
+                tile2Desc: 'Transformações 2D/3D: rotação, escala, cisalhamento e intuição geométrica.',
+                tile3Chip: 'Otimização · GD/Adam',
+                tile3Title: 'Playground de otimização',
+                tile3Desc: 'Família gradient descent e comportamento de otimizadores em superfícies 2D.',
+                tile4Chip: 'Estática · Equilíbrio',
+                tile4Title: 'Forças 2D e equilíbrio',
+                tile4Desc: 'Vetores de força, momentos e verificação de equilíbrio com diagramas interativos.',
+                tile5Chip: 'Sinais · FFT',
+                tile5Title: 'Sinais e Fourier',
+                tile5Desc: 'Intuição tempo/frequência, exploração FFT e conceitos de filtragem.',
+                tile6Chip: 'Circuitos · Bode',
+                tile6Title: 'Equações de circuitos e Bode',
+                tile6Desc: 'Circuitos RLC, funções de transferência, ressonância e resposta em frequência (Bode).',
+                tile7Chip: 'Estática · Analisador',
+                tile7Title: 'Analisador de forças 2D',
+                tile7Desc: 'Sistemas avançados com momentos e verificação de equilíbrio multi-forças.',
+                openLab: 'Abrir'
+            },
+            de: {
+                heroTitle: 'Labor für angewandte Mathematik',
+                heroDesc: 'Sieben interaktive Sandboxes: Analysis, Matrixtransformationen, Optimierung, Statik, Fourier und Schaltungen (Bode). Für Mobile/Desktop optimiert, bereit für Cloudflare Pages.',
+                ctaLaunch: 'Labor starten',
+                ctaCfGuide: 'Cloudflare Pages Guide',
+                chipInteractive: 'Interaktive Visuals',
+                chipTheme: 'Hell/Dunkel',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Statisch + portabel',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Deployment-Checkliste <span>Cloudflare Pages</span></h4>',
+                checklist1: 'Root index.html verlinkt jedes Labor',
+                checklist2: 'Geteilte Assets in /assets für konsistenten Stil',
+                checklist3: 'Relative Pfade für Offline + CDN',
+                checklist4: 'Theme und Sprache in localStorage',
+                ctaDashboard: 'Cloudflare-Dashboard öffnen',
+                ctaReadme: 'README',
+                sectionTitle: 'Labor-Kollektion',
+                sectionSubtitle: 'Wähle eine Sandbox und starte',
+                tile1Chip: 'Analysis · Visualisierung',
+                tile1Title: 'Analysis-Labor',
+                tile1Desc: 'Ableitungen und Integrale mit interaktiven Plots und numerisch vs analytisch.',
+                tile2Chip: 'Lineare Algebra · Geometrie',
+                tile2Title: 'Matrizen als Transformationen',
+                tile2Desc: '2D/3D: Rotation, Skalierung, Scherung und geometrische Intuition.',
+                tile3Chip: 'Optimierung · GD/Adam',
+                tile3Title: 'Optimierungs-Playground',
+                tile3Desc: 'Gradient-Descent-Familie und Optimizer-Verhalten auf 2D-Oberflächen.',
+                tile4Chip: 'Statik · Gleichgewicht',
+                tile4Title: '2D-Kräfte & Gleichgewicht',
+                tile4Desc: 'Kraftvektoren, Momente und Gleichgewichtsprüfung mit interaktiven Diagrammen.',
+                tile5Chip: 'Signale · FFT',
+                tile5Title: 'Signale & Fourier',
+                tile5Desc: 'Zeit/Frequenz-Intuition, FFT-Spektrum und Filterkonzepte.',
+                tile6Chip: 'Schaltungen · Bode',
+                tile6Title: 'Schaltungsgleichungen & Bode',
+                tile6Desc: 'RLC, Übertragungsfunktionen, Resonanz und Frequenzgang (Bode).',
+                tile7Chip: 'Statik · Analyzer',
+                tile7Title: '2D-Kräfte Analyzer',
+                tile7Desc: 'Fortgeschrittene Kraftsysteme mit Momenten und Multi-Force-Gleichgewichtsprüfung.',
+                openLab: 'Öffnen'
+            },
+            uk: {
+                heroTitle: 'Лабораторія прикладної математики',
+                heroDesc: 'Сім інтерактивних sandbox-лабораторій: аналіз, матричні перетворення, оптимізація, статика, Фур’є та кола (діаграми Боде). Оптимізовано для мобільних і ПК, готово до Cloudflare Pages.',
+                ctaLaunch: 'Запустити лабораторію',
+                ctaCfGuide: 'Гід Cloudflare Pages',
+                chipInteractive: 'Інтерактивні візуалізації',
+                chipTheme: 'Світла/темна тема',
+                chipMathjax: 'MathJax',
+                chipPortable: 'Статичне + портативне',
+                checklistHtml: '<h4 class="section-title" style="margin:0 0 10px;">Чекліст розгортання <span>Cloudflare Pages</span></h4>',
+                checklist1: 'Кореневий index.html посилається на всі лабораторії',
+                checklist2: 'Спільні assets у /assets для єдиного стилю',
+                checklist3: 'Відносні шляхи для offline + CDN',
+                checklist4: 'Тема та мова у localStorage',
+                ctaDashboard: 'Відкрити панель Cloudflare',
+                ctaReadme: 'README',
+                sectionTitle: 'Колекція лабораторій',
+                sectionSubtitle: 'Оберіть sandbox і починайте',
+                tile1Chip: 'Аналіз · Візуалізація',
+                tile1Title: 'Лабораторія аналізу',
+                tile1Desc: 'Похідні та інтеграли з інтерактивними графіками і порівняннями.',
+                tile2Chip: 'Лін. алгебра · Геометрія',
+                tile2Title: 'Матриці як перетворення',
+                tile2Desc: 'Перетворення 2D/3D: обертання, масштабування, зсув і геометрична інтуїція.',
+                tile3Chip: 'Оптимізація · GD/Adam',
+                tile3Title: 'Оптимізаційний майданчик',
+                tile3Desc: 'Сімейство gradient descent і поведінка оптимізаторів на 2D поверхнях.',
+                tile4Chip: 'Статика · Рівновага',
+                tile4Title: 'Сили 2D та рівновага',
+                tile4Desc: 'Вектори сил, моменти та перевірка рівноваги з інтерактивними діаграмами.',
+                tile5Chip: 'Сигнали · FFT',
+                tile5Title: 'Сигнали та Фур’є',
+                tile5Desc: 'Інтуїція час/частота, спектр FFT та базові ідеї фільтрації.',
+                tile6Chip: 'Кола · Bode',
+                tile6Title: 'Рівняння кіл і Bode',
+                tile6Desc: 'RLC, передавальні функції, резонанс і частотна характеристика (Bode).',
+                tile7Chip: 'Статика · Аналізатор',
+                tile7Title: 'Аналізатор сил 2D',
+                tile7Desc: 'Просунуті системи сил з моментами та перевіркою рівноваги для багатьох сил.',
+                openLab: 'Відкрити'
+            }
+        };
+    </script>
+</head>
+
+<body data-lab-name="Math Lab" data-page-name="Math Lab" data-home="./index.html" data-tags="Math, Simulation, Calculus, Linear Algebra, Optimization, Signals, Circuits">
+    <div class="lab-shell">
+        <section class="hero lab-card soft">
+            <div>
+                <h1 data-i18n="heroTitle">Applied Mathematics Laboratory</h1>
+                <p data-i18n="heroDesc">Seven interactive sandboxes for applied math and engineering fundamentals: calculus, matrix transformations, optimization, statics, Fourier analysis, and circuits (Bode plots). Optimized for mobile and desktop, deployable instantly on Cloudflare Pages.</p>
+                <div class="cta-row">
+                    <a class="pill primary" href="#labs" data-i18n="ctaLaunch">Launch a Lab</a>
+                    <a class="pill" href="https://developers.cloudflare.com/pages/" target="_blank" rel="noreferrer" data-i18n="ctaCfGuide">Cloudflare Pages Guide</a>
+                </div>
+                <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="chip" data-i18n="chipInteractive">Interactive Visuals</span>
+                    <span class="chip" data-i18n="chipTheme">Dark/Light Theme</span>
+                    <span class="chip" data-i18n="chipMathjax">MathJax</span>
+                    <span class="chip" data-i18n="chipPortable">Static + Portable</span>
+                </div>
+            </div>
+            <div class="lab-card">
+                <div data-i18n-html="checklistHtml"><h4 class="section-title" style="margin:0 0 10px;">Deployment checklist <span>Cloudflare Pages</span></h4></div>
+                <ul style="margin:0; padding-left: 18px; color: var(--text-light);">
+                    <li data-i18n="checklist1">Root index.html links every lab</li>
+                    <li data-i18n="checklist2">Shared assets in /assets for consistent styling</li>
+                    <li data-i18n="checklist3">Relative paths for offline + CDN hosting</li>
+                    <li data-i18n="checklist4">Theme + language stored in localStorage</li>
+                </ul>
+                <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <a class="pill" href="https://dash.cloudflare.com/" target="_blank" rel="noreferrer" data-i18n="ctaDashboard">Open Cloudflare Dashboard</a>
+                    <a class="pill ghost" href="./README.md" target="_blank" rel="noreferrer" data-i18n="ctaReadme">README</a>
+                </div>
+            </div>
+        </section>
+
+        <div id="labs" class="section-title" style="margin-top: 12px;">
+            <h2 style="margin:0; font-size:1.1rem; color: var(--text-main);" data-i18n="sectionTitle">Laboratory Collection</h2>
+            <span data-i18n="sectionSubtitle">Pick a sandbox to start experimenting</span>
+        </div>
+
+        <div class="lab-grid">
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile1Chip">Calculus · Visualization</div>
+                <h3 data-i18n="tile1Title">The Calculus Lab</h3>
+                <p data-i18n="tile1Desc">Derivatives and integrals with interactive plots and numerical vs analytical comparisons.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project1/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile2Chip">Linear Algebra · Geometry</div>
+                <h3 data-i18n="tile2Title">Matrices as Transformations</h3>
+                <p data-i18n="tile2Desc">2D/3D matrix transformations: rotations, scaling, shearing, and geometric intuition.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project2/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile3Chip">Optimization · GD/Adam</div>
+                <h3 data-i18n="tile3Title">Optimization Playground</h3>
+                <p data-i18n="tile3Desc">Gradient descent family and optimizer behavior on 2D surfaces with visual feedback.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project3/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile4Chip">Statics · Equilibrium</div>
+                <h3 data-i18n="tile4Title">2D Forces & Equilibrium</h3>
+                <p data-i18n="tile4Desc">Force vectors, moments, and equilibrium checks using interactive diagrams.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project4/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile5Chip">Signals · FFT</div>
+                <h3 data-i18n="tile5Title">Signals & Fourier Playground</h3>
+                <p data-i18n="tile5Desc">Time vs frequency domain intuition, FFT-based spectrum exploration and filtering concepts.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project5/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile6Chip">Circuits · Bode</div>
+                <h3 data-i18n="tile6Title">Circuit Equations & Bode Plots</h3>
+                <p data-i18n="tile6Desc">RLC circuits, transfer functions, resonance and frequency response visualized with Bode plots.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project6/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+            <div class="lab-card lab-tile">
+                <div class="chip" data-i18n="tile7Chip">Statics · Analyzer</div>
+                <h3 data-i18n="tile7Title">2D Forces & Equilibrium Analyzer</h3>
+                <p data-i18n="tile7Desc">Advanced force systems with moments and equilibrium verification for multi-force setups.</p>
+                <div class="tile-actions">
+                    <a class="pill primary" href="./project7/index.html" data-i18n="openLab">Open Lab</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./assets/site.js"></script>
+</body>
+
+</html>
