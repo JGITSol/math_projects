@@ -484,6 +484,8 @@
 
                 // setTheme and setLang removed - handled by site.js
 
+                getVar: (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
+
                 updateTranslations: () => {
                     const t = translations[app.lang];
                     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -690,7 +692,8 @@
                     const s = app.state;
 
                     // Clear
-                    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--grid-bg');
+                    const bg = app.getVar('--grid-bg');
+                    ctx.fillStyle = bg || '#ffffff';
                     ctx.fillRect(0, 0, w, h);
 
                     const cx = w / 2;
@@ -723,8 +726,8 @@
                     const startY = Math.floor(yMin / step) * step;
 
                     // Grid Lines
-                    const gridColor = getComputedStyle(document.body).getPropertyValue('--grid-line');
-                    ctx.strokeStyle = gridColor; // Minor
+                    const gridColor = app.getVar('--grid-line');
+                    ctx.strokeStyle = gridColor || '#e2e8f0'; // Minor
                     ctx.beginPath();
                     for (let x = startX; x <= xMax; x += step) {
                         // Check if major (integer)
@@ -739,7 +742,8 @@
                     ctx.stroke();
 
                     // Axes
-                    ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 2;
+                    ctx.strokeStyle = app.getVar('--text-light') || '#94a3b8'; 
+                    ctx.lineWidth = 2;
                     ctx.beginPath();
                     // Y Axis (x=0)
                     if (xMin <= 0 && xMax >= 0) {
@@ -778,7 +782,8 @@
                     }
 
                     // Draw Function
-                    ctx.strokeStyle = '#0f766e'; ctx.lineWidth = 3;
+                    ctx.strokeStyle = app.getVar('--primary') || '#0f766e'; 
+                    ctx.lineWidth = 3;
                     ctx.beginPath();
                     // Draw only within view + padding
                     const drawStep = Math.max(0.01, 1 / s.scale * 2);
@@ -801,7 +806,7 @@
                         const ty = toScreenY(cy);
 
                         // Specific point
-                        ctx.fillStyle = '#ef4444';
+                        ctx.fillStyle = app.getVar('--error') || '#ef4444';
                         ctx.beginPath(); ctx.arc(tx, ty, 6, 0, 2 * Math.PI); ctx.fill();
 
                         // Tangent
@@ -809,7 +814,8 @@
                         const x1 = cx - dx; const y1 = cy - slope * dx;
                         const x2 = cx + dx; const y2 = cy + slope * dx;
 
-                        ctx.strokeStyle = '#ef4444'; ctx.lineWidth = 2;
+                        ctx.strokeStyle = app.getVar('--error') || '#ef4444'; 
+                        ctx.lineWidth = 2;
                         ctx.beginPath();
                         ctx.moveTo(toScreenX(x1), toScreenY(y1));
                         ctx.lineTo(toScreenX(x2), toScreenY(y2));

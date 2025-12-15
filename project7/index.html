@@ -417,6 +417,8 @@
                 theme: 'light'
             },
 
+            getVar: (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
+
             // setTheme and setLang removed - handled by site.js
 
             init: () => {
@@ -624,12 +626,14 @@
                 const ctx = app.ctx;
 
                 // Use CSS variables for colors
-                const bgColor = getComputedStyle(document.body).getPropertyValue('--grid-bg').trim();
-                const gridColor = getComputedStyle(document.body).getPropertyValue('--grid-line').trim();
-                const textColor = getComputedStyle(document.body).getPropertyValue('--text-main').trim();
-                const primaryColor = getComputedStyle(document.body).getPropertyValue('--primary').trim();
-                const errorColor = getComputedStyle(document.body).getPropertyValue('--error').trim();
-                const successColor = getComputedStyle(document.body).getPropertyValue('--success').trim();
+                const bgColor = app.getVar('--grid-bg');
+                const gridColor = app.getVar('--grid-line');
+                const textColor = app.getVar('--text-main');
+                const primaryColor = app.getVar('--primary');
+                const errorColor = app.getVar('--error');
+                const successColor = app.getVar('--success');
+                const warningColor = app.getVar('--warning');
+                const accentColor = app.getVar('--accent');
 
                 // Clear
                 ctx.fillStyle = bgColor;
@@ -699,7 +703,7 @@
                     const dx = Math.cos(f.angle) * arrowLen;
                     const dy = -Math.sin(f.angle) * arrowLen; // Canvas Y is inverted relative to math Y
 
-                    const colors = [primaryColor, '#14b8a6', '#10b981', '#f59e0b'];
+                    const colors = [primaryColor, accentColor, successColor, warningColor];
                     ctx.strokeStyle = colors[idx % colors.length];
                     ctx.lineWidth = 3;
                     ctx.beginPath();
@@ -737,12 +741,12 @@
                         const rx = (sumFx / resMag) * arrowLen;
                         const ry = -(sumFy / resMag) * arrowLen;
 
-                        app.ctx.strokeStyle = '#ef4444';
+                        app.ctx.strokeStyle = errorColor;
                         app.ctx.lineWidth = 3;
                         app.ctx.setLineDash([5, 5]);
                         app.ctx.beginPath();
-                        app.ctx.moveTo(centerX, centerY);
-                        app.ctx.lineTo(centerX + rx, centerY + ry);
+                        app.ctx.moveTo(cx, cy);
+                        app.ctx.lineTo(cx + rx, cy + ry);
                         app.ctx.stroke();
                         app.ctx.setLineDash([]);
 
@@ -750,15 +754,15 @@
                         const angle = Math.atan2(ry, rx);
                         const headlen = 10;
                         app.ctx.beginPath();
-                        app.ctx.moveTo(centerX + rx, centerY + ry);
-                        app.ctx.lineTo(centerX + rx - headlen * Math.cos(angle - Math.PI / 6), centerY + ry - headlen * Math.sin(angle - Math.PI / 6));
-                        app.ctx.moveTo(centerX + rx, centerY + ry);
-                        app.ctx.lineTo(centerX + rx - headlen * Math.cos(angle + Math.PI / 6), centerY + ry - headlen * Math.sin(angle + Math.PI / 6));
+                        app.ctx.moveTo(cx + rx, cy + ry);
+                        app.ctx.lineTo(cx + rx - headlen * Math.cos(angle - Math.PI / 6), cy + ry - headlen * Math.sin(angle - Math.PI / 6));
+                        app.ctx.moveTo(cx + rx, cy + ry);
+                        app.ctx.lineTo(cx + rx - headlen * Math.cos(angle + Math.PI / 6), cy + ry - headlen * Math.sin(angle + Math.PI / 6));
                         app.ctx.stroke();
 
-                        app.ctx.fillStyle = '#ef4444';
+                        app.ctx.fillStyle = errorColor;
                         app.ctx.font = 'bold 12px Inter';
-                        app.ctx.fillText(`ΣF=${resMag.toFixed(1)}N`, centerX + rx + 15, centerY + ry);
+                        app.ctx.fillText(`ΣF=${resMag.toFixed(1)}N`, cx + rx + 15, cy + ry);
                     }
                 }
             },
