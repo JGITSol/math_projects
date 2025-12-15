@@ -216,8 +216,10 @@ a:hover {
 .pill {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 8px 12px;
+    height: 36px;
+    padding: 0 16px;
     border-radius: 8px;
     border: 1px solid transparent;
     background: transparent;
@@ -227,6 +229,8 @@ a:hover {
     font-size: 0.9rem;
     transition: all 0.2s ease;
     cursor: pointer;
+    box-sizing: border-box;
+    line-height: 1;
 }
 
 .pill:hover {
@@ -246,6 +250,17 @@ a:hover {
 select.pill {
     cursor: pointer;
     font: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 16px; /* Balance padding since arrow is removed/hidden */
+    text-align: center;
+    text-align-last: center;
+    background-color: transparent; /* Override global select bg */
+}
+
+select.pill option {
+    background-color: var(--card-bg);
+    color: var(--text-main);
 }
 
 .lab-nav select.pill {

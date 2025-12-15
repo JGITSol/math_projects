@@ -934,14 +934,19 @@
                     const c = app.matVecMul(M, corners[i]);
                     app.ctx.lineTo(centerX + c[0] * scale, centerY - c[1] * scale);
                 }
+                app.ctx.closePath();
                 app.ctx.stroke();
 
                 // Labels (2D only)
-                app.ctx.fillStyle = colors.text;
+                app.ctx.textAlign = 'left';
+                app.ctx.textBaseline = 'top';
                 app.ctx.font = 'bold 14px Inter';
-                app.ctx.fillText('Original (gray)', centerX + 10, centerY - scale - 10);
+                
+                app.ctx.fillStyle = colors.text;
+                app.ctx.fillText('Original (gray)', 15, 15);
+                
                 app.ctx.fillStyle = colors.textHighlight;
-                app.ctx.fillText('Transformed (color)', centerX + 10, centerY + scale + 20);
+                app.ctx.fillText('Transformed (color)', 15, 35);
             },
 
             displayMatrix: () => {
