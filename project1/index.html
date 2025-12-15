@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Derivatives Explorer | Applied Mathematics</title>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="../assets/site.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
         :root {
@@ -55,11 +56,6 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
         }
 
         h1 {
@@ -301,33 +297,9 @@
     </style>
 </head>
 
-<body>
+<body data-lab-name="Derivatives Explorer" data-page-name="Derivatives Explorer" data-home="../index.html">
     <div class="container">
-        <header style="position: relative;">
-            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
-                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="pl">🇵🇱 PL</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="pt">🇵🇹 PT</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="uk">🇺🇦 UK</option>
-                    <option value="be">🇧🇾 BE</option>
-                </select>
-                <button id="themeToggle"
-                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
-                    <i data-lucide="moon" size="16"></i>
-                </button>
-            </div>
-            <h1><i data-lucide="microscope"
-                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
-                    data-i18n="title">The Calculus Lab</span>
-            </h1>
-            <p class="subtitle" data-i18n="subtitle">Crash Course: From Slopes to Areas. Visualize standard Calculus I &
-                II concepts.</p>
-        </header>
-
+        
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
@@ -537,24 +509,7 @@
                 lang: 'en',
                 theme: 'light',
 
-                setTheme: (t) => {
-                    app.theme = t;
-                    document.documentElement.setAttribute('data-theme', t);
-                    localStorage.setItem('theme', t);
-                    const icon = t === 'dark' ? 'sun' : 'moon';
-                    // Update icon
-                    document.getElementById('themeToggle').innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
-                    lucide.createIcons();
-                    app.draw(); // Redraw canvas on theme change
-                },
-
-                setLang: (l) => {
-                    app.lang = l;
-                    localStorage.setItem('lang', l);
-                    document.getElementById('langSelect').value = l;
-                    app.updateTranslations();
-                    app.displayInfo(); // Trigger content update
-                },
+                // setTheme and setLang removed - handled by site.js
 
                 updateTranslations: () => {
                     const t = translations[app.lang];
@@ -625,24 +580,26 @@
 
                     app.setupListeners();
 
-                    // Init Theme/Lang
-                    const savedTheme = localStorage.getItem('theme') || 'light';
-                    app.setTheme(savedTheme);
-                    const savedLang = localStorage.getItem('lang') || 'en';
-                    app.setLang(savedLang);
+                    // Init Theme/Lang from DOM (set by site.js)
+                    app.theme = document.documentElement.getAttribute('data-theme') || 'light';
+                    app.lang = document.documentElement.getAttribute('lang') || 'en';
+                    app.updateTranslations();
 
                     app.draw();
-                    // app.displayInfo(); // Called by setLang
+                    app.displayInfo();
                     lucide.createIcons();
                 },
 
                 setupListeners: () => {
-                    // Theme/Lang
-                    document.getElementById('themeToggle').addEventListener('click', () => {
-                        app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
+                    // Theme/Lang Events from site.js
+                    window.addEventListener('themechange', (e) => {
+                        app.theme = e.detail.theme;
+                        app.draw();
                     });
-                    document.getElementById('langSelect').addEventListener('change', (e) => {
-                        app.setLang(e.target.value);
+                    window.addEventListener('langchange', (e) => {
+                        app.lang = e.detail.lang;
+                        app.updateTranslations();
+                        app.displayInfo();
                     });
 
                     // Mode Toggle

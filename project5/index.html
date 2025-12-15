@@ -8,341 +8,19 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-    <style>
-        :root {
-            --primary: #0f766e;
-            --primary-light: #14b8a6;
-            --primary-dark: #115e59;
-            --surface: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --input-bg: #ffffff;
-            --grid-line: #e2e8f0;
-            --grid-bg: #f8fafc;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        [data-theme="dark"] {
-            --primary: #2dd4bf;
-            --primary-light: #5eead4;
-            --primary-dark: #14b8a6;
-            --surface: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --input-bg: #1e293b;
-            --grid-line: #334155;
-            --grid-bg: #0f172a;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--surface);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        h1 {
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:hover {
-            background-color: var(--primary-light);
-        }
-
-        button:active {
-            background-color: var(--primary-dark);
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 380px;
-            margin-bottom: 16px;
-        }
-
-        .info-section {
-            background-color: var(--surface);
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-
-        .info-section h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.95rem;
-            color: var(--primary-dark);
-        }
-
-        .info-section p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .formula {
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            margin: 8px 0;
-            overflow-x: auto;
-        }
-
-        .dual-chart {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .chart-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 8px;
-            text-align: center;
-        }
-
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .comparison-item {
-            padding: 12px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-
-        .comparison-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
-        }
-
-        .engineering-box {
-            background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
-            border: 2px solid var(--primary-light);
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .engineering-box h4 {
-            margin: 0 0 8px 0;
-            color: var(--primary-dark);
-            font-size: 0.95rem;
-        }
-
-        .engineering-box p {
-            margin: 0 0 8px 0;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        .value-display {
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            background: var(--surface);
-            border-radius: 6px;
-            margin: 4px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--primary-dark);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .spectrum-bar {
-            height: 100%;
-            background: linear-gradient(to top, rgba(20, 184, 166, 0.7), rgba(20, 184, 166, 0.3));
-            border-radius: 4px;
-            position: relative;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/site.css">
 </head>
 
-<body>
+<body data-theme="light" class="project-page">
     <div class="container">
         <header>
-            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 20px;">
-                <button id="themeToggle" onclick="app.toggleTheme()"
-                    style="width: auto; padding: 8px; background: transparent; color: var(--text-main); border: 1px solid var(--border);">
-                    <i data-lucide="moon" size="16"></i>
-                </button>
-                <select id="langSelect" onchange="app.setLang(this.value)" style="width: auto; padding: 6px 12px;">
-                    <option value="en">English</option>
-                    <option value="pl">Polski</option>
-                    <option value="fr">Français</option>
-                    <option value="es">Español</option>
-                    <option value="pt">Português</option>
-                    <option value="de">Deutsch</option>
-                    <option value="ua">Українська</option>
-                    <option value="be">Беларуская</option>
-                </select>
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <i data-lucide="arrow-left"></i> Back to Hub
+                </a>
+                <h1 data-i18n="title">🌊 Signals & Fourier Playground</h1>
+                <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and signal filtering in real-world applications</p>
             </div>
-            <h1 data-i18n="title">🌊 Signals & Fourier Playground</h1>
-            <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and
-                signal filtering in real-world applications</p>
         </header>
 
         <div class="grid">
@@ -773,6 +451,8 @@
             lang: 'en',
             theme: 'light',
 
+            // setTheme and setLang removed - handled by site.js
+
             // Generate time-domain signal
             generateSignal: (t) => {
                 const f1 = app.state.freq1;
@@ -906,39 +586,27 @@
                     app.update();
                 });
 
-                // Initialize Theme
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                app.setTheme(savedTheme);
+                // Listen for site.js events
+                window.addEventListener('themechange', (e) => {
+                    app.theme = e.detail.theme;
+                    app.update(); // Re-render charts
+                });
+                
+                window.addEventListener('langchange', (e) => {
+                    app.lang = e.detail.lang;
+                    app.updateTranslations();
+                    app.update();
+                });
 
-                // Initialize Lang
-                const savedLang = localStorage.getItem('lang') || 'en';
-                document.getElementById('langSelect').value = savedLang;
-                app.setLang(savedLang);
+                // Initial sync
+                app.theme = document.documentElement.getAttribute('data-theme') || 'light';
+                app.lang = document.documentElement.getAttribute('lang') || 'en';
+                app.updateTranslations();
 
                 app.updateFormDisplay();
                 app.initCharts();
                 app.update();
                 lucide.createIcons();
-            },
-
-            setTheme: (t) => {
-                app.theme = t;
-                document.documentElement.setAttribute('data-theme', t);
-                localStorage.setItem('theme', t);
-                const icon = t === 'dark' ? 'sun' : 'moon';
-                const el = document.getElementById('themeToggle');
-                if (el) {
-                    el.innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
-                    if (window.lucide) lucide.createIcons();
-                }
-                app.update(); // Re-render charts for theme colors
-            },
-
-            setLang: (l) => {
-                app.lang = l;
-                localStorage.setItem('lang', l);
-                app.updateTranslations();
-                app.update();
             },
 
             updateTranslations: () => {
@@ -1169,6 +837,7 @@
 
         window.onload = app.init;
     </script>
+    <script src="../assets/site.js"></script>
 </body>
 
 </html>

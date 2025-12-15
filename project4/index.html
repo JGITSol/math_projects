@@ -7,363 +7,19 @@
     <title>2D Forces & Equilibrium Analyzer | Mechanics</title>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-    <style>
-        :root {
-            --primary: #0f766e;
-            --primary-light: #14b8a6;
-            --primary-dark: #115e59;
-            --surface: #f0fdfa;
-            --card-bg: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --input-bg: #ffffff;
-            --text-on-primary: #ffffff;
-            --grid-line: #e2e8f0;
-            --grid-bg: #f0fdfa;
-            /* P4 used surface color originally */
-        }
-
-        [data-theme="dark"] {
-            --primary: #2dd4bf;
-            --primary-light: #5eead4;
-            --primary-dark: #14b8a6;
-            --surface: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --input-bg: #0f172a;
-            --text-on-primary: #1e293b;
-            --grid-line: #334155;
-            --grid-bg: #0f172a;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--surface);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        h1 {
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: var(--text-main);
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 6px 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        select,
-        input,
-        textarea {
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        select {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        input[type="number"]:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        button {
-            width: 100%;
-            padding: 9px 14px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 6px;
-        }
-
-        button:hover {
-            background-color: var(--primary-light);
-        }
-
-        button:active {
-            background-color: var(--primary-dark);
-        }
-
-        .canvas-container {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            background: var(--grid-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 24px;
-            cursor: crosshair;
-        }
-
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-
-        .info-section {
-            background-color: var(--surface);
-            border-left: 4px solid var(--primary);
-            padding: 14px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-
-        .info-section h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.9rem;
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-
-        .info-section p {
-            margin: 0;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin: 12px 0;
-        }
-
-        .result-item {
-            padding: 10px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-family: 'Courier New', monospace;
-        }
-
-        .result-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 6px;
-        }
-
-        .engineering-box {
-            background: var(--surface);
-            border: 2px solid var(--primary-light);
-            padding: 14px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .engineering-box h4 {
-            margin: 0 0 8px 0;
-            color: var(--primary-dark);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .engineering-box p {
-            margin: 0 0 6px 0;
-            font-size: 0.8rem;
-            color: var(--text-main);
-            line-height: 1.5;
-        }
-
-        .value-display {
-            font-size: 0.8rem;
-            padding: 6px 10px;
-            background: var(--surface);
-            border-radius: 6px;
-            margin: 3px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--primary-dark);
-        }
-
-        .forces-list {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            background: var(--surface);
-        }
-
-        .force-item {
-            padding: 8px;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .force-item:last-child {
-            border-bottom: none;
-        }
-
-        .force-item button {
-            width: auto;
-            padding: 3px 6px;
-            font-size: 0.7rem;
-            margin: 0;
-            background-color: var(--error);
-        }
-
-        .force-item button:hover {
-            background-color: #dc2626;
-        }
-
-        .equilibrium-status {
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.8rem;
-            margin-top: 8px;
-        }
-
-        .equilibrium-status.balanced {
-            background-color: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-            border: 1px solid var(--success);
-        }
-
-        .equilibrium-status.unbalanced {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: var(--error);
-            border: 1px solid var(--error);
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="../assets/site.css">
 </head>
 
-<body>
+<body data-theme="light" class="project-page">
     <div class="container">
-        <header style="position: relative;">
-            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
-                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="pl">🇵🇱 PL</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="pt">🇵🇹 PT</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="uk">🇺🇦 UK</option>
-                    <option value="be">🇧🇾 BE</option>
-                </select>
-                <button id="themeToggle"
-                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
-                    <i data-lucide="moon" size="16"></i>
-                </button>
+        <header>
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <i data-lucide="arrow-left"></i> Back to Hub
+                </a>
+                <h1><i data-lucide="scale" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span data-i18n="title">2D Forces & Equilibrium Analyzer</span></h1>
+                <p class="subtitle" data-i18n="subtitle">Visualize force systems, compute resultants, moments, and verify static equilibrium</p>
             </div>
-            <h1><i data-lucide="scale"
-                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
-                    data-i18n="title">2D Forces & Equilibrium Analyzer</span></h1>
-            <p class="subtitle" data-i18n="subtitle">Visualize force systems, compute resultants, moments, and verify
-                static equilibrium</p>
         </header>
 
         <div class="grid">
@@ -623,30 +279,11 @@
         };
 
         const app = {
-            lang: 'en', // Default
+            lang: 'en',
             theme: 'light',
             initialized: false,
 
-            setTheme: (t) => {
-                app.theme = t;
-                document.documentElement.setAttribute('data-theme', t);
-                localStorage.setItem('theme', t);
-                const icon = t === 'dark' ? 'sun' : 'moon';
-                // Note: Header icons in P4 are Lucide icons, but Toggle button icon needs update
-                const themeToggle = document.getElementById('themeToggle');
-                if (themeToggle) themeToggle.innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
-                if (window.lucide) lucide.createIcons();
-                if (app.initialized) app.draw(); // Redraw canvas when ready
-            },
-
-            setLang: (l) => {
-                app.lang = l;
-                localStorage.setItem('lang', l);
-                const langSelect = document.getElementById('langSelect');
-                if (langSelect) langSelect.value = l;
-                app.updateTranslations();
-                if (app.initialized) app.update(); // Trigger re-render of dynamic strings when ready
-            },
+            // setTheme and setLang removed - handled by site.js
 
             updateTranslations: () => {
                 const t = translations[app.lang];
@@ -692,18 +329,22 @@
 
                 app.initialized = true;
 
-                // Init Theme/Lang
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                app.setTheme(savedTheme);
-                const savedLang = localStorage.getItem('lang') || 'en';
-                app.setLang(savedLang);
+                // Listen for site.js events
+                window.addEventListener('themechange', (e) => {
+                    app.theme = e.detail.theme;
+                    app.draw();
+                });
+                
+                window.addEventListener('langchange', (e) => {
+                    app.lang = e.detail.lang;
+                    app.updateTranslations();
+                    app.update();
+                });
 
-                document.getElementById('themeToggle').addEventListener('click', () => {
-                    app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
-                });
-                document.getElementById('langSelect').addEventListener('change', (e) => {
-                    app.setLang(e.target.value);
-                });
+                // Initial sync
+                app.theme = document.documentElement.getAttribute('data-theme') || 'light';
+                app.lang = document.documentElement.getAttribute('lang') || 'en';
+                app.updateTranslations();
 
                 // Event listeners for inputs
                 document.getElementById('inputMag').addEventListener('input', (e) => {
@@ -1264,6 +905,7 @@
 
         window.onload = app.init;
     </script>
+    <script src="../assets/site.js"></script>
 </body>
 
 </html>

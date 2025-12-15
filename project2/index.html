@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matrices as Transformations | Applied Mathematics</title>
+    <link rel="stylesheet" href="../assets/site.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
@@ -55,11 +56,6 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
         }
 
         h1 {
@@ -523,23 +519,7 @@
             lang: 'en',
             theme: 'light',
 
-            setTheme: (t) => {
-                app.theme = t;
-                document.documentElement.setAttribute('data-theme', t);
-                localStorage.setItem('theme', t);
-                const icon = t === 'dark' ? 'sun' : 'moon';
-                document.getElementById('themeToggle').innerHTML = `<i data-lucide="${icon}" size="16"></i>`;
-                lucide.createIcons();
-                app.update(); // Redraw canvas
-            },
-
-            setLang: (l) => {
-                app.lang = l;
-                localStorage.setItem('lang', l);
-                document.getElementById('langSelect').value = l;
-                app.updateTranslations();
-                app.update(); // Trigger re-render of canvas labels if any? No, mostly DOM.
-            },
+            // setTheme and setLang removed - handled by site.js
 
             updateTranslations: () => {
                 const t = translations[app.lang];
@@ -748,17 +728,20 @@
                 app.updateFormDisplay();
                 app.update();
 
-                // Init Theme/Lang
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                app.setTheme(savedTheme);
-                const savedLang = localStorage.getItem('lang') || 'en';
-                app.setLang(savedLang);
+                // Init Theme/Lang from DOM (set by site.js)
+                app.theme = document.documentElement.getAttribute('data-theme') || 'light';
+                app.lang = document.documentElement.getAttribute('lang') || 'en';
+                app.updateTranslations();
 
-                document.getElementById('themeToggle').addEventListener('click', () => {
-                    app.setTheme(app.theme === 'dark' ? 'light' : 'dark');
+                // Listeners for site.js events
+                window.addEventListener('themechange', (e) => {
+                    app.theme = e.detail.theme;
+                    app.update();
                 });
-                document.getElementById('langSelect').addEventListener('change', (e) => {
-                    app.setLang(e.target.value);
+                window.addEventListener('langchange', (e) => {
+                    app.lang = e.detail.lang;
+                    app.updateTranslations();
+                    app.displayEngineering();
                 });
 
                 lucide.createIcons();
@@ -1086,6 +1069,7 @@
 
         window.onload = app.init;
     </script>
+    <script src="../assets/site.js"></script>
 </body>
 
 </html>
