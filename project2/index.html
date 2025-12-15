@@ -733,6 +733,9 @@
             },
 
             drawTransformation: () => {
+                // Ensure theme is current
+                app.theme = document.documentElement.getAttribute('data-theme') || 'light';
+
                 const width = app.canvas.clientWidth;
                 const height = app.canvas.clientHeight;
                 app.canvas.width = width;
@@ -882,6 +885,20 @@
                 app.ctx.moveTo(centerX, centerY);
                 app.ctx.lineTo(centerX, centerY - scale);
                 app.ctx.stroke();
+
+                // Draw Original Unit Square (Dashed)
+                app.ctx.strokeStyle = colors.origBasis;
+                app.ctx.setLineDash([5, 5]);
+                app.ctx.lineWidth = 1;
+                app.ctx.beginPath();
+                const origCorners = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
+                app.ctx.moveTo(centerX + origCorners[0][0] * scale, centerY - origCorners[0][1] * scale);
+                for (let i = 1; i < origCorners.length; i++) {
+                    app.ctx.lineTo(centerX + origCorners[i][0] * scale, centerY - origCorners[i][1] * scale);
+                }
+                app.ctx.closePath();
+                app.ctx.stroke();
+                app.ctx.setLineDash([]);
 
                 // Draw transformed basis (bright)
                 const e1 = app.matVecMul(M, [1, 0]);

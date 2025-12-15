@@ -75,18 +75,6 @@
                     <input type="range" id="sliderCutoff" min="1" max="40" step="1" value="15">
                 </div>
 
-                <!-- Application Context -->
-                <div class="form-group">
-                    <label for="context">Application</label>
-                    <select id="context">
-                        <option value="audio">Audio & Music</option>
-                        <option value="motor">Motor Control (PWM)</option>
-                        <option value="sensor">Sensor Filtering</option>
-                        <option value="communication">Communication Signals</option>
-                        <option value="vibration">Vibration Analysis</option>
-                    </select>
-                </div>
-
                 <button id="btnUpdate" data-i18n="updateBtn">Update Visualization</button>
 
                 <div class="badge" data-i18n="badgeSignal">Signal</div>
@@ -141,6 +129,13 @@
                 <!-- Engineering Application -->
                 <div class="card">
                     <div class="card-header">⚡ Real-World Applications</div>
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="audio">Audio</button>
+                        <button class="tab-btn" data-tab="motor">Motor</button>
+                        <button class="tab-btn" data-tab="sensor">Sensor</button>
+                        <button class="tab-btn" data-tab="communication">Comms</button>
+                        <button class="tab-btn" data-tab="vibration">Vibration</button>
+                    </div>
                     <div id="engineeringApp" class="engineering-box"></div>
                 </div>
             </div>
@@ -581,9 +576,13 @@
                     app.update();
                 });
 
-                document.getElementById('context').addEventListener('change', (e) => {
-                    app.state.context = e.target.value;
-                    app.update();
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        app.state.context = e.target.getAttribute('data-tab');
+                        app.update();
+                    });
                 });
 
                 // Listen for site.js events

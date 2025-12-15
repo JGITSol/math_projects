@@ -65,18 +65,6 @@
                 <div id="equilibriumStatus" class="equilibrium-status hidden">
                     ✓ System in Equilibrium
                 </div>
-
-                <!-- Engineering Context -->
-                <div style="margin-top: 16px;">
-                    <h3 style="font-size: 0.9rem; margin: 0 0 8px 0; color: var(--primary-dark);">Application</h3>
-                    <select id="context"
-                        style="width: 100%; padding: 6px 8px; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px;">
-                        <option value="truss">Truss Joint Analysis</option>
-                        <option value="beam">Beam Support Reactions</option>
-                        <option value="pulley">Pulley System</option>
-                        <option value="landing">Landing Gear Impact</option>
-                    </select>
-                </div>
             </div>
 
             <!-- Visualization & Analysis -->
@@ -146,6 +134,20 @@
                         <p><strong>ΣFx = 0:</strong> <span id="checkFx">✗ Not balanced</span></p>
                         <p><strong>ΣFy = 0:</strong> <span id="checkFy">✗ Not balanced</span></p>
                         <p><strong>ΣM = 0:</strong> <span id="checkMoment">✗ Not balanced</span></p>
+                    </div>
+                </div>
+
+                <!-- Real World Applications -->
+                <div class="card">
+                    <div class="card-header">🏗️ Real World Applications</div>
+                    <div class="tab-header">
+                        <button class="tab-btn active" data-tab="truss">Truss</button>
+                        <button class="tab-btn" data-tab="beam">Beam</button>
+                        <button class="tab-btn" data-tab="pulley">Pulley</button>
+                        <button class="tab-btn" data-tab="landing">Landing Gear</button>
+                    </div>
+                    <div id="engineeringApp">
+                        <!-- Content rendered by JS -->
                     </div>
                 </div>
 
@@ -454,9 +456,13 @@
                 document.getElementById('btnAddForce').addEventListener('click', app.addForce);
                 document.getElementById('btnClear').addEventListener('click', app.clearAllForces);
 
-                document.getElementById('context').addEventListener('change', (e) => {
-                    app.state.context = e.target.value;
-                    app.displayEngineering();
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        app.state.context = e.target.getAttribute('data-tab');
+                        app.displayEngineering();
+                    });
                 });
 
                 app.canvas.addEventListener('click', (e) => {
