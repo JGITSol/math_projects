@@ -10,41 +10,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        :root {
-            --primary: #0f766e;
-            --primary-light: #14b8a6;
-            --primary-dark: #115e59;
-            --surface: #f0fdfa;
-            --card-bg: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --input-bg: #ffffff;
-            --text-on-primary: #ffffff;
-            --grid-line: #e2e8f0;
-            --grid-bg: #f8fafc;
-        }
-
-        [data-theme="dark"] {
-            --primary: #2dd4bf;
-            --primary-light: #5eead4;
-            --primary-dark: #14b8a6;
-            --surface: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --input-bg: #0f172a;
-            --text-on-primary: #1e293b;
-            --grid-line: #334155;
-            --grid-bg: #0f172a;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--surface);
@@ -53,7 +18,6 @@
             padding: 40px 20px;
             line-height: 1.5;
             overscroll-behavior: none;
-            /* Prevent scroll bounce on trackpad */
         }
 
         .container {
@@ -311,30 +275,16 @@
     </style>
 </head>
 
-<body>
+<body data-lab-name="Optimization & Gradient Descent" data-page-name="Optimization & Gradient Descent" data-home="../index.html" class="project-page">
     <div class="container">
-        <header style="position: relative;">
-            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
-                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="pl">🇵🇱 PL</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="pt">🇵🇹 PT</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="uk">🇺🇦 UK</option>
-                    <option value="be">🇧🇾 BE</option>
-                </select>
-                <button id="themeToggle"
-                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
-                    <i data-lucide="moon" size="16"></i>
-                </button>
+        <header>
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <i data-lucide="arrow-left"></i> Back to Hub
+                </a>
+                <h1 data-i18n="title">Optimization & Gradient Descent</h1>
+                <p class="subtitle" data-i18n="subtitle">Visualize how algorithms minimize cost functions in complex 3D landscapes.</p>
             </div>
-            <h1><i data-lucide="trending-down"
-                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
-                    data-i18n="title">Optimization & Gradient Descent</span></h1>
-            <p class="subtitle" data-i18n="subtitle">Visualize how algorithms minimize cost functions in complex 3D
-                landscapes</p>
         </header>
 
         <div class="grid">
@@ -379,10 +329,10 @@
                 <div class="form-group">
                     <label data-i18n="iter">Iterations</label>
                     <div style="display: flex; gap: 8px;">
-                        <button id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step">Step (+1)</button>
-                        <button id="runBtn" style="flex: 1; margin: 0;" data-i18n="run">Run (Auto)</button>
+                        <button type="button" id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step">Step (+1)</button>
+                        <button type="button" id="runBtn" style="flex: 1; margin: 0;" data-i18n="run">Run (Auto)</button>
                     </div>
-                    <button id="resetBtn" style="background-color: var(--warning);" data-i18n="reset">Reset
+                    <button type="button" id="resetBtn" style="background-color: var(--warning);" data-i18n="reset">Reset
                         Position</button>
                 </div>
 
@@ -762,8 +712,18 @@
                 const prob = optim.probs[optim.state.prob];
                 // const r = prob.range; // Range driven by scale/scroll now
 
+                // Theme Colors
+                const isDark = optim.theme === 'dark';
+                const colors = {
+                    bg: isDark ? '#0f172a' : '#f8fafc',
+                    gridMinor: isDark ? '#1e293b' : '#e2e8f0',
+                    gridMajor: isDark ? '#334155' : '#cbd5e1',
+                    axis: isDark ? '#64748b' : '#94a3b8',
+                    path: isDark ? 'rgba(45, 212, 191, 0.6)' : 'rgba(15, 118, 110, 0.6)'
+                };
+
                 // Clear
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--grid-bg');
+                ctx.fillStyle = colors.bg;
                 ctx.fillRect(0, 0, w, h);
 
                 const cx = w / 2;
@@ -794,26 +754,25 @@
                 const startY = Math.floor(yMin / step) * step;
 
                 ctx.lineWidth = 1;
-                ctx.strokeStyle = '#e2e8f0'; // Minor grid color
-
+                
                 // Vertical Lines
                 for (let x = startX; x <= xMax; x += step) {
                     const scrX = toScr(x, 0).x;
                     const isMajor = Math.abs(x % (step * 5)) < 0.001; // Every 5th line major-ish
-                    ctx.strokeStyle = isMajor ? '#cbd5e1' : '#e2e8f0';
+                    ctx.strokeStyle = isMajor ? colors.gridMajor : colors.gridMinor;
                     ctx.beginPath(); ctx.moveTo(scrX, 0); ctx.lineTo(scrX, h); ctx.stroke();
                 }
                 // Horizontal Lines
                 for (let y = startY; y <= yMax; y += step) {
                     const scrY = toScr(0, y).y;
                     const isMajor = Math.abs(y % (step * 5)) < 0.001;
-                    ctx.strokeStyle = isMajor ? '#cbd5e1' : '#e2e8f0';
+                    ctx.strokeStyle = isMajor ? colors.gridMajor : colors.gridMinor;
                     ctx.beginPath(); ctx.moveTo(0, scrY); ctx.lineTo(w, scrY); ctx.stroke();
                 }
 
                 // Axes
                 const origin = toScr(0, 0);
-                ctx.strokeStyle = '#94a3b8';
+                ctx.strokeStyle = colors.axis;
                 ctx.lineWidth = 2;
                 ctx.beginPath(); ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, h); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(0, origin.y); ctx.lineTo(w, origin.y); ctx.stroke();
@@ -827,7 +786,7 @@
 
                 // Draw History Path
                 ctx.beginPath();
-                ctx.strokeStyle = 'rgba(15, 118, 110, 0.6)'; // Primary Darker
+                ctx.strokeStyle = colors.path;
                 ctx.lineWidth = 3;
                 if (optim.history.length > 0) {
                     const start = toScr(optim.history[0].x, optim.history[0].y);

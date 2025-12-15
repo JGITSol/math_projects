@@ -669,13 +669,27 @@
                 const centerX = w / 2;
                 const centerY = h / 2;
 
+                // Theme Colors
+                const isDark = app.theme === 'dark';
+                const colors = {
+                    bg: isDark ? '#0f172a' : '#f8fafc',
+                    grid: isDark ? '#1e293b' : '#e2e8f0',
+                    axis: isDark ? '#94a3b8' : '#64748b',
+                    text: isDark ? '#e2e8f0' : '#64748b',
+                    origin: isDark ? '#2dd4bf' : '#0f766e',
+                    forcePoint: isDark ? 'rgba(45, 212, 191, 0.3)' : 'rgba(15, 118, 110, 0.3)',
+                    forceColors: isDark 
+                        ? ['#2dd4bf', '#5eead4', '#34d399', '#fbbf24'] 
+                        : ['#0f766e', '#14b8a6', '#10b981', '#f59e0b'],
+                    resultant: '#ef4444'
+                };
+
                 // Clear
-                ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--grid-bg');
+                ctx.fillStyle = colors.bg;
                 ctx.fillRect(0, 0, w, h);
 
                 // Grid
-                const gridColor = getComputedStyle(document.body).getPropertyValue('--grid-line');
-                ctx.strokeStyle = gridColor;
+                ctx.strokeStyle = colors.grid;
                 ctx.lineWidth = 1;
 
                 // Draw grid lines
@@ -694,7 +708,7 @@
                 }
 
                 // Draw axes
-                app.ctx.strokeStyle = '#64748b';
+                app.ctx.strokeStyle = colors.axis;
                 app.ctx.lineWidth = 2;
                 app.ctx.beginPath();
                 app.ctx.moveTo(0, centerY);
@@ -706,13 +720,13 @@
                 app.ctx.stroke();
 
                 // Labels
-                app.ctx.fillStyle = '#64748b';
+                app.ctx.fillStyle = colors.text;
                 app.ctx.font = '12px Inter';
                 app.ctx.fillText('X (m)', w - 30, centerY - 10);
                 app.ctx.fillText('Y (m)', centerX + 10, 20);
 
                 // Draw origin point
-                app.ctx.fillStyle = '#0f766e';
+                app.ctx.fillStyle = colors.origin;
                 app.ctx.beginPath();
                 app.ctx.arc(centerX, centerY, 4, 0, 2 * Math.PI);
                 app.ctx.fill();
@@ -723,7 +737,7 @@
                     const fy = centerY - f.y * app.scale;
 
                     // Force application point
-                    app.ctx.fillStyle = 'rgba(15, 118, 110, 0.3)';
+                    app.ctx.fillStyle = colors.forcePoint;
                     app.ctx.beginPath();
                     app.ctx.arc(fx, fy, 5, 0, 2 * Math.PI);
                     app.ctx.fill();
@@ -733,8 +747,8 @@
                     const fx_scaled = Math.cos(f.angle) * arrowLen;
                     const fy_scaled = -Math.sin(f.angle) * arrowLen;
 
-                    const colors = ['#0f766e', '#14b8a6', '#10b981', '#f59e0b'];
-                    app.ctx.strokeStyle = colors[idx % colors.length];
+                    const forceColor = colors.forceColors[idx % colors.forceColors.length];
+                    app.ctx.strokeStyle = forceColor;
                     app.ctx.lineWidth = 2.5;
                     app.ctx.beginPath();
                     app.ctx.moveTo(fx, fy);
@@ -752,7 +766,7 @@
                     app.ctx.stroke();
 
                     // Label
-                    app.ctx.fillStyle = colors[idx % colors.length];
+                    app.ctx.fillStyle = forceColor;
                     app.ctx.font = 'bold 11px Inter';
                     app.ctx.fillText(`F${idx + 1}: ${f.magnitude.toFixed(0)}N`, fx + 15, fy - 10);
                 });
@@ -771,7 +785,7 @@
                         const rx = (sumFx / resMag) * arrowLen;
                         const ry = -(sumFy / resMag) * arrowLen;
 
-                        app.ctx.strokeStyle = '#ef4444';
+                        app.ctx.strokeStyle = colors.resultant;
                         app.ctx.lineWidth = 3;
                         app.ctx.setLineDash([5, 5]);
                         app.ctx.beginPath();
@@ -790,7 +804,7 @@
                         app.ctx.lineTo(centerX + rx - headlen * Math.cos(angle + Math.PI / 6), centerY + ry - headlen * Math.sin(angle + Math.PI / 6));
                         app.ctx.stroke();
 
-                        app.ctx.fillStyle = '#ef4444';
+                        app.ctx.fillStyle = colors.resultant;
                         app.ctx.font = 'bold 12px Inter';
                         app.ctx.fillText(`ΣF=${resMag.toFixed(1)}N`, centerX + rx + 15, centerY + ry);
                     }

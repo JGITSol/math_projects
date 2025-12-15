@@ -9,41 +9,6 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        :root {
-            --primary: #0f766e;
-            --primary-light: #14b8a6;
-            --primary-dark: #115e59;
-            --surface: #f0fdfa;
-            --card-bg: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --input-bg: #ffffff;
-            --text-on-primary: #ffffff;
-            --grid-line: #e2e8f0;
-            --grid-bg: #f8fafc;
-        }
-
-        [data-theme="dark"] {
-            --primary: #2dd4bf;
-            --primary-light: #5eead4;
-            --primary-dark: #14b8a6;
-            --surface: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --input-bg: #0f172a;
-            --text-on-primary: #1e293b;
-            --grid-line: #334155;
-            --grid-bg: #0f172a;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--surface);
@@ -297,9 +262,17 @@
     </style>
 </head>
 
-<body data-lab-name="Derivatives Explorer" data-page-name="Derivatives Explorer" data-home="../index.html">
+<body data-lab-name="Derivatives Explorer" data-page-name="Derivatives Explorer" data-home="../index.html" class="project-page">
     <div class="container">
-        
+        <header>
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <i data-lucide="arrow-left"></i> Back to Hub
+                </a>
+                <h1 data-i18n="title">Derivatives Explorer</h1>
+                <p class="subtitle" data-i18n="subtitle">Interactive visualization of derivatives and integrals</p>
+            </div>
+        </header>
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
@@ -943,6 +916,5 @@
 
             window.onload = app.init;
         </script>
-</body>
-
+    <script src="../assets/site.js"></script>
 </html>

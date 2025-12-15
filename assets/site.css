@@ -127,32 +127,33 @@ a:hover {
 .lab-nav {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 18px;
-    margin: -16px -6px 18px;
+    padding: 12px 24px;
+    margin: -24px -18px 24px;
+    width: calc(100% + 36px);
     backdrop-filter: blur(12px);
-    background: rgba(8, 14, 26, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 18px;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+    background: rgba(8, 14, 26, 0.9);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="light"] .lab-nav {
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid var(--border);
-    box-shadow: 0 10px 35px rgba(2, 6, 23, 0.10);
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(2, 6, 23, 0.05);
 }
 
 .lab-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-weight: 700;
     letter-spacing: 0.01em;
     color: var(--text-main);
+    white-space: nowrap;
 }
 
 .lab-brand .dot {
@@ -166,36 +167,61 @@ a:hover {
 .lab-brand-name {
     text-decoration: none;
     color: var(--text-main);
+    font-size: 1.1rem;
 }
 
 .lab-divider {
     color: var(--text-light);
+    opacity: 0.5;
 }
 
 .lab-current {
     color: var(--primary-light);
     font-weight: 600;
+    display: none; /* Hide current page name on mobile/small screens if needed, or keep it */
+}
+
+@media (min-width: 768px) {
+    .lab-current {
+        display: inline-block;
+    }
 }
 
 .lab-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
 }
 
 .pill {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 9px 14px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.03);
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
     color: var(--text-main);
     text-decoration: none;
     font-weight: 600;
-    transition: transform 0.1s ease, border-color 0.2s ease, background 0.2s ease;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pill:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border);
+}
+
+[data-theme="light"] .pill:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.pill.ghost {
+    background: transparent;
+    border-color: transparent;
 }
 
 select.pill {

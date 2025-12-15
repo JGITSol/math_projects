@@ -589,6 +589,7 @@
                 // Listen for site.js events
                 window.addEventListener('themechange', (e) => {
                     app.theme = e.detail.theme;
+                    app.updateChartTheme();
                     app.update(); // Re-render charts
                 });
                 
@@ -636,6 +637,49 @@
                     success: '#10b981',
                     successBg: 'rgba(16, 185, 129, 0.1)'
                 };
+            },
+
+            updateChartTheme: () => {
+                const colors = app.getChartColors();
+                
+                const updateChart = (chart) => {
+                    if (!chart) return;
+                    
+                    if (chart.options.scales.x) {
+                        chart.options.scales.x.title.color = colors.text;
+                        chart.options.scales.x.grid.color = colors.grid;
+                        chart.options.scales.x.ticks.color = colors.text;
+                    }
+                    if (chart.options.scales.y) {
+                        chart.options.scales.y.title.color = colors.text;
+                        chart.options.scales.y.grid.color = colors.grid;
+                        chart.options.scales.y.ticks.color = colors.text;
+                    }
+                    
+                    if (chart.options.plugins.legend) {
+                        chart.options.plugins.legend.labels.color = colors.text;
+                    }
+                };
+
+                updateChart(app.timeChart);
+                updateChart(app.freqChart);
+                updateChart(app.filteredChart);
+
+                if (app.timeChart) {
+                    app.timeChart.data.datasets[0].borderColor = colors.primary;
+                    app.timeChart.data.datasets[0].backgroundColor = colors.primaryBg;
+                    app.timeChart.update();
+                }
+                if (app.freqChart) {
+                    app.freqChart.data.datasets[0].borderColor = colors.secondary;
+                    app.freqChart.data.datasets[0].backgroundColor = colors.secondaryBg;
+                    app.freqChart.update();
+                }
+                if (app.filteredChart) {
+                    app.filteredChart.data.datasets[0].borderColor = colors.success;
+                    app.filteredChart.data.datasets[0].backgroundColor = colors.successBg;
+                    app.filteredChart.update();
+                }
             },
 
             initCharts: () => {

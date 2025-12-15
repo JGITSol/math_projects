@@ -9,41 +9,6 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        :root {
-            --primary: #0f766e;
-            --primary-light: #14b8a6;
-            --primary-dark: #115e59;
-            --surface: #f0fdfa;
-            --card-bg: #ffffff;
-            --text-main: #334155;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --input-bg: #ffffff;
-            --text-on-primary: #ffffff;
-            --grid-line: #e2e8f0;
-            --grid-bg: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --primary: #2dd4bf;
-            --primary-light: #5eead4;
-            --primary-dark: #14b8a6;
-            --surface: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-light: #94a3b8;
-            --border: #334155;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --input-bg: #0f172a;
-            --text-on-primary: #1e293b;
-            --grid-line: #334155;
-            --grid-bg: #ffffff;
-        }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--surface);
@@ -307,30 +272,16 @@
     </style>
 </head>
 
-<body>
+<body data-lab-name="Matrices as Transformations" data-page-name="Matrices as Transformations" data-home="../index.html" class="project-page">
     <div class="container">
-        <header style="position: relative;">
-            <div style="position: absolute; top: 0; right: 0; display: flex; gap: 8px;">
-                <select id="langSelect" style="width: auto; padding: 6px; font-size: 0.8rem;">
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="pl">🇵🇱 PL</option>
-                    <option value="fr">🇫🇷 FR</option>
-                    <option value="es">🇪🇸 ES</option>
-                    <option value="pt">🇵🇹 PT</option>
-                    <option value="de">🇩🇪 DE</option>
-                    <option value="uk">🇺🇦 UK</option>
-                    <option value="be">🇧🇾 BE</option>
-                </select>
-                <button id="themeToggle"
-                    style="width: auto; margin:0; padding: 6px 10px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border);">
-                    <i data-lucide="moon" size="16"></i>
-                </button>
+        <header>
+            <div class="header-content">
+                <a href="../index.html" class="back-link">
+                    <i data-lucide="arrow-left"></i> Back to Hub
+                </a>
+                <h1 data-i18n="title">Matrices as Transformations</h1>
+                <p class="subtitle" data-i18n="subtitle">Visualize 2D/3D matrix transformations: rotations, scalings, projections, and engineering applications</p>
             </div>
-            <h1><i data-lucide="box-select"
-                    style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span
-                    data-i18n="title">Matrices as Transformations</span></h1>
-            <p class="subtitle" data-i18n="subtitle">Visualize 2D/3D matrix transformations: rotations, scalings,
-                projections, and engineering applications</p>
         </header>
 
         <div class="grid">
@@ -791,7 +742,21 @@
                 const centerY = height / 2;
                 const scale = 60;
 
-                app.ctx.fillStyle = '#f0fdfa';
+                // Theme Colors
+                const isDark = app.theme === 'dark';
+                const colors = {
+                    bg: isDark ? '#0f172a' : '#f8fafc',
+                    grid: isDark ? '#1e293b' : '#e2e8f0',
+                    axis: isDark ? '#94a3b8' : '#64748b',
+                    origBasis: isDark ? 'rgba(148, 163, 184, 0.3)' : 'rgba(100, 116, 139, 0.3)', // Grayish
+                    transBasis1: isDark ? '#f472b6' : '#db2777', // Pink/Magenta for contrast
+                    transBasis2: isDark ? '#22d3ee' : '#0891b2', // Cyan for contrast
+                    transGrid: isDark ? 'rgba(34, 211, 238, 0.15)' : 'rgba(8, 145, 178, 0.1)',
+                    text: isDark ? '#e2e8f0' : '#334155',
+                    textHighlight: isDark ? '#22d3ee' : '#0891b2'
+                };
+
+                app.ctx.fillStyle = colors.bg;
                 app.ctx.fillRect(0, 0, width, height);
 
                 // --- 3D RENDERING ---
@@ -815,7 +780,7 @@
                     ];
 
                     // Draw Grid (on XY plane, z=0)
-                    app.ctx.strokeStyle = '#e2e8f0';
+                    app.ctx.strokeStyle = colors.grid;
                     app.ctx.lineWidth = 1;
                     for (let i = -3; i <= 3; i++) {
                         const p1 = project([i, -3, 0]); const p2 = project([i, 3, 0]);
@@ -836,7 +801,7 @@
                         [0, 4], [1, 5], [2, 6], [3, 7]  // pillars
                     ];
 
-                    app.ctx.strokeStyle = '#14b8a6'; // Primary Light
+                    app.ctx.strokeStyle = colors.transBasis2;
                     app.ctx.lineWidth = 2;
 
                     edges.forEach(edge => {
@@ -855,14 +820,14 @@
 
                     // Draw Transformed Basis Vectors (stronger)
                     const basis = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
-                    const colors = ['#ef4444', '#10b981', '#3b82f6']; // RGB
+                    const basisColors = ['#ef4444', '#10b981', '#3b82f6']; // RGB
                     const origin = project([0, 0, 0]); // Transformation fixes origin at 0 usually
 
                     basis.forEach((b, i) => {
                         const tb = app.matVecMul3D(M3, b);
                         const pt = project([tb[0] * 1.5, tb[1] * 1.5, tb[2] * 1.5]); // Scale up a bit
 
-                        app.ctx.strokeStyle = colors[i];
+                        app.ctx.strokeStyle = basisColors[i];
                         app.ctx.lineWidth = 3;
                         app.ctx.beginPath();
                         app.ctx.moveTo(origin.x, origin.y);
@@ -870,7 +835,7 @@
                         app.ctx.stroke();
                     });
 
-                    app.ctx.fillStyle = '#334155';
+                    app.ctx.fillStyle = colors.text;
                     app.ctx.fillText('3D Mode: Wireframe Cube + Basis', 10, 20);
 
                     return; // Skip 2D drawing
@@ -878,7 +843,7 @@
 
                 // --- 2D RENDERING ---
                 // Draw grid
-                app.ctx.strokeStyle = '#e2e8f0';
+                app.ctx.strokeStyle = colors.grid;
                 app.ctx.lineWidth = 1;
                 for (let i = -4; i <= 4; i++) {
                     app.ctx.beginPath();
@@ -893,7 +858,7 @@
                 }
 
                 // Draw axes
-                app.ctx.strokeStyle = '#64748b';
+                app.ctx.strokeStyle = colors.axis;
                 app.ctx.lineWidth = 2;
                 app.ctx.beginPath();
                 app.ctx.moveTo(centerX - 5 * scale, centerY);
@@ -907,7 +872,7 @@
                 const M = app.getMatrix();
 
                 // Draw original basis (light)
-                app.ctx.strokeStyle = 'rgba(15, 118, 110, 0.3)';
+                app.ctx.strokeStyle = colors.origBasis;
                 app.ctx.lineWidth = 2;
                 app.ctx.beginPath();
                 app.ctx.moveTo(centerX, centerY);
@@ -922,22 +887,22 @@
                 const e1 = app.matVecMul(M, [1, 0]);
                 const e2 = app.matVecMul(M, [0, 1]);
 
-                app.ctx.strokeStyle = 'rgb(15, 118, 110)';
+                app.ctx.strokeStyle = colors.transBasis1;
                 app.ctx.lineWidth = 3;
                 app.ctx.beginPath();
                 app.ctx.moveTo(centerX, centerY);
                 app.ctx.lineTo(centerX + e1[0] * scale, centerY - e1[1] * scale);
                 app.ctx.stroke();
 
-                app.ctx.strokeStyle = 'rgb(20, 184, 166)';
+                app.ctx.strokeStyle = colors.transBasis2;
                 app.ctx.beginPath();
                 app.ctx.moveTo(centerX, centerY);
                 app.ctx.lineTo(centerX + e2[0] * scale, centerY - e2[1] * scale);
                 app.ctx.stroke();
 
                 // Draw transformed grid/square
-                app.ctx.fillStyle = 'rgba(20, 184, 166, 0.15)';
-                app.ctx.strokeStyle = 'rgb(20, 184, 166)';
+                app.ctx.fillStyle = colors.transGrid;
+                app.ctx.strokeStyle = colors.transBasis2;
                 app.ctx.lineWidth = 2;
 
                 const corners = [
@@ -955,11 +920,11 @@
                 app.ctx.stroke();
 
                 // Labels (2D only)
-                app.ctx.fillStyle = '#334155';
+                app.ctx.fillStyle = colors.text;
                 app.ctx.font = 'bold 14px Inter';
-                app.ctx.fillText('Original (light)', centerX + 10, centerY - scale - 10);
-                app.ctx.fillStyle = '#0f766e';
-                app.ctx.fillText('Transformed (bright)', centerX + 10, centerY + scale + 20);
+                app.ctx.fillText('Original (gray)', centerX + 10, centerY - scale - 10);
+                app.ctx.fillStyle = colors.textHighlight;
+                app.ctx.fillText('Transformed (color)', centerX + 10, centerY + scale + 20);
             },
 
             displayMatrix: () => {
