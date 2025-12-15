@@ -17,6 +17,7 @@
     --nav-height: 70px;
     --grid-bg: var(--card-bg);
     --grid-line: var(--border);
+    --input-bg: #1e293b;
 }
 
 [data-theme="light"] {
@@ -35,10 +36,26 @@
     --success: #16a34a;
     --warning: #d97706;
     --error: #dc2626;
+    --input-bg: #ffffff;
 }
 
 * {
     box-sizing: border-box;
+}
+
+input, select, textarea {
+    background-color: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
 }
 
 .skip-link {

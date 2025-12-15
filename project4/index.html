@@ -6,27 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2D Forces & Equilibrium Analyzer | Mechanics</title>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../assets/site.css">
 </head>
 
-<body data-theme="light" class="project-page">
+<body class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
                 <a href="../index.html" class="back-link">
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
-                <h1><i data-lucide="scale" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 8px;"></i> <span data-i18n="title">2D Forces & Equilibrium Analyzer</span></h1>
-                <p class="subtitle" data-i18n="subtitle">Visualize force systems, compute resultants, moments, and verify static equilibrium</p>
+                <h1 data-i18n="title">⚖️ 2D Forces & Equilibrium Analyzer</h1>
+                <p class="subtitle" data-i18n="subtitle">Analyze concurrent forces, calculate resultants, and verify equilibrium conditions</p>
             </div>
         </header>
 
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="list-plus" style="margin-right: 8px;"></i> <span
-                        data-i18n="addForcesCard">Add Forces</span></div>
+                <div class="card-header">⚙️ Add Forces</div>
 
                 <div class="form-group">
                     <label>Magnitude (N): <span id="valMag">100</span></label>
@@ -48,8 +48,8 @@
                     <input type="number" id="inputY" value="0" min="-10" max="10" step="0.5">
                 </div>
 
-                <button id="btnAddForce" data-i18n="btnAdd">Add Force (Click Canvas)</button>
-                <button id="btnClear" style="background-color: var(--warning);" data-i18n="btnClear">Clear All</button>
+                <button id="btnAddForce">Add Force (Click Canvas)</button>
+                <button id="btnClear" style="background-color: var(--warning);">Clear All</button>
 
                 <div class="badge">Forces</div>
                 <div class="badge">Equilibrium</div>
@@ -57,8 +57,7 @@
 
                 <!-- Forces List -->
                 <div style="margin-top: 16px;">
-                    <h3 style="font-size: 0.9rem; margin: 0 0 8px 0; color: var(--primary-dark);"
-                        data-i18n="activeForces">Active Forces</h3>
+                    <h3 style="font-size: 0.9rem; margin: 0 0 8px 0; color: var(--primary-dark);">Active Forces</h3>
                     <div id="forcesList" class="forces-list"></div>
                 </div>
 
@@ -67,28 +66,11 @@
                     ✓ System in Equilibrium
                 </div>
 
-                <!-- Virtual Work Controls -->
-                <div class="card-header"
-                    style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;"><i
-                        data-lucide="zap" style="margin-right: 8px;"></i> <span data-i18n="virtWorkTitle">Virtual Work
-                        (Masters)</span></div>
-                <div class="form-group">
-                    <label><span data-i18n="virtDisp">Virtual Displacement (δr)</span>: <span
-                            id="valVirtDir">0°</span></label>
-                    <input type="range" id="sliderVirtDir" min="0" max="360" value="0">
-                </div>
-                <div class="form-group">
-                    <button id="btnToggleWork" style="background-color: var(--text-light);" data-i18n="btnVirt">Enable
-                        Virtual Work Viz</button>
-                    <div id="virtualWorkRes" class="value-display hidden">δW = 0.00 J</div>
-                </div>
-
                 <!-- Engineering Context -->
                 <div style="margin-top: 16px;">
-                    <h3 style="font-size: 0.9rem; margin: 0 0 8px 0; color: var(--primary-dark);"
-                        data-i18n="appContext">Application</h3>
+                    <h3 style="font-size: 0.9rem; margin: 0 0 8px 0; color: var(--primary-dark);">Application</h3>
                     <select id="context"
-                        style="width: 100%; padding: 6px 8px; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px; background-color: var(--input-bg); color: var(--text-main);">
+                        style="width: 100%; padding: 6px 8px; font-size: 0.8rem; border: 1px solid var(--border); border-radius: 6px;">
                         <option value="truss">Truss Joint Analysis</option>
                         <option value="beam">Beam Support Reactions</option>
                         <option value="pulley">Pulley System</option>
@@ -99,35 +81,32 @@
 
             <!-- Visualization & Analysis -->
             <div>
-                <!-- Canvas -->
+                <!-- Visualization Panel -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="activity" style="margin-right: 8px;"></i> <span
-                            data-i18n="forceDiag">Force Diagram
-                            (Free-Body Diagram)</span></div>
-                    <div class="canvas-container">
-                        <canvas id="forceCanvas"></canvas>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2 data-i18n="vizTitle">Force Diagram</h2>
+                        <div style="font-size: 0.9rem; color: var(--text-light);">
+                            <span style="color:var(--primary)">● Force</span>
+                            <span style="color:var(--error)">● Resultant</span>
+                            <span style="color:var(--success)">● Equilibrant</span>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Math Traceability (New) -->
-                <div class="card">
-                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation
-                            Details</span></div>
-                    <div id="mathTrace" class="formula"
-                        style="font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main); overflow-x:auto;">
-                        <!-- Content populated by JS -->
+                    <!-- Canvas -->
+                    <div class="card">
+                        <div class="card-header">📊 Force Diagram (Free-Body Diagram)</div>
+                        <div class="canvas-container">
+                            <canvas id="forceCanvas"></canvas>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Resultant & Analysis -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="forceAnalysis">Force Analysis</span>
-                    </div>
+                    <div class="card-header">📐 Force Analysis</div>
 
                     <div class="info-section">
-                        <h3 data-i18n="resForce">Resultant Force</h3>
+                        <h3>Resultant Force</h3>
                         <div class="results-grid">
                             <div class="result-item">
                                 <strong>Fx (N)</strong>
@@ -138,32 +117,32 @@
                                 <span id="resFy">0.00</span>
                             </div>
                             <div class="result-item">
-                                <strong data-i18n="resMag">Magnitude</strong>
+                                <strong>Magnitude</strong>
                                 <span id="resMag">0.00 N</span>
                             </div>
                             <div class="result-item">
-                                <strong data-i18n="resDir">Direction</strong>
+                                <strong>Direction</strong>
                                 <span id="resDir">0.00°</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="info-section">
-                        <h3 data-i18n="resMoment">Moment Analysis (about origin)</h3>
+                        <h3>Moment Analysis (about origin)</h3>
                         <div class="results-grid">
                             <div class="result-item">
-                                <strong data-i18n="totalMoment">Total Moment (N·m)</strong>
+                                <strong>Total Moment (N·m)</strong>
                                 <span id="resMoment">0.00</span>
                             </div>
                             <div class="result-item">
-                                <strong data-i18n="equilCheck">Equilibrium Check</strong>
+                                <strong>Equilibrium Check</strong>
                                 <span id="equilCheck">ΣF ≠ 0, ΣM ≠ 0</span>
                             </div>
                         </div>
                     </div>
 
                     <div class="info-section">
-                        <h3 data-i18n="equilCond">Equilibrium Conditions</h3>
+                        <h3>Equilibrium Conditions</h3>
                         <p><strong>ΣFx = 0:</strong> <span id="checkFx">✗ Not balanced</span></p>
                         <p><strong>ΣFy = 0:</strong> <span id="checkFy">✗ Not balanced</span></p>
                         <p><strong>ΣM = 0:</strong> <span id="checkMoment">✗ Not balanced</span></p>
@@ -172,32 +151,26 @@
 
                 <!-- Free-Body Diagram Explanation -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="help-circle" style="margin-right: 8px;"></i> <span
-                            data-i18n="howTo">How to Use</span>
-                    </div>
+                    <div class="card-header">🔍 How to Use</div>
                     <div class="info-section">
-                        <h3 data-i18n="steps">Steps</h3>
-                        <div data-i18n="stepsList"
-                            style="font-size: 0.8rem; color: var(--text-light); line-height: 1.5;">
-                            1. Enter force magnitude & angle.<br>2. Enter application point.<br>3. Click Add
-                            Force.<br>4. Repeat for multiple forces.<br>5. Check Equilibrium.
-                        </div>
+                        <h3>Steps</h3>
+                        <p>1. Enter force magnitude (N) and angle (° from horizontal)</p>
+                        <p>2. Enter application point (x, y coordinates in meters)</p>
+                        <p>3. Click "Add Force" or click canvas to place force visually</p>
+                        <p>4. Repeat to add multiple forces</p>
+                        <p>5. Analyze resultant, moments, and equilibrium status</p>
                     </div>
 
                     <div class="info-section">
-                        <h3 data-i18n="equilReq">Equilibrium Requirements</h3>
-                        <div data-i18n="equilReqText"
-                            style="font-size: 0.8rem; color: var(--text-light); line-height: 1.5;">
-                            For static equilibrium: ΣFx = 0, ΣFy = 0, ΣM = 0. All three conditions must be satisfied.
-                        </div>
+                        <h3>Equilibrium Requirements</h3>
+                        <p>For static equilibrium: ΣFx = 0, ΣFy = 0, ΣM = 0</p>
+                        <p>All three conditions must be satisfied simultaneously</p>
                     </div>
                 </div>
 
                 <!-- Engineering Applications -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="book-open" style="margin-right: 8px;"></i> <span
-                            data-i18n="realWorld">Real-World
-                            Applications</span></div>
+                    <div class="card-header">⚡ Real-World Applications</div>
                     <div id="engineeringApp" class="engineering-box"></div>
                 </div>
             </div>
@@ -207,99 +180,230 @@
     <script>
         const translations = {
             en: {
-                title: "2D Forces & Equilibrium Analyzer",
-                subtitle: "Visualize force systems, compute resultants, moments, and verify static equilibrium.",
-                addForcesCard: "Add Forces",
+                title: "⚖️ 2D Forces & Equilibrium Analyzer",
+                subtitle: "Analyze concurrent forces, calculate resultants, and verify equilibrium conditions",
+                config: "⚙️ Configuration",
+                addForce: "Add Force",
                 magLabel: "Magnitude (N)",
-                angleLabel: "Angle (°)",
-                ptX: "Point X (m)", ptY: "Point Y (m)",
-                btnAdd: "Add Force (Click Canvas)", btnClear: "Clear All",
-                activeForces: "Active Forces",
-                virtWorkTitle: "Virtual Work (Masters)",
-                virtDisp: "Virtual Displacement (δr)",
-                btnVirt: "Enable Virtual Work Viz", btnVirtOff: "Disable Virtual Work",
-                appContext: "Application",
-                forceDiag: "Force Diagram (Free-Body Diagram)",
-                calcDetails: "Calculation Details",
-                forceAnalysis: "Force Analysis",
-                resForce: "Resultant Force",
-                resMoment: "Moment Analysis (about origin)",
-                totalMoment: "Total Moment",
-                equilCheck: "Equilibrium Check",
-                equilCond: "Equilibrium Conditions",
-                howTo: "How to Use",
-                steps: "Steps",
-                stepsList: "1. Enter force magnitude & angle.<br>2. Enter application point.<br>3. Click Add Force.<br>4. Repeat for multiple forces.<br>5. Check Equilibrium.",
-                equilReq: "Equilibrium Requirements",
-                equilReqText: "For static equilibrium: ΣFx = 0, ΣFy = 0, ΣM = 0. All three conditions must be satisfied.",
-                realWorld: "Real-World Applications",
-                noForces: "No forces added. Click canvas to set position, then 'Add Force'.",
-                balanced: "✓ Balanced", unbalanced: "✗ Not balanced",
-                sysEquil: "✓ System in Equilibrium", sysNotEquil: "✗ System Not in Equilibrium",
-                resMag: "Magnitude", resDir: "Direction", remove: "Remove"
+                angleLabel: "Angle (degrees)",
+                forcesList: "Forces List",
+                vizTitle: "Force Diagram",
+                resultsTitle: "📊 Analysis Results",
+                resultantForce: "Resultant Force (R)",
+                equilibrantForce: "Equilibrant Force (E)",
+                equilibriumStatus: "Equilibrium Status",
+                eqCheckTitle: "Equilibrium Check (ΣFx = 0, ΣFy = 0)",
+                engContext: "🏗️ Engineering Context",
+
+                // Status
+                balanced: "✅ BALANCED (Equilibrium)",
+                unbalanced: "⚠️ UNBALANCED",
+
+                // Contexts
+                particle: "Particle Equilibrium",
+                truss: "Truss Joint Analysis",
+                bracket: "Bracket Support",
+                pulleys: "Pulley System",
+
+                // UI
+                showRes: "Show Resultant",
+                showEquil: "Show Equilibrant",
+                showComp: "Show Components",
+                clearAll: "Clear All",
+                remove: "Remove"
             },
             pl: {
-                title: "Analizator Sił i Równowagi 2D",
-                subtitle: "Wizualizacja układów sił, obliczanie wypadkowych, momentów i weryfikacja równowagi statycznej.",
-                addForcesCard: "Dodaj Siły",
+                title: "⚖️ Siły 2D i Stan Równowagi",
+                subtitle: "Analiza sił zbieżnych, obliczanie wypadkowej i weryfikacja równowagi",
+                config: "⚙️ Konfiguracja",
+                addForce: "Dodaj Siłę",
                 magLabel: "Wartość (N)",
-                angleLabel: "Kąt (°)",
-                ptX: "Punkt X (m)", ptY: "Punkt Y (m)",
-                btnAdd: "Dodaj Siłę (Kliknij)", btnClear: "Wyczyść",
-                activeForces: "Aktywne Siły",
-                virtWorkTitle: "Praca Wirtualna (Magister)",
-                virtDisp: "Przesunięcie Wirtualne (δr)",
-                btnVirt: "Włącz Wizualizację Pracy", btnVirtOff: "Wyłącz Wizualizację",
-                appContext: "Zastosowanie",
-                forceDiag: "Diagram Sił (FBD)",
-                calcDetails: "Szczegóły Obliczeń",
-                forceAnalysis: "Analiza Sił",
-                resForce: "Siła Wypadkowa",
-                resMoment: "Analiza Momentu (wzgl. 0,0)",
-                totalMoment: "Moment Całkowity",
-                equilCheck: "Sprawdzenie Równowagi",
-                equilCond: "Warunki Równowagi",
-                howTo: "Instrukcja",
-                steps: "Kroki",
-                stepsList: "1. Wpisz wartość i kąt siły.<br>2. Wpisz punkt przyłożenia.<br>3. Dodaj siłę.<br>4. Powtórz dla innych.<br>5. Sprawdź równowagę.",
-                equilReq: "Wymogi Równowagi",
-                equilReqText: "Dla równowagi statycznej: ΣFx = 0, ΣFy = 0, ΣM = 0.",
-                realWorld: "Zastosowania w Inżynierii",
-                noForces: "Brak sił. Kliknij na płótnie i dodaj siłę.",
-                balanced: "✓ Zrównoważone", unbalanced: "✗ Niezrównoważone",
-                sysEquil: "✓ Układ w Równowadze", sysNotEquil: "✗ Brak Równowagi",
-                resMag: "Wartość", resDir: "Kierunek", remove: "Usuń"
+                angleLabel: "Kąt (stopnie)",
+                forcesList: "Lista Sił",
+                vizTitle: "Diagram Sił",
+                resultsTitle: "📊 Wyniki Analizy",
+                resultantForce: "Siła Wypadkowa (R)",
+                equilibrantForce: "Siła Równoważąca (E)",
+                equilibriumStatus: "Stan Równowagi",
+                eqCheckTitle: "Warunek Równowagi",
+                engContext: "🏗️ Kontekst Inżynierski",
+                balanced: "✅ W RÓWNOWADZE",
+                unbalanced: "⚠️ BRAK RÓWNOWAGI",
+                particle: "Równowaga Punktu",
+                truss: "Węzeł Kratownicy",
+                bracket: "Wspornik",
+                pulleys: "Układ Bloczków",
+                showRes: "Pokaż Wypadkową",
+                showEquil: "Pokaż Równoważącą",
+                showComp: "Pokaż Składowe",
+                clearAll: "Wyczyść Wszystko",
+                remove: "Usuń"
             },
-            fr: { title: "Analyse des Forces 2D", subtitle: "Équilibre statique.", addForcesCard: "Ajouter Forces", magLabel: "Magnitude (N)", angleLabel: "Angle (°)", btnAdd: "Ajouter Force", btnClear: "Effacer", activeForces: "Forces Actives", forceDiag: "Diagramme des Forces", forceAnalysis: "Analyse", resForce: "Résultante", resMoment: "Moment", equilCond: "Conditions", balanced: "✓ Équilibré", unbalanced: "✗ Non Équilibré", sysEquil: "✓ Équilibré", sysNotEquil: "✗ Non Équilibré", stepsList: "Ajouter des forces et vérifier l'équilibre." },
-            es: { title: "Análisis de Fuerzas 2D", subtitle: "Equilibrio estático.", addForcesCard: "Añadir Fuerzas", magLabel: "Magnitud (N)", angleLabel: "Ángulo (°)", btnAdd: "Añadir Fuerza", btnClear: "Borrar", activeForces: "Fuerzas Activas", forceDiag: "Diagrama de Fuerzas", forceAnalysis: "Análisis", resForce: "Resultante", resMoment: "Momento", equilCond: "Condiciones", balanced: "✓ Equilibrado", unbalanced: "✗ No Equilibrado", sysEquil: "✓ Equilibrado", sysNotEquil: "✗ No Equilibrado", stepsList: "Añadir fuerzas y verificar equilibrio." },
-            pt: { title: "Análise de Forças 2D", subtitle: "Equilíbrio estático.", addForcesCard: "Adicionar Forças", magLabel: "Magnitude (N)", angleLabel: "Ângulo (°)", btnAdd: "Adicionar Força", btnClear: "Limpar", activeForces: "Forças Ativas", forceDiag: "Diagrama de Forças", forceAnalysis: "Análise", resForce: "Resultante", resMoment: "Momento", equilCond: "Condições", balanced: "✓ Equilibrado", unbalanced: "✗ Não Equilibrado", sysEquil: "✓ Equilibrado", sysNotEquil: "✗ Não Equilibrado", stepsList: "Adicionar forças e verificar equilibrio." },
-            de: { title: "Kraftanalyse 2D", subtitle: "Statisches Gleichgewicht.", addForcesCard: "Kräfte hinzufügen", magLabel: "Betrag (N)", angleLabel: "Winkel (°)", btnAdd: "Kraft hinzufügen", btnClear: "Löschen", activeForces: "Aktive Kräfte", forceDiag: "Kräftediagramm", forceAnalysis: "Analyse", resForce: "Resultierende", resMoment: "Moment", equilCond: "Bedingungen", balanced: "✓ Gleichgewicht", unbalanced: "✗ Ungleichgewicht", sysEquil: "✓ Im Gleichgewicht", sysNotEquil: "✗ Nicht im Gleichgewicht", stepsList: "Kräfte hinzufügen und Gleichgewicht prüfen." },
-            uk: { title: "Аналіз Сил 2D", subtitle: "Статична рівновага.", addForcesCard: "Додати Сили", magLabel: "Величина (N)", angleLabel: "Кут (°)", btnAdd: "Додати Силу", btnClear: "Очистити", activeForces: "Активні Сили", forceDiag: "Діаграма Сил", forceAnalysis: "Аналіз", resForce: "Рівнодійна", resMoment: "Момент", equilCond: "Умови", balanced: "✓ Збалансовано", unbalanced: "✗ Не збалансовано", sysEquil: "✓ Рівновага", sysNotEquil: "✗ Немає рівноваги", stepsList: "Додайте сили та перевірте рівновагу." },
-            be: { title: "Аналіз Сіл 2D", subtitle: "Статычная раўнавага.", addForcesCard: "Дадаць Сілы", magLabel: "Велічыня (N)", angleLabel: "Кут (°)", btnAdd: "Дадаць Сілу", btnClear: "Ачысціць", activeForces: "Актыўныя Сілы", forceDiag: "Дыяграма Сіл", forceAnalysis: "Аналіз", resForce: "Выніковая", resMoment: "Момант", equilCond: "Умовы", balanced: "✓ Збалансавана", unbalanced: "✗ Не збалансавана", sysEquil: "✓ Раўнавага", sysNotEquil: "✗ Няма раўнавагі", stepsList: "Дадайце сілы і праверце раўнавагу." }
+            fr: {
+                title: "⚖️ Forces 2D & Équilibre",
+                subtitle: "Analysez les forces concourantes, calculez les résultantes et vérifiez l'équilibre",
+                config: "⚙️ Configuration",
+                addForce: "Ajouter Force",
+                magLabel: "Magnitude (N)",
+                angleLabel: "Angle (degrés)",
+                forcesList: "Liste des Forces",
+                vizTitle: "Diagramme des Forces",
+                resultsTitle: "📊 Résultats",
+                resultantForce: "Force Résultante (R)",
+                equilibrantForce: "Force Équilibrante (E)",
+                equilibriumStatus: "État d'Équilibre",
+                eqCheckTitle: "Vérification d'Équilibre",
+                engContext: "🏗️ Contexte Ingénierie",
+                balanced: "✅ ÉQUILIBRÉ",
+                unbalanced: "⚠️ NON ÉQUILIBRÉ",
+                particle: "Équilibre du Point",
+                truss: "Analyse de Treillis",
+                bracket: "Support",
+                pulleys: "Système de Poulies",
+                showRes: "Afficher Résultante",
+                showEquil: "Afficher Équilibrante",
+                showComp: "Afficher Composantes",
+                clearAll: "Tout Effacer",
+                remove: "Supprimer"
+            },
+            es: {
+                title: "⚖️ Fuerzas 2D y Equilibrio",
+                subtitle: "Analiza fuerzas concurrentes, calcula resultantes y verifica el equilibrio",
+                config: "⚙️ Configuración",
+                addForce: "Añadir Fuerza",
+                magLabel: "Magnitud (N)",
+                angleLabel: "Ángulo (grados)",
+                forcesList: "Lista de Fuerzas",
+                vizTitle: "Diagrama de Fuerzas",
+                resultsTitle: "📊 Resultados",
+                resultantForce: "Fuerza Resultante (R)",
+                equilibrantForce: "Fuerza Equilibrante (E)",
+                equilibriumStatus: "Estado de Equilibrio",
+                eqCheckTitle: "Verificación de Equilibrio",
+                engContext: "🏗️ Contexto de Ingeniería",
+                balanced: "✅ EQUILIBRADO",
+                unbalanced: "⚠️ DESEQUILIBRADO",
+                particle: "Equilibrio de Partícula",
+                truss: "Análisis de Armadura",
+                bracket: "Soporte",
+                pulleys: "Sistema de Poleas",
+                showRes: "Mostrar Resultante",
+                showEquil: "Mostrar Equilibrante",
+                showComp: "Mostrar Componentes",
+                clearAll: "Borrar Todo",
+                remove: "Eliminar"
+            },
+            pt: {
+                title: "⚖️ Forças 2D e Equilíbrio",
+                subtitle: "Analise forças concorrentes, calcule resultantes e verifique o equilíbrio",
+                config: "⚙️ Configuração",
+                addForce: "Adicionar Força",
+                magLabel: "Magnitude (N)",
+                angleLabel: "Ângulo (graus)",
+                forcesList: "Lista de Forças",
+                vizTitle: "Diagrama de Forças",
+                resultsTitle: "📊 Resultados",
+                resultantForce: "Força Resultante (R)",
+                equilibrantForce: "Força Equilibrante (E)",
+                equilibriumStatus: "Estado de Equilíbrio",
+                eqCheckTitle: "Verificação de Equilíbrio",
+                engContext: "🏗️ Contexto de Engenharia",
+                balanced: "✅ EQUILIBRADO",
+                unbalanced: "⚠️ DESEQUILIBRADO",
+                particle: "Equilíbrio de Partícula",
+                truss: "Análise de Treliça",
+                bracket: "Suporte",
+                pulleys: "Sistema de Polias",
+                showRes: "Mostrar Resultante",
+                showEquil: "Mostrar Equilibrante",
+                showComp: "Mostrar Componentes",
+                clearAll: "Limpar Tudo",
+                remove: "Remover"
+            },
+            de: {
+                title: "⚖️ 2D Kräfte & Gleichgewicht",
+                subtitle: "Analysieren Sie Kräfte, berechnen Sie Resultierende und prüfen Sie das Gleichgewicht",
+                config: "⚙️ Konfiguration",
+                addForce: "Kraft Hinzufügen",
+                magLabel: "Betrag (N)",
+                angleLabel: "Winkel (Grad)",
+                forcesList: "Liste der Kräfte",
+                vizTitle: "Kraftdiagramm",
+                resultsTitle: "📊 Ergebnisse",
+                resultantForce: "Resultierende Kraft (R)",
+                equilibrantForce: "Gleichgewichtskraft (E)",
+                equilibriumStatus: "Gleichgewichtsstatus",
+                eqCheckTitle: "Gleichgewichtsprüfung",
+                engContext: "🏗️ Technischer Kontext",
+                balanced: "✅ IM GLEICHGEWICHT",
+                unbalanced: "⚠️ UNAUSGEGLICHEN",
+                particle: "Punktgleichgewicht",
+                truss: "Fachwerkanalyse",
+                bracket: "Halterung",
+                pulleys: "Flaschenzug",
+                showRes: "Resultierende Anzeigen",
+                showEquil: "Gleichgewichtskraft Anzeigen",
+                showComp: "Komponenten Anzeigen",
+                clearAll: "Alles Löschen",
+                remove: "Entfernen"
+            },
+            ua: {
+                title: "⚖️ 2D Сили та Рівновага",
+                subtitle: "Аналіз збіжних сил, розрахунок рівнодійної та перевірка рівноваги",
+                config: "⚙️ Конфігурація",
+                addForce: "Додати Силу",
+                magLabel: "Величина (Н)",
+                angleLabel: "Кут (градуси)",
+                forcesList: "Список Сил",
+                vizTitle: "Діаграма Сил",
+                resultsTitle: "📊 Результати Аналізу",
+                resultantForce: "Рівнодійна Сила (R)",
+                equilibrantForce: "Зрівноважуюча Сила (E)",
+                equilibriumStatus: "Стан Рівноваги",
+                eqCheckTitle: "Перевірка Рівноваги",
+                engContext: "🏗️ Інженерний Контекст",
+                balanced: "✅ В РІВНОВАЗІ",
+                unbalanced: "⚠️ НЕ В РІВНОВАЗІ",
+                particle: "Рівновага Точки",
+                truss: "Вузол Ферми",
+                bracket: "Кронштейн",
+                pulleys: "Система Блоків",
+                showRes: "Показати Рівнодійну",
+                showEquil: "Показати Зрівноважуючу",
+                showComp: "Показати Складові",
+                clearAll: "Очистити Все",
+                remove: "Видалити"
+            },
+            be: {
+                title: "⚖️ 2D Сілы і Раўнавага",
+                subtitle: "Аналіз збежных сіл, разлік раўнодзейнай і праверка раўнавагі",
+                config: "⚙️ Канфігурацыя",
+                addForce: "Дадаць Сілу",
+                magLabel: "Велічыня (Н)",
+                angleLabel: "Вугал (градусы)",
+                forcesList: "Спіс Сіл",
+                vizTitle: "Дыяграма Сіл",
+                resultsTitle: "📊 Вынікі Аналізу",
+                resultantForce: "Раўнодзейная Сіла (R)",
+                equilibrantForce: "Ураўнаважвальная Сіла (E)",
+                equilibriumStatus: "Стан Раўнавагі",
+                eqCheckTitle: "Праверка Раўнавагі",
+                engContext: "🏗️ Інжынерны Кантэкст",
+                balanced: "✅ У РАЎНАВАЗЕ",
+                unbalanced: "⚠️ НЕ У РАЎНАВАЗЕ",
+                particle: "Раўнавага Кропкі",
+                truss: "Вузел Фермы",
+                bracket: "Кранштэйн",
+                pulleys: "Сістэма Блокаў",
+                showRes: "Паказаць Раўнодзейную",
+                showEquil: "Паказаць Ураўнаважвальную",
+                showComp: "Паказаць Складнікі",
+                clearAll: "Ачысціць Усё",
+                remove: "Выдаліць"
+            }
         };
 
         const app = {
-            lang: 'en',
-            theme: 'light',
-            initialized: false,
-
-            // setTheme and setLang removed - handled by site.js
-
-            updateTranslations: () => {
-                const t = translations[app.lang];
-                document.querySelectorAll('[data-i18n]').forEach(el => {
-                    const key = el.getAttribute('data-i18n');
-                    if (t[key]) {
-                        if (key === 'stepsList' || key === 'equilReqText') el.innerHTML = t[key];
-                        else el.textContent = t[key];
-                    }
-                });
-
-                // Manual updates
-                document.getElementById('inputMag').previousElementSibling.firstChild.textContent = t.magLabel + ': ';
-                document.getElementById('inputAngle').previousElementSibling.firstChild.textContent = t.angleLabel + ': ';
-            },
-
             canvas: null,
             ctx: null,
             forces: [],
@@ -309,42 +413,22 @@
                 x: 0,
                 y: 0,
                 context: 'truss',
-                virtualWork: false,
-                virtAngle: 0,
-                dragging: -1 // Index of force being dragged, -1 if none
+                lang: 'en',
+                theme: 'light'
             },
 
+            getVar: (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
+
+            // setTheme and setLang removed - handled by site.js
+
             init: () => {
-                // Canvas must exist before theme/lang can trigger render
                 app.canvas = document.getElementById('forceCanvas');
-                if (!app.canvas) return;
                 app.ctx = app.canvas.getContext('2d');
 
                 // Set canvas size
                 const container = app.canvas.parentElement;
-                if (container) {
-                    app.canvas.width = container.clientWidth;
-                    app.canvas.height = container.clientHeight;
-                }
-
-                app.initialized = true;
-
-                // Listen for site.js events
-                window.addEventListener('themechange', (e) => {
-                    app.theme = e.detail.theme;
-                    app.draw();
-                });
-                
-                window.addEventListener('langchange', (e) => {
-                    app.lang = e.detail.lang;
-                    app.updateTranslations();
-                    app.update();
-                });
-
-                // Initial sync
-                app.theme = document.documentElement.getAttribute('data-theme') || 'light';
-                app.lang = document.documentElement.getAttribute('lang') || 'en';
-                app.updateTranslations();
+                app.canvas.width = container.clientWidth;
+                app.canvas.height = container.clientHeight;
 
                 // Event listeners for inputs
                 document.getElementById('inputMag').addEventListener('input', (e) => {
@@ -368,47 +452,62 @@
                 });
 
                 document.getElementById('btnAddForce').addEventListener('click', app.addForce);
-                document.getElementById('btnClear').addEventListener('click', app.clearAll);
+                document.getElementById('btnClear').addEventListener('click', app.clearAllForces);
+
                 document.getElementById('context').addEventListener('change', (e) => {
                     app.state.context = e.target.value;
                     app.displayEngineering();
                 });
 
-                document.getElementById('sliderVirtDir').addEventListener('input', (e) => {
-                    app.state.virtAngle = parseFloat(e.target.value) * Math.PI / 180;
-                    document.getElementById('valVirtDir').textContent = e.target.value + '°';
-                    app.update();
+                app.canvas.addEventListener('click', (e) => {
+                    const rect = app.canvas.getBoundingClientRect();
+                    const px = (e.clientX - rect.left) / app.scale - app.offsetX;
+                    const py = -(e.clientY - rect.top) / app.scale + app.offsetY;
+
+                    app.state.x = px;
+                    app.state.y = py;
+                    document.getElementById('inputX').value = px.toFixed(1);
+                    document.getElementById('inputY').value = py.toFixed(1);
+                    document.getElementById('valX').textContent = px.toFixed(1);
+                    document.getElementById('valY').textContent = py.toFixed(1);
                 });
 
-                document.getElementById('btnToggleWork').addEventListener('click', () => {
-                    app.state.virtualWork = !app.state.virtualWork;
-                    const btn = document.getElementById('btnToggleWork');
-                    const res = document.getElementById('virtualWorkRes');
-
-                    if (app.state.virtualWork) {
-                        btn.style.backgroundColor = 'var(--primary)';
-                        btn.textContent = 'Disable Virtual Work';
-                        res.classList.remove('hidden');
-                    } else {
-                        btn.style.backgroundColor = 'var(--text-light)';
-                        btn.textContent = 'Enable Virtual Work Viz';
-                        res.classList.add('hidden');
-                    }
-                    app.update();
+                // Listen for site.js events
+                window.addEventListener('themechange', (e) => {
+                    app.state.theme = e.detail.theme;
+                    app.draw();
+                });
+                
+                window.addEventListener('langchange', (e) => {
+                    app.state.lang = e.detail.lang;
+                    // Need to manually update translations here since setLang is gone
+                    const dict = translations[app.state.lang] || translations.en;
+                    document.querySelectorAll('[data-i18n]').forEach(el => {
+                        const key = el.getAttribute('data-i18n');
+                        if (!key) return;
+                        const v = dict[key];
+                        if (v !== undefined && v !== null) el.textContent = String(v);
+                    });
+                    app.updateForcesList();
                 });
 
-                app.canvas.addEventListener('mousedown', app.handleMouseDown);
-                app.canvas.addEventListener('mousemove', app.handleMouseMove);
-                app.canvas.addEventListener('mouseup', app.handleMouseUp);
-
-                // Keep click for adding new forces if not dragging
-                // app.canvas.addEventListener('click', ...); // Replaced by mousedown/up logic
-
+                // Initial sync
+                app.state.theme = document.documentElement.getAttribute('data-theme') || 'light';
+                app.state.lang = document.documentElement.getAttribute('lang') || 'en';
+                
+                // Initial translation apply
+                const dict = translations[app.state.lang] || translations.en;
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    if (!key) return;
+                    const v = dict[key];
+                    if (v !== undefined && v !== null) el.textContent = String(v);
+                });
 
                 app.displayEngineering();
+                app.updateForcesList();
                 app.draw();
-                if (window.lucide) lucide.createIcons();
-                app.updateTranslations(); // Initial translation apply
+                lucide.createIcons();
             },
 
             scale: 30,
@@ -428,7 +527,7 @@
                 app.update();
             },
 
-            clearAll: () => {
+            clearAllForces: () => { // Renamed from clearAll
                 app.forces = [];
                 app.update();
             },
@@ -445,135 +544,20 @@
                 app.draw();
             },
 
-            getMousePos: (e) => {
-                const rect = app.canvas.getBoundingClientRect();
-                return {
-                    x: (e.clientX - rect.left) / app.scale - app.offsetX,
-                    y: -(e.clientY - rect.top) / app.scale + app.offsetY
-                };
-            },
-
-            handleMouseDown: (e) => {
-                const m = app.getMousePos(e);
-                const w = app.canvas.width;
-                const h = app.canvas.height;
-                const centerX = w / 2;
-                const centerY = h / 2;
-
-                // Check collisions with existing forces (heads) to change magnitude/angle
-                // Or check collision with origin points to move force
-                // For simplified UX: Dragging the HEAD changes Mag/Angle. Dragging the TAIL changes X/Y.
-
-                // 1. Check Heads
-                let hit = -1;
-                app.forces.forEach((f, i) => {
-                    const fx = centerX + f.x * app.scale;
-                    const fy = centerY - f.y * app.scale;
-                    const headX = fx + f.fx / f.magnitude * Math.min(100, f.magnitude * 0.5); // approximate visual head
-                    // Actually let's use the explicit math from draw()
-                    const arrowLen = Math.min(100, f.magnitude * 0.5);
-                    const hx = fx + Math.cos(f.angle) * arrowLen;
-                    const hy = fy - Math.sin(f.angle) * arrowLen;
-
-                    // Hit test in PIXELS
-                    const mx = e.clientX - rect.left;
-                    const my = e.clientY - rect.top;
-                    // This is tricky because getMousePos returns physics coords.
-                    // Let's stick to physics coords distance ~ 0.5m radius?
-                    // Or just screen distance.
-                });
-                // Let's implement simpler: Click = Place "Ghost" cursor.
-                // Dragging = If we click NEAR a force head, we drag the head.
-
-                const pos = app.getMousePos(e);
-
-                // Find nearest force head
-                let minDist = 1.0; // 1 meter interaction radius
-                let dragIdx = -1;
-
-                app.forces.forEach((f, i) => {
-                    // Head pos in physics units
-                    const arrowLen = Math.min(100, f.magnitude * 0.5) / app.scale;
-                    const headX = f.x + Math.cos(f.angle) * arrowLen;
-                    const headY = f.y + Math.sin(f.angle) * arrowLen;
-
-                    const d = Math.sqrt(Math.pow(pos.x - headX, 2) + Math.pow(pos.y - headY, 2));
-                    if (d < minDist) {
-                        minDist = d;
-                        dragIdx = i;
-                    }
-                });
-
-                if (dragIdx !== -1) {
-                    app.state.dragging = dragIdx;
-                } else {
-                    // If we didn't hit a force, move the placement cursor
-                    app.state.x = pos.x;
-                    app.state.y = pos.y;
-                    document.getElementById('inputX').value = pos.x.toFixed(1);
-                    document.getElementById('inputY').value = pos.y.toFixed(1);
-                    document.getElementById('valX').textContent = pos.x.toFixed(1);
-                    document.getElementById('valY').textContent = pos.y.toFixed(1);
-                }
-            },
-
-            handleMouseMove: (e) => {
-                if (app.state.dragging !== -1) {
-                    const pos = app.getMousePos(e);
-                    const f = app.forces[app.state.dragging];
-
-                    // Calculate new angle/mag based on drag
-                    // Vector from Tail to Mouse
-                    const dx = pos.x - f.x;
-                    const dy = pos.y - f.y;
-
-                    f.angle = Math.atan2(dy, dx);
-                    if (f.angle < 0) f.angle += 2 * Math.PI;
-
-                    // Mag is distance, scaled back from visual limit?
-                    // Visual length was min(100, mag*0.5).
-                    // This is hard to reverse. 
-                    // Let's just say Mag = Distance * 10? Simple mapping.
-                    // Or keep Mag independent? Users usually want to drag to point.
-                    // Let's make force vector simply follow mouse, so Mag ~ length.
-                    f.magnitude = Math.sqrt(dx * dx + dy * dy) * 20;
-                    if (f.magnitude > 500) f.magnitude = 500;
-
-                    f.fx = f.magnitude * Math.cos(f.angle);
-                    f.fy = f.magnitude * Math.sin(f.angle);
-
-                    app.update();
-                }
-
-                // Hover cursor
-                const canvas = app.canvas;
-                // canvas.style.cursor = hit ? 'move' : 'crosshair'; 
-            },
-
-            handleMouseUp: (e) => {
-                app.state.dragging = -1;
-            },
-
             updateForcesList: () => {
                 const list = document.getElementById('forcesList');
-                const t = translations[app.lang];
-                list.innerHTML = '';
                 if (app.forces.length === 0) {
-                    list.innerHTML = `<div style="padding: 8px; text-align: center; color: var(--text-light); font-size: 0.75rem;">${t.noForces}</div>`;
+                    list.innerHTML = '<div style="padding: 8px; text-align: center; color: var(--text-light); font-size: 0.75rem;">No forces added</div>';
                     return;
                 }
 
-                app.forces.forEach((f, i) => {
-                    const item = document.createElement('div');
-                    item.className = 'force-item';
-                    item.innerHTML = `
-                        <span><strong>F${i + 1}:</strong> ${f.magnitude.toFixed(0)}N @ ${(f.angle * 180 / Math.PI).toFixed(0)}° at (${f.x}, ${f.y})</span>
-                        <button onclick="app.removeForce(${i})">${t.remove}</button>
-                    `;
-                    list.appendChild(item);
-                });
+                list.innerHTML = app.forces.map((f, i) => `
+                    <div class="force-item">
+                        <span>F${i + 1}: ${f.magnitude.toFixed(0)}N @ ${(f.angle * 180 / Math.PI).toFixed(0)}° at (${f.x.toFixed(1)}, ${f.y.toFixed(1)})</span>
+                        <button onclick="app.removeForce(${i})">✕</button>
+                    </div>
+                `).join('');
             },
-
 
             calculateResultant: () => {
                 let sumFx = 0, sumFy = 0;
@@ -612,8 +596,7 @@
                 document.getElementById('resMoment').textContent = sumM.toFixed(2);
 
                 const mBalanced = Math.abs(sumM) < 0.1;
-                const t = translations[app.lang];
-                document.getElementById('checkMoment').innerHTML = mBalanced ? t.balanced : t.unbalanced;
+                document.getElementById('checkMoment').innerHTML = mBalanced ? '✓ Balanced' : '✗ Not balanced';
                 document.getElementById('checkMoment').style.color = mBalanced ? 'var(--success)' : 'var(--error)';
 
                 const result = app.calculateResultant();
@@ -621,12 +604,12 @@
 
                 const status = document.getElementById('equilibriumStatus');
                 if (allBalanced && app.forces.length > 0) {
-                    status.textContent = t.sysEquil;
+                    status.textContent = '✓ System in Equilibrium';
                     status.classList.remove('unbalanced');
                     status.classList.add('balanced');
                     status.classList.remove('hidden');
                 } else if (app.forces.length > 0) {
-                    status.textContent = t.sysNotEquil;
+                    status.textContent = '✗ System Not in Equilibrium';
                     status.classList.remove('balanced');
                     status.classList.add('unbalanced');
                     status.classList.remove('hidden');
@@ -634,144 +617,117 @@
                     status.classList.add('hidden');
                 }
 
-                // Traceability Display
-                let html = `<strong>Sum of Forces (X):</strong> $\\sum F_x = 0$<br>`;
-                html += `$$ `;
-                if (app.forces.length === 0) html += `0 = 0`;
-                else {
-                    const terms = app.forces.map(f => f.fx.toFixed(1)).join(' + ');
-                    html += `${terms} = ${sumFx.toFixed(2)}`;
-                }
-                html += ` $$ <br>`;
-
-                html += `<strong>Sum of Forces (Y):</strong> $\\sum F_y = 0$<br>`;
-                html += `$$ `;
-                if (app.forces.length === 0) html += `0 = 0`;
-                else {
-                    const terms = app.forces.map(f => f.fy.toFixed(1)).join(' + ');
-                    html += `${terms} = ${sumFy.toFixed(2)}`;
-                }
-                html += ` $$`;
-
-                document.getElementById('mathTrace').innerHTML = html;
-                if (window.MathJax) MathJax.typesetPromise();
-
                 return sumM;
             },
 
             draw: () => {
-                if (!app.canvas || !app.ctx) return;
                 const w = app.canvas.width;
                 const h = app.canvas.height;
                 const ctx = app.ctx;
 
-                // Define centerX/centerY as they are used in the rest of the function
-                const centerX = w / 2;
-                const centerY = h / 2;
-
-                // Theme Colors
-                const isDark = app.theme === 'dark';
-                const colors = {
-                    bg: isDark ? '#0f172a' : '#f8fafc',
-                    grid: isDark ? '#1e293b' : '#e2e8f0',
-                    axis: isDark ? '#94a3b8' : '#64748b',
-                    text: isDark ? '#e2e8f0' : '#64748b',
-                    origin: isDark ? '#2dd4bf' : '#0f766e',
-                    forcePoint: isDark ? 'rgba(45, 212, 191, 0.3)' : 'rgba(15, 118, 110, 0.3)',
-                    forceColors: isDark 
-                        ? ['#2dd4bf', '#5eead4', '#34d399', '#fbbf24'] 
-                        : ['#0f766e', '#14b8a6', '#10b981', '#f59e0b'],
-                    resultant: '#ef4444'
-                };
+                // Use CSS variables for colors
+                const bgColor = app.getVar('--grid-bg');
+                const gridColor = app.getVar('--grid-line');
+                const textColor = app.getVar('--text-main');
+                const primaryColor = app.getVar('--primary');
+                const errorColor = app.getVar('--error');
+                const successColor = app.getVar('--success');
+                const warningColor = app.getVar('--warning');
+                const accentColor = app.getVar('--accent');
 
                 // Clear
-                ctx.fillStyle = colors.bg;
+                ctx.fillStyle = bgColor;
                 ctx.fillRect(0, 0, w, h);
 
-                // Grid
-                ctx.strokeStyle = colors.grid;
+                const cx = w / 2;
+                const cy = h / 2;
+
+                // Local to Screen transform
+                const toScreenX = (x) => cx + (x - app.offsetX) * app.scale;
+                const toScreenY = (y) => cy - (y - app.offsetY) * app.scale;
+
+                // Draw Grid
                 ctx.lineWidth = 1;
+                ctx.strokeStyle = gridColor;
 
-                // Draw grid lines
-                for (let i = -10; i <= 10; i++) {
-                    // Vertical
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + i * app.scale, 0);
-                    ctx.lineTo(centerX + i * app.scale, h);
-                    ctx.stroke();
+                // Calculate grid spacing
+                let step = 1;
+                if (app.scale > 80) step = 0.5;
+                if (app.scale > 150) step = 0.1;
+                if (app.scale < 30) step = 2;
+                if (app.scale < 15) step = 5;
 
-                    // Horizontal
-                    ctx.beginPath();
-                    ctx.moveTo(0, centerY + i * app.scale);
-                    ctx.lineTo(w, centerY + i * app.scale);
-                    ctx.stroke();
+                const xMin = app.offsetX - cx / app.scale;
+                const xMax = app.offsetX + cx / app.scale;
+                const yMin = app.offsetY - cy / app.scale;
+                const yMax = app.offsetY + cy / app.scale;
+
+                const startX = Math.floor(xMin / step) * step;
+                const startY = Math.floor(yMin / step) * step;
+
+                ctx.beginPath();
+                for (let x = startX; x <= xMax; x += step) {
+                    ctx.moveTo(toScreenX(x), 0);
+                    ctx.lineTo(toScreenX(x), h);
                 }
+                for (let y = startY; y <= yMax; y += step) {
+                    ctx.moveTo(0, toScreenY(y));
+                    ctx.lineTo(w, toScreenY(y));
+                }
+                ctx.stroke();
 
-                // Draw axes
-                app.ctx.strokeStyle = colors.axis;
-                app.ctx.lineWidth = 2;
-                app.ctx.beginPath();
-                app.ctx.moveTo(0, centerY);
-                app.ctx.lineTo(w, centerY);
-                app.ctx.stroke();
-                app.ctx.beginPath();
-                app.ctx.moveTo(centerX, 0);
-                app.ctx.lineTo(centerX, h);
-                app.ctx.stroke();
+                // Axes
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = textColor;
+                ctx.beginPath();
+                ctx.moveTo(0, toScreenY(0));
+                ctx.lineTo(w, toScreenY(0));
+                ctx.moveTo(toScreenX(0), 0);
+                ctx.lineTo(toScreenX(0), h);
+                ctx.stroke();
 
-                // Labels
-                app.ctx.fillStyle = colors.text;
-                app.ctx.font = '12px Inter';
-                app.ctx.fillText('X (m)', w - 30, centerY - 10);
-                app.ctx.fillText('Y (m)', centerX + 10, 20);
-
-                // Draw origin point
-                app.ctx.fillStyle = colors.origin;
-                app.ctx.beginPath();
-                app.ctx.arc(centerX, centerY, 4, 0, 2 * Math.PI);
-                app.ctx.fill();
-
-                // Draw forces
+                // Draw Forces
                 app.forces.forEach((f, idx) => {
-                    const fx = centerX + f.x * app.scale;
-                    const fy = centerY - f.y * app.scale;
+                    const fx = toScreenX(f.x);
+                    const fy = toScreenY(f.y);
 
                     // Force application point
-                    app.ctx.fillStyle = colors.forcePoint;
-                    app.ctx.beginPath();
-                    app.ctx.arc(fx, fy, 5, 0, 2 * Math.PI);
-                    app.ctx.fill();
+                    ctx.fillStyle = primaryColor;
+                    ctx.beginPath();
+                    ctx.arc(fx, fy, 4, 0, 2 * Math.PI);
+                    ctx.fill();
 
                     // Force vector
-                    const arrowLen = Math.min(100, app.state.magnitude * 0.5);
-                    const fx_scaled = Math.cos(f.angle) * arrowLen;
-                    const fy_scaled = -Math.sin(f.angle) * arrowLen;
+                    // f.angle is in Radians (stored by addForce)
+                    const arrowLen = Math.min(100, f.magnitude * 0.5);
+                    const dx = Math.cos(f.angle) * arrowLen;
+                    const dy = -Math.sin(f.angle) * arrowLen; // Canvas Y is inverted relative to math Y
 
-                    const forceColor = colors.forceColors[idx % colors.forceColors.length];
-                    app.ctx.strokeStyle = forceColor;
-                    app.ctx.lineWidth = 2.5;
-                    app.ctx.beginPath();
-                    app.ctx.moveTo(fx, fy);
-                    app.ctx.lineTo(fx + fx_scaled, fy + fy_scaled);
-                    app.ctx.stroke();
+                    const colors = [primaryColor, accentColor, successColor, warningColor];
+                    ctx.strokeStyle = colors[idx % colors.length];
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(fx, fy);
+                    ctx.lineTo(fx + dx, fy + dy);
+                    ctx.stroke();
 
                     // Arrowhead
                     const headlen = 10;
-                    const angle = Math.atan2(fy_scaled, fx_scaled);
-                    app.ctx.beginPath();
-                    app.ctx.moveTo(fx + fx_scaled, fy + fy_scaled);
-                    app.ctx.lineTo(fx + fx_scaled - headlen * Math.cos(angle - Math.PI / 6), fy + fy_scaled - headlen * Math.sin(angle - Math.PI / 6));
-                    app.ctx.moveTo(fx + fx_scaled, fy + fy_scaled);
-                    app.ctx.lineTo(fx + fx_scaled - headlen * Math.cos(angle + Math.PI / 6), fy + fy_scaled - headlen * Math.sin(angle + Math.PI / 6));
-                    app.ctx.stroke();
+                    const angle = Math.atan2(dy, dx);
+                    ctx.fillStyle = colors[idx % colors.length];
+                    ctx.beginPath();
+                    ctx.moveTo(fx + dx, fy + dy);
+                    ctx.lineTo(fx + dx - headlen * Math.cos(angle - Math.PI / 6), fy + dy - headlen * Math.sin(angle - Math.PI / 6));
+                    ctx.lineTo(fx + dx - headlen * Math.cos(angle + Math.PI / 6), fy + dy - headlen * Math.sin(angle + Math.PI / 6));
+                    ctx.fill();
 
                     // Label
-                    app.ctx.fillStyle = forceColor;
-                    app.ctx.font = 'bold 11px Inter';
-                    app.ctx.fillText(`F${idx + 1}: ${f.magnitude.toFixed(0)}N`, fx + 15, fy - 10);
+                    ctx.fillStyle = textColor;
+                    ctx.font = 'bold 12px Inter';
+                    ctx.fillText(`F${idx + 1}`, fx + dx + 10, fy + dy);
                 });
 
-                // Draw resultant
+                // Draw Resultant
                 if (app.forces.length > 0) {
                     let sumFx = 0, sumFy = 0;
                     app.forces.forEach(f => {
@@ -785,12 +741,12 @@
                         const rx = (sumFx / resMag) * arrowLen;
                         const ry = -(sumFy / resMag) * arrowLen;
 
-                        app.ctx.strokeStyle = colors.resultant;
+                        app.ctx.strokeStyle = errorColor;
                         app.ctx.lineWidth = 3;
                         app.ctx.setLineDash([5, 5]);
                         app.ctx.beginPath();
-                        app.ctx.moveTo(centerX, centerY);
-                        app.ctx.lineTo(centerX + rx, centerY + ry);
+                        app.ctx.moveTo(cx, cy);
+                        app.ctx.lineTo(cx + rx, cy + ry);
                         app.ctx.stroke();
                         app.ctx.setLineDash([]);
 
@@ -798,70 +754,15 @@
                         const angle = Math.atan2(ry, rx);
                         const headlen = 10;
                         app.ctx.beginPath();
-                        app.ctx.moveTo(centerX + rx, centerY + ry);
-                        app.ctx.lineTo(centerX + rx - headlen * Math.cos(angle - Math.PI / 6), centerY + ry - headlen * Math.sin(angle - Math.PI / 6));
-                        app.ctx.moveTo(centerX + rx, centerY + ry);
-                        app.ctx.lineTo(centerX + rx - headlen * Math.cos(angle + Math.PI / 6), centerY + ry - headlen * Math.sin(angle + Math.PI / 6));
+                        app.ctx.moveTo(cx + rx, cy + ry);
+                        app.ctx.lineTo(cx + rx - headlen * Math.cos(angle - Math.PI / 6), cy + ry - headlen * Math.sin(angle - Math.PI / 6));
+                        app.ctx.moveTo(cx + rx, cy + ry);
+                        app.ctx.lineTo(cx + rx - headlen * Math.cos(angle + Math.PI / 6), cy + ry - headlen * Math.sin(angle + Math.PI / 6));
                         app.ctx.stroke();
 
-                        app.ctx.fillStyle = colors.resultant;
+                        app.ctx.fillStyle = errorColor;
                         app.ctx.font = 'bold 12px Inter';
-                        app.ctx.fillText(`ΣF=${resMag.toFixed(1)}N`, centerX + rx + 15, centerY + ry);
-                    }
-                }
-
-                // Draw Virtual Work
-                if (app.state.virtualWork) {
-                    const dr = 40; // visual length of virtual displacement
-                    const dx = Math.cos(app.state.virtAngle) * dr;
-                    const dy = -Math.sin(app.state.virtAngle) * dr; // canvas Y inverted
-
-                    // Draw Phantom Center
-                    app.ctx.globalAlpha = 0.5;
-                    app.ctx.fillStyle = '#f59e0b';
-                    app.ctx.beginPath(); app.ctx.arc(centerX + dx, centerY + dy, 4, 0, 2 * Math.PI); app.ctx.fill();
-
-                    // Draw Displacement Vector at Origin
-                    app.ctx.strokeStyle = '#f59e0b';
-                    app.ctx.setLineDash([2, 2]);
-                    app.ctx.lineWidth = 2;
-                    app.ctx.beginPath();
-                    app.ctx.moveTo(centerX, centerY);
-                    app.ctx.lineTo(centerX + dx, centerY + dy);
-                    app.ctx.stroke();
-
-                    // Calculate Total Virtual Work
-                    let totalWork = 0;
-
-                    // Draw Ghost Forces at new position
-                    app.forces.forEach(f => {
-                        const ghostX = centerX + f.x * app.scale + dx;
-                        const ghostY = centerY - f.y * app.scale + dy;
-
-                        // Ghost point
-                        app.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
-                        app.ctx.beginPath(); app.ctx.arc(ghostX, ghostY, 3, 0, 2 * Math.PI); app.ctx.fill();
-
-                        // Calc Work: F dot dr
-                        // dr vector in physics coords is (cos(a), sin(a))
-                        // F vector is (fx, fy)
-                        const physDx = Math.cos(app.state.virtAngle);
-                        const physDy = Math.sin(app.state.virtAngle);
-                        const work = f.fx * physDx + f.fy * physDy;
-                        totalWork += work;
-                    });
-
-                    app.ctx.setLineDash([]);
-                    app.ctx.globalAlpha = 1.0;
-
-                    const res = document.getElementById('virtualWorkRes');
-                    res.innerHTML = `δW = Σ F·δr = <strong>${totalWork.toFixed(1)}</strong> (J)`;
-                    if (Math.abs(totalWork) < 1.0) {
-                        res.style.color = 'var(--success)';
-                        res.innerHTML += ' ✓ Equilibrium';
-                    } else {
-                        res.style.color = 'var(--error)';
-                        res.innerHTML += ' ✗ Non-zero Work';
+                        app.ctx.fillText(`ΣF=${resMag.toFixed(1)}N`, cx + rx + 15, cy + ry);
                     }
                 }
             },
@@ -872,22 +773,22 @@
 
                 const contexts = {
                     truss: {
-                        title: '<i data-lucide="triangle" style="width:16px; height:16px; margin-right:4px; vertical-align:text-bottom;"></i> Truss Joint Analysis',
+                        title: '🏗️ Truss Joint Analysis',
                         desc: 'Forces at pin joints must be in equilibrium. Find member forces (tension/compression) by solving ΣFx=0, ΣFy=0. Method of joints uses force equilibrium at each node.',
                         example: 'At a truss joint, all forces must sum to zero for static equilibrium.'
                     },
                     beam: {
-                        title: '<i data-lucide="columns" style="width:16px; height:16px; margin-right:4px; vertical-align:text-bottom;"></i> Beam Support Reactions',
+                        title: '🏢 Beam Support Reactions',
                         desc: 'Distributed loads and concentrated forces on beams create reactions at supports. Sum forces vertically/horizontally and sum moments about support points to find reaction forces and moments.',
                         example: 'Sum moments about one support to find the other reaction, then use ΣFy=0.'
                     },
                     pulley: {
-                        title: '<i data-lucide="anchor" style="width:16px; height:16px; margin-right:4px; vertical-align:text-bottom;"></i> Pulley & Cable Systems',
+                        title: '🔗 Pulley & Cable Systems',
                         desc: 'Ideal (frictionless) pulleys change force direction. Tensions in cables connected through pulleys are equal if massless. Equilibrium of the load applies: sum of cable tensions = load weight.',
                         example: 'For a single movable pulley: 2T = Weight (force is halved, distance doubled).'
                     },
                     landing: {
-                        title: '<i data-lucide="plane-landing" style="width:16px; height:16px; margin-right:4px; vertical-align:text-bottom;"></i> Landing Gear Impact Forces',
+                        title: '✈️ Landing Gear Impact Forces',
                         desc: 'During landing, the fuselage weight transfers through the landing gear (shock struts, oleos) to the ground. Forces at contact must equilibrate weight + inertial forces. Critical for structural design.',
                         example: 'Multi-point landing gear distributes vertical load; side forces arise from crosswind and braking.'
                     }
@@ -901,7 +802,7 @@
                 const result = app.calculateResultant();
                 const sumM = app.calculateMoments();
 
-                html += `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(20, 184, 166, 0.3);">`;
+                html += `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);">`;
                 html += `<strong>Current System State:</strong><br/>`;
                 html += `<span class="value-display">Resultant: ${Math.sqrt(result.sumFx * result.sumFx + result.sumFy * result.sumFy).toFixed(2)} N</span>`;
                 html += `<span class="value-display">Moment: ${sumM.toFixed(2)} N·m</span>`;
@@ -913,7 +814,6 @@
                 html += `</div>`;
 
                 document.getElementById('engineeringApp').innerHTML = html;
-                lucide.createIcons();
             }
         };
 
