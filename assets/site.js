@@ -379,7 +379,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="lab-current" data-i18n-name="page">${translatePageName()}</span>
         </div>
         <div class="lab-actions">
-            <a class="pill" href="${home}" data-i18n-ui="home">${getT().home}</a>
             <button class="pill ghost" type="button" data-nav-back data-i18n-ui="back" data-i18n-ui-aria="backAria" aria-label="${getT().backAria}">${getT().back}</button>
             <select class="pill ghost" data-lang-select aria-label="${getT().langAria}">
                 <option value="en">EN</option>
