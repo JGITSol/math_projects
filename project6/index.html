@@ -18,7 +18,7 @@
                 <a href="../index.html" class="back-link">
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
-                <h1 data-i18n="title">⚡ Circuit Equations & Bode Plots</h1>
+                <h1 data-i18n="title">Circuit Equations & Bode Plots</h1>
                 <p class="subtitle" data-i18n="subtitle">RLC circuits, transfer functions, resonance, and frequency response analysis</p>
             </div>
         </header>
@@ -26,7 +26,7 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header">⚙️ Configuration</div>
+                <div class="card-header">Configuration</div>
 
                 <!-- Circuit Topology -->
                 <div class="form-group">
@@ -95,7 +95,7 @@
             <div>
                 <!-- Circuit Schematic -->
                 <div class="card">
-                    <div class="card-header">🔌 Circuit Topology</div>
+                    <div class="card-header">Circuit Topology</div>
                     <div class="circuit-schematic">
                         <canvas id="schematicCanvas" class="schematic"></canvas>
                     </div>
@@ -103,7 +103,7 @@
 
                 <!-- Bode Plot & Transient Response -->
                 <div class="card">
-                    <div class="card-header">📊 Frequency Response (Bode Plot)</div>
+                    <div class="card-header">Frequency Response (Bode Plot)</div>
                     <div class="dual-chart">
                         <div>
                             <div class="chart-label">Magnitude (dB)</div>
@@ -122,7 +122,7 @@
 
                 <!-- Time-Domain Response -->
                 <div class="card">
-                    <div class="card-header">⏱️ Time-Domain Response</div>
+                    <div class="card-header">Time-Domain Response</div>
                     <div class="chart-container">
                         <canvas id="transientChart"></canvas>
                     </div>
@@ -130,7 +130,7 @@
 
                 <!-- Transfer Function & Equations -->
                 <div class="card">
-                    <div class="card-header">📐 Transfer Function & Differential Equations</div>
+                    <div class="card-header">Transfer Function & Differential Equations</div>
                     <div id="tfDisplay"></div>
                     <div class="info-section">
                         <h3>Governing Differential Equation</h3>
@@ -144,7 +144,7 @@
 
                 <!-- Engineering Application -->
                 <div class="card">
-                    <div class="card-header">⚡ Real-World Impact</div>
+                    <div class="card-header">Real-World Impact</div>
                     <div id="engineeringApp" class="engineering-box"></div>
                 </div>
             </div>
@@ -154,9 +154,9 @@
     <script>
         const translations = {
             en: {
-                title: "⚡ Circuit Equations & Bode Plots",
+                title: "Circuit Equations & Bode Plots",
                 subtitle: "RLC circuits, transfer functions, resonance, and frequency response analysis",
-                config: "⚙️ Configuration",
+                config: "Configuration",
                 topology: "Circuit Topology",
                 inputSignal: "Input Signal",
                 resistance: "Resistance R (Ω)",
@@ -169,15 +169,15 @@
                 badgeBode: "Bode Plot",
                 badgeResonance: "Resonance",
 
-                circuitDiagram: "🔌 Circuit Topology",
-                freqResponse: "📊 Frequency Response (Bode Plot)",
+                circuitDiagram: "Circuit Topology",
+                freqResponse: "Frequency Response (Bode Plot)",
                 magLabel: "Magnitude (dB)",
                 phaseLabel: "Phase (degrees)",
-                timeResponse: "⏱️ Time-Domain Response",
-                tfTitle: "📐 Transfer Function & Equations",
+                timeResponse: "Time-Domain Response",
+                tfTitle: "Transfer Function & Equations",
                 governingEq: "Governing Differential Equation",
                 resonanceProps: "Resonance Properties",
-                realWorld: "⚡ Real-World Impact",
+                realWorld: "Real-World Impact",
 
                 // Selects
                 series: "Series RLC",
@@ -197,9 +197,9 @@
                 landing: "Landing Gear Impact Forces"
             },
             pl: {
-                title: "⚡ Równania Obwodów i Wykresy Bodego",
+                title: "Równania Obwodów i Wykresy Bodego",
                 subtitle: "Obwody RLC, transmitancje, rezonans i analiza częstotliwościowa",
-                config: "⚙️ Konfiguracja",
+                config: "Konfiguracja",
                 topology: "Topologia Obwodu",
                 inputSignal: "Sygnał Wejściowy",
                 resistance: "Rezystancja R (Ω)",
@@ -211,15 +211,15 @@
                 badgeTF: "Transmitancja",
                 badgeBode: "Wykres Bodego",
                 badgeResonance: "Rezonans",
-                circuitDiagram: "🔌 Schemat Obwodu",
-                freqResponse: "📊 Odpowiedź Częstotliwościowa",
+                circuitDiagram: "Schemat Obwodu",
+                freqResponse: "Odpowiedź Częstotliwościowa",
                 magLabel: "Amplituda (dB)",
                 phaseLabel: "Faza (stopnie)",
-                timeResponse: "⏱️ Odpowiedź Czasowa",
-                tfTitle: "📐 Transmitancja i Równania",
+                timeResponse: "Odpowiedź Czasowa",
+                tfTitle: "Transmitancja i Równania",
                 governingEq: "Równanie Różniczkowe",
                 resonanceProps: "Właściwości Rezonansowe",
-                realWorld: "⚡ Zastosowanie Praktyczne",
+                realWorld: "Zastosowanie Praktyczne",
                 series: "Szeregowy RLC",
                 parallel: "Równoległy RLC",
                 rl: "Tylko RL (1. rzędu)",
@@ -231,9 +231,9 @@
                 frequency: "Analiza Częstotliwościowa"
             },
             fr: {
-                title: "⚡ Équations de Circuit & Diagrammes de Bode",
+                title: "Équations de Circuit & Diagrammes de Bode",
                 subtitle: "Circuits RLC, fonctions de transfert, résonance et réponse fréquentielle",
-                config: "⚙️ Configuration",
+                config: "Configuration",
                 topology: "Topologie du Circuit",
                 inputSignal: "Signal d'Entrée",
                 resistance: "Résistance R (Ω)",
@@ -245,15 +245,15 @@
                 badgeTF: "Fonction de Transfert",
                 badgeBode: "Diagramme de Bode",
                 badgeResonance: "Résonance",
-                circuitDiagram: "🔌 Schéma du Circuit",
-                freqResponse: "📊 Réponse Fréquentielle",
+                circuitDiagram: "Schéma du Circuit",
+                freqResponse: "Réponse Fréquentielle",
                 magLabel: "Magnitude (dB)",
                 phaseLabel: "Phase (degrés)",
-                timeResponse: "⏱️ Réponse Temporelle",
-                tfTitle: "📐 Fonction de Transfert",
+                timeResponse: "Réponse Temporelle",
+                tfTitle: "Fonction de Transfert",
                 governingEq: "Équation Différentielle",
                 resonanceProps: "Propriétés de Résonance",
-                realWorld: "⚡ Impact Réel",
+                realWorld: "Impact Réel",
                 series: "RLC Série",
                 parallel: "RLC Parallèle",
                 rl: "RL Seul (1er Ordre)",
@@ -265,9 +265,9 @@
                 frequency: "Réponse Fréquentielle"
             },
             es: {
-                title: "⚡ Ecuaciones de Circuito y Diagramas de Bode",
+                title: "Ecuaciones de Circuito y Diagramas de Bode",
                 subtitle: "Circuitos RLC, funciones de transferencia, resonancia y análisis de respuesta en frecuencia",
-                config: "⚙️ Configuración",
+                config: "Configuración",
                 topology: "Topología del Circuito",
                 inputSignal: "Señal de Entrada",
                 resistance: "Resistencia R (Ω)",
@@ -279,15 +279,15 @@
                 badgeTF: "Función de Transferencia",
                 badgeBode: "Diagrama de Bode",
                 badgeResonance: "Resonancia",
-                circuitDiagram: "🔌 Esquema del Circuito",
-                freqResponse: "📊 Respuesta en Frecuencia",
+                circuitDiagram: "Esquema del Circuito",
+                freqResponse: "Respuesta en Frecuencia",
                 magLabel: "Magnitud (dB)",
                 phaseLabel: "Fase (grados)",
-                timeResponse: "⏱️ Respuesta Temporal",
-                tfTitle: "📐 Función de Transferencia",
+                timeResponse: "Respuesta Temporal",
+                tfTitle: "Función de Transferencia",
                 governingEq: "Ecuación Diferencial",
                 resonanceProps: "Propiedades de Resonancia",
-                realWorld: "⚡ Impacto en el Mundo Real",
+                realWorld: "Impacto en el Mundo Real",
                 series: "RLC Serie",
                 parallel: "RLC Paralelo",
                 rl: "Solo RL (1er Orden)",
@@ -299,9 +299,9 @@
                 frequency: "Respuesta en Frecuencia"
             },
             pt: {
-                title: "⚡ Equações de Circuito e Diagramas de Bode",
+                title: "Equações de Circuito e Diagramas de Bode",
                 subtitle: "Circuitos RLC, funções de transferência, ressonância e análise de resposta em frequência",
-                config: "⚙️ Configuração",
+                config: "Configuração",
                 topology: "Topologia do Circuito",
                 inputSignal: "Sinal de Entrada",
                 resistance: "Resistência R (Ω)",
@@ -313,15 +313,15 @@
                 badgeTF: "Função de Transferência",
                 badgeBode: "Diagrama de Bode",
                 badgeResonance: "Ressonância",
-                circuitDiagram: "🔌 Esquema do Circuito",
-                freqResponse: "📊 Resposta em Frequência",
+                circuitDiagram: "Esquema do Circuito",
+                freqResponse: "Resposta em Frequência",
                 magLabel: "Magnitude (dB)",
                 phaseLabel: "Fase (graus)",
-                timeResponse: "⏱️ Resposta Temporal",
-                tfTitle: "📐 Função de Transferência",
+                timeResponse: "Resposta Temporal",
+                tfTitle: "Função de Transferência",
                 governingEq: "Equação Diferencial",
                 resonanceProps: "Propriedades de Ressonância",
-                realWorld: "⚡ Impacto no Mundo Real",
+                realWorld: "Impacto no Mundo Real",
                 series: "RLC Série",
                 parallel: "RLC Paralelo",
                 rl: "Apenas RL (1ª Ordem)",
@@ -333,9 +333,9 @@
                 frequency: "Resposta em Frequência"
             },
             de: {
-                title: "⚡ Schaltungsgleichungen & Bode-Diagramme",
+                title: "Schaltungsgleichungen & Bode-Diagramme",
                 subtitle: "RLC-Schaltungen, Übertragungsfunktionen, Resonanz und Frequenzgangsanalyse",
-                config: "⚙️ Konfiguration",
+                config: "Konfiguration",
                 topology: "Schaltungstopologie",
                 inputSignal: "Eingangssignal",
                 resistance: "Widerstand R (Ω)",
@@ -347,15 +347,15 @@
                 badgeTF: "Übertragungsfunktion",
                 badgeBode: "Bode-Diagramm",
                 badgeResonance: "Resonanz",
-                circuitDiagram: "🔌 Schaltplan",
-                freqResponse: "📊 Frequenzgang",
+                circuitDiagram: "Schaltplan",
+                freqResponse: "Frequenzgang",
                 magLabel: "Betrag (dB)",
                 phaseLabel: "Phase (Grad)",
-                timeResponse: "⏱️ Zeitbereichsantwort",
-                tfTitle: "📐 Übertragungsfunktion",
+                timeResponse: "Zeitbereichsantwort",
+                tfTitle: "Übertragungsfunktion",
                 governingEq: "Differentialgleichung",
                 resonanceProps: "Resonanzeigenschaften",
-                realWorld: "⚡ Reale Anwendungen",
+                realWorld: "Reale Anwendungen",
                 series: "RLC Serie",
                 parallel: "RLC Parallel",
                 rl: "Nur RL (1. Ordnung)",
@@ -367,9 +367,9 @@
                 frequency: "Frequenzgang"
             },
             ua: {
-                title: "⚡ Рівняння Кіл та Діаграми Боде",
+                title: "Рівняння Кіл та Діаграми Боде",
                 subtitle: "RLC кола, передавальні функції, резонанс та частотний аналіз",
-                config: "⚙️ Конфігурація",
+                config: "Конфігурація",
                 topology: "Топологія Кола",
                 inputSignal: "Вхідний Сигнал",
                 resistance: "Опір R (Ом)",
@@ -381,15 +381,15 @@
                 badgeTF: "Передавальна Функція",
                 badgeBode: "Діаграма Боде",
                 badgeResonance: "Резонанс",
-                circuitDiagram: "🔌 Схема Кола",
-                freqResponse: "📊 Частотна Характеристика",
+                circuitDiagram: "Схема Кола",
+                freqResponse: "Частотна Характеристика",
                 magLabel: "Амплітуда (дБ)",
                 phaseLabel: "Фаза (градуси)",
-                timeResponse: "⏱️ Часова Характеристика",
-                tfTitle: "📐 Передавальна Функція",
+                timeResponse: "Часова Характеристика",
+                tfTitle: "Передавальна Функція",
                 governingEq: "Диференціальне Рівняння",
                 resonanceProps: "Резонансні Властивості",
-                realWorld: "⚡ Практичне Застосування",
+                realWorld: "Практичне Застосування",
                 series: "Послідовне RLC",
                 parallel: "Паралельне RLC",
                 rl: "Тільки RL",
@@ -401,9 +401,9 @@
                 frequency: "Частотний Аналіз"
             },
             be: {
-                title: "⚡ Ракнанні Ланцугоў і Дыяграмы Бодэ",
+                title: "Ракнанні Ланцугоў і Дыяграмы Бодэ",
                 subtitle: "RLC ланцугі, перадаткавыя функцыі, рэзананс і частотны аналіз",
-                config: "⚙️ Канфігурацыя",
+                config: "Канфігурацыя",
                 topology: "Тапалогія Ланцуга",
                 inputSignal: "Уваходны Сігнал",
                 resistance: "Супраціўленне R (Ом)",
@@ -415,15 +415,15 @@
                 badgeTF: "Перадаткавая Функцыя",
                 badgeBode: "Дыяграма Бодэ",
                 badgeResonance: "Рэзананс",
-                circuitDiagram: "🔌 Схема Ланцуга",
-                freqResponse: "📊 Частотная Характарыстыка",
+                circuitDiagram: "Схема Ланцуга",
+                freqResponse: "Частотная Характарыстыка",
                 magLabel: "Амплітуда (дБ)",
                 phaseLabel: "Фаза (градусы)",
-                timeResponse: "⏱️ Часавая Характарыстыка",
-                tfTitle: "📐 Перадаткавая Функцыя",
+                timeResponse: "Часавая Характарыстыка",
+                tfTitle: "Перадаткавая Функцыя",
                 governingEq: "Дыферэнцыяльнае Раўнанне",
                 resonanceProps: "Рэзанансныя Ўласцівасці",
-                realWorld: "⚡ Практычнае Ужыванне",
+                realWorld: "Практычнае Ужыванне",
                 series: "Паслядоўнае RLC",
                 parallel: "Паралельнае RLC",
                 rl: "Толькі RL",
@@ -845,100 +845,216 @@
 
                 ctx.strokeStyle = strokeColor;
                 ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
 
                 ctx.font = 'bold 14px Inter';
                 ctx.fillStyle = primaryColor;
 
+                // Helper functions for components
+                const drawResistor = (x, y, len, vertical = false) => {
+                    ctx.beginPath();
+                    const seg = len / 6;
+                    if (!vertical) {
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x + seg, y - 5);
+                        ctx.lineTo(x + 2 * seg, y + 5);
+                        ctx.lineTo(x + 3 * seg, y - 5);
+                        ctx.lineTo(x + 4 * seg, y + 5);
+                        ctx.lineTo(x + 5 * seg, y - 5);
+                        ctx.lineTo(x + len, y);
+                    } else {
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x - 5, y + seg);
+                        ctx.lineTo(x + 5, y + 2 * seg);
+                        ctx.lineTo(x - 5, y + 3 * seg);
+                        ctx.lineTo(x + 5, y + 4 * seg);
+                        ctx.lineTo(x - 5, y + 5 * seg);
+                        ctx.lineTo(x, y + len);
+                    }
+                    ctx.stroke();
+                };
+
+                const drawInductor = (x, y, len, vertical = false) => {
+                    ctx.beginPath();
+                    const loops = 4;
+                    const r = len / (loops * 2);
+                    if (!vertical) {
+                        for (let i = 0; i < loops; i++) {
+                            ctx.arc(x + r + i * 2 * r, y, r, Math.PI, 0);
+                        }
+                    } else {
+                        for (let i = 0; i < loops; i++) {
+                            ctx.arc(x, y + r + i * 2 * r, r, 1.5 * Math.PI, 0.5 * Math.PI);
+                        }
+                    }
+                    ctx.stroke();
+                };
+
+                const drawCapacitor = (x, y, size, vertical = false) => {
+                    ctx.beginPath();
+                    if (!vertical) {
+                        ctx.moveTo(x, y - 10); ctx.lineTo(x, y + 10);
+                        ctx.moveTo(x + 8, y - 10); ctx.lineTo(x + 8, y + 10);
+                    } else {
+                        ctx.moveTo(x - 10, y); ctx.lineTo(x + 10, y);
+                        ctx.moveTo(x - 10, y + 8); ctx.lineTo(x + 10, y + 8);
+                    }
+                    ctx.stroke();
+                };
+
+                const drawSource = (x, y, r) => {
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, 2 * Math.PI);
+                    ctx.stroke();
+                    ctx.font = '16px Inter';
+                    ctx.fillStyle = strokeColor;
+                    ctx.fillText('~', x - 5, y + 5);
+                };
+
                 const t = app.state.topology;
+                const cx = w / 2;
+                const cy = h / 2;
+
                 if (t === 'series') {
-                    ctx.fillText(translations[app.lang]?.series || 'Series RLC Circuit', w / 2 - 60, 30);
-                    // Simple representation
+                    ctx.fillText(translations[app.lang]?.series || 'Series RLC Circuit', 20, 30);
+                    
+                    // Layout: Source Left, R Top, L Top, C Right (Loop)
+                    // Let's do a simple rectangular loop
+                    const lx = cx - 100;
+                    const rx = cx + 100;
+                    const ty = cy - 60;
+                    const by = cy + 60;
+
+                    // Wires
                     ctx.beginPath();
-                    ctx.moveTo(50, 100);
-                    ctx.lineTo(w - 50, 100);
+                    ctx.moveTo(lx, ty); ctx.lineTo(lx, by); // Left (Source)
+                    ctx.moveTo(lx, ty); ctx.lineTo(rx, ty); // Top
+                    ctx.moveTo(rx, ty); ctx.lineTo(rx, by); // Right
+                    ctx.moveTo(rx, by); ctx.lineTo(lx, by); // Bottom
                     ctx.stroke();
 
-                    // Components (simplified boxes)
-                    ctx.fillStyle = bgColor;
+                    // Clear gaps for components
+                    ctx.clearRect(lx - 15, cy - 15, 30, 30); // Source
+                    ctx.clearRect(cx - 60, ty - 10, 40, 20); // R
+                    ctx.clearRect(cx + 20, ty - 10, 40, 20); // L
+                    ctx.clearRect(rx - 10, cy - 10, 20, 20); // C
 
-                    // R
-                    ctx.fillRect(80, 90, 40, 20);
-                    ctx.strokeRect(80, 90, 40, 20);
+                    // Draw Components
+                    drawSource(lx, cy, 15);
+                    drawResistor(cx - 60, ty, 40);
+                    drawInductor(cx + 20, ty, 40);
+                    drawCapacitor(rx - 4, cy - 4, 20, true); // Vertical C
 
-                    // L
-                    ctx.fillRect(180, 90, 40, 20);
-                    ctx.strokeRect(180, 90, 40, 20);
-
-                    // C
-                    ctx.fillRect(280, 90, 40, 20);
-                    ctx.strokeRect(280, 90, 40, 20);
-
+                    // Labels
                     ctx.fillStyle = primaryColor;
-                    ctx.fillText('R', 95, 80);
-                    ctx.fillText('L', 195, 80);
-                    ctx.fillText('C', 295, 80);
+                    ctx.fillText('Vin', lx - 30, cy);
+                    ctx.fillText('R', cx - 45, ty - 15);
+                    ctx.fillText('L', cx + 35, ty - 15);
+                    ctx.fillText('C', rx + 10, cy);
+
                 } else if (t === 'parallel') {
-                    ctx.fillText(translations[app.lang]?.parallel || 'Parallel RLC Circuit', w / 2 - 70, 30);
-                    ctx.font = '12px Inter';
-                    ctx.fillStyle = textColor;
-                    ctx.fillText('(All branches share voltage)', w / 2 - 80, 50);
-
-                    // Draw Parallel Lines
+                    ctx.fillText(translations[app.lang]?.parallel || 'Parallel RLC Circuit', 20, 30);
+                    
+                    const lx = cx - 120;
+                    const rx = cx + 120;
+                    const ty = cy - 60;
+                    const by = cy + 60;
+                    
+                    // Wires
                     ctx.beginPath();
-                    ctx.moveTo(50, 100); ctx.lineTo(350, 100);
-                    ctx.moveTo(50, 200); ctx.lineTo(350, 200);
-
-                    // Branches
-                    ctx.moveTo(100, 100); ctx.lineTo(100, 200); // R
-                    ctx.moveTo(200, 100); ctx.lineTo(200, 200); // L
-                    ctx.moveTo(300, 100); ctx.lineTo(300, 200); // C
-                    ctx.strokeStyle = strokeColor;
+                    ctx.moveTo(lx, ty); ctx.lineTo(rx, ty); // Top Rail
+                    ctx.moveTo(lx, by); ctx.lineTo(rx, by); // Bottom Rail
+                    
+                    // Vertical branches
+                    ctx.moveTo(lx, ty); ctx.lineTo(lx, by); // Source
+                    ctx.moveTo(cx - 40, ty); ctx.lineTo(cx - 40, by); // R
+                    ctx.moveTo(cx + 40, ty); ctx.lineTo(cx + 40, by); // L
+                    ctx.moveTo(rx, ty); ctx.lineTo(rx, by); // C
                     ctx.stroke();
 
+                    // Clear gaps
+                    ctx.clearRect(lx - 15, cy - 15, 30, 30); // Source
+                    ctx.clearRect(cx - 50, cy - 20, 20, 40); // R
+                    ctx.clearRect(cx + 30, cy - 20, 20, 40); // L
+                    ctx.clearRect(rx - 10, cy - 10, 20, 20); // C
+
+                    // Draw Components
+                    drawSource(lx, cy, 15);
+                    drawResistor(cx - 40, cy - 20, 40, true);
+                    drawInductor(cx + 40, cy - 20, 40, true);
+                    drawCapacitor(rx - 4, cy - 4, 20, true);
+
+                    // Labels
                     ctx.fillStyle = primaryColor;
-                    ctx.font = 'bold 14px Inter';
-                    ctx.fillText('R', 105, 95);
-                    ctx.fillText('L', 205, 95);
-                    ctx.fillText('C', 305, 95);
+                    ctx.fillText('Vin', lx - 30, cy);
+                    ctx.fillText('R', cx - 35, cy);
+                    ctx.fillText('L', cx + 45, cy);
+                    ctx.fillText('C', rx + 10, cy);
 
                 } else if (t === 'rl') {
-                    ctx.fillText(translations[app.lang]?.rl || 'RL Circuit', w / 2 - 40, 30);
+                    ctx.fillText(translations[app.lang]?.rl || 'RL Circuit', 20, 30);
+                    
+                    const lx = cx - 80;
+                    const rx = cx + 80;
+                    const ty = cy - 60;
+                    const by = cy + 60;
 
                     ctx.beginPath();
-                    ctx.moveTo(50, 100); ctx.lineTo(250, 100);
-                    ctx.fillStyle = bgColor;
-                    ctx.fillRect(100, 90, 40, 20); // R
-                    ctx.strokeRect(100, 90, 40, 20);
-                    ctx.fillRect(200, 90, 40, 20); // L
-                    ctx.strokeRect(200, 90, 40, 20);
+                    ctx.moveTo(lx, ty); ctx.lineTo(lx, by);
+                    ctx.moveTo(lx, ty); ctx.lineTo(rx, ty);
+                    ctx.moveTo(rx, ty); ctx.lineTo(rx, by);
+                    ctx.moveTo(rx, by); ctx.lineTo(lx, by);
                     ctx.stroke();
 
+                    ctx.clearRect(lx - 15, cy - 15, 30, 30); // Source
+                    ctx.clearRect(cx - 20, ty - 10, 40, 20); // R
+                    ctx.clearRect(rx - 10, cy - 20, 20, 40); // L
+
+                    drawSource(lx, cy, 15);
+                    drawResistor(cx - 20, ty, 40);
+                    drawInductor(rx, cy - 20, 40, true);
+
                     ctx.fillStyle = primaryColor;
-                    ctx.fillText('R', 115, 80);
-                    ctx.fillText('L', 215, 80);
+                    ctx.fillText('Vin', lx - 30, cy);
+                    ctx.fillText('R', cx - 5, ty - 15);
+                    ctx.fillText('L', rx + 10, cy);
+
                 } else if (t === 'rc') {
-                    ctx.fillText(translations[app.lang]?.rc || 'RC Circuit', w / 2 - 40, 30);
+                    ctx.fillText(translations[app.lang]?.rc || 'RC Circuit', 20, 30);
+                    
+                    const lx = cx - 80;
+                    const rx = cx + 80;
+                    const ty = cy - 60;
+                    const by = cy + 60;
 
                     ctx.beginPath();
-                    ctx.moveTo(50, 100); ctx.lineTo(250, 100);
-                    ctx.fillStyle = bgColor;
-                    ctx.fillRect(100, 90, 40, 20); // R
-                    ctx.strokeRect(100, 90, 40, 20);
-                    ctx.fillRect(200, 90, 40, 20); // C
-                    ctx.strokeRect(200, 90, 40, 20);
+                    ctx.moveTo(lx, ty); ctx.lineTo(lx, by);
+                    ctx.moveTo(lx, ty); ctx.lineTo(rx, ty);
+                    ctx.moveTo(rx, ty); ctx.lineTo(rx, by);
+                    ctx.moveTo(rx, by); ctx.lineTo(lx, by);
                     ctx.stroke();
 
+                    ctx.clearRect(lx - 15, cy - 15, 30, 30); // Source
+                    ctx.clearRect(cx - 20, ty - 10, 40, 20); // R
+                    ctx.clearRect(rx - 10, cy - 10, 20, 20); // C
+
+                    drawSource(lx, cy, 15);
+                    drawResistor(cx - 20, ty, 40);
+                    drawCapacitor(rx - 4, cy - 4, 20, true);
+
                     ctx.fillStyle = primaryColor;
-                    ctx.fillText('R', 115, 80);
-                    ctx.fillText('C', 215, 80);
+                    ctx.fillText('Vin', lx - 30, cy);
+                    ctx.fillText('R', cx - 5, ty - 15);
+                    ctx.fillText('C', rx + 10, cy);
                 }
 
                 ctx.font = '12px Inter';
                 ctx.fillStyle = textColor;
-                ctx.fillText(`R=${app.state.R.toFixed(1)}Ω`, 50, 240);
-                if (t !== 'rc') ctx.fillText(`L=${app.state.L.toFixed(3)}H`, 50, 260);
-                if (t !== 'rl') ctx.fillText(`C=${app.state.C.toFixed(5)}F`, 50, 280);
-                ctx.fillText(`Vin=${app.state.Vin.toFixed(1)}V`, 50, 300);
+                ctx.fillText(`R=${app.state.R.toFixed(1)}Ω`, 20, h - 80);
+                if (t !== 'rc') ctx.fillText(`L=${app.state.L.toFixed(3)}H`, 20, h - 60);
+                if (t !== 'rl') ctx.fillText(`C=${app.state.C.toFixed(5)}F`, 20, h - 40);
+                ctx.fillText(`Vin=${app.state.Vin.toFixed(1)}V`, 20, h - 20);
             },
 
             generateBodePlot: () => {
@@ -1035,7 +1151,7 @@
 
                 if (t === 'series') {
                     if (zeta > 1) {
-                        html = '<strong>⚠️ Overdamped Response:</strong> Slow response, no overshoot. Used in applications requiring smooth transitions (power supplies, audio filters).';
+                        html = '<strong>Overdamped Response:</strong> Slow response, no overshoot. Used in applications requiring smooth transitions (power supplies, audio filters).';
                     } else if (Math.abs(zeta - 1) < 0.01) {
                         html = '<strong>✓ Critically Damped:</strong> Fastest response without overshoot. Ideal for instrumentation and control systems.';
                     } else {

@@ -18,7 +18,7 @@
                 <a href="../index.html" class="back-link">
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
-                <h1 data-i18n="title">⚖️ 2D Forces & Equilibrium Analyzer</h1>
+                <h1 data-i18n="title">2D Forces & Equilibrium Analyzer</h1>
                 <p class="subtitle" data-i18n="subtitle">Analyze concurrent forces, calculate resultants, and verify equilibrium conditions</p>
             </div>
         </header>
@@ -26,7 +26,7 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header">⚙️ Add Forces</div>
+                <div class="card-header">Add Forces</div>
 
                 <div class="form-group">
                     <label>Magnitude (N): <span id="valMag">100</span></label>
@@ -82,8 +82,8 @@
                     </div>
                     <!-- Canvas -->
                     <div class="card">
-                        <div class="card-header">📊 Force Diagram (Free-Body Diagram)</div>
-                        <div class="canvas-container">
+                        <div class="card-header">Force Diagram (Free-Body Diagram)</div>
+                        <div class="canvas-container" style="height: 450px;">
                             <canvas id="forceCanvas"></canvas>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
 
                 <!-- Resultant & Analysis -->
                 <div class="card">
-                    <div class="card-header">📐 Force Analysis</div>
+                    <div class="card-header">Force Analysis</div>
 
                     <div class="info-section">
                         <h3>Resultant Force</h3>
@@ -139,7 +139,7 @@
 
                 <!-- Real World Applications -->
                 <div class="card">
-                    <div class="card-header">🏗️ Real World Applications</div>
+                    <div class="card-header">Real World Applications</div>
                     <div class="tab-header">
                         <button class="tab-btn active" data-tab="truss">Truss</button>
                         <button class="tab-btn" data-tab="beam">Beam</button>
@@ -153,7 +153,7 @@
 
                 <!-- Free-Body Diagram Explanation -->
                 <div class="card">
-                    <div class="card-header">🔍 How to Use</div>
+                    <div class="card-header">How to Use</div>
                     <div class="info-section">
                         <h3>Steps</h3>
                         <p>1. Enter force magnitude (N) and angle (° from horizontal)</p>
@@ -172,7 +172,7 @@
 
                 <!-- Engineering Applications -->
                 <div class="card">
-                    <div class="card-header">⚡ Real-World Applications</div>
+                    <div class="card-header">Real-World Applications</div>
                     <div id="engineeringApp" class="engineering-box"></div>
                 </div>
             </div>
@@ -182,24 +182,24 @@
     <script>
         const translations = {
             en: {
-                title: "⚖️ 2D Forces & Equilibrium Analyzer",
+                title: "2D Forces & Equilibrium Analyzer",
                 subtitle: "Analyze concurrent forces, calculate resultants, and verify equilibrium conditions",
-                config: "⚙️ Configuration",
+                config: "Configuration",
                 addForce: "Add Force",
                 magLabel: "Magnitude (N)",
                 angleLabel: "Angle (degrees)",
                 forcesList: "Forces List",
                 vizTitle: "Force Diagram",
-                resultsTitle: "📊 Analysis Results",
+                resultsTitle: "Analysis Results",
                 resultantForce: "Resultant Force (R)",
                 equilibrantForce: "Equilibrant Force (E)",
                 equilibriumStatus: "Equilibrium Status",
                 eqCheckTitle: "Equilibrium Check (ΣFx = 0, ΣFy = 0)",
-                engContext: "🏗️ Engineering Context",
+                engContext: "Engineering Context",
 
                 // Status
-                balanced: "✅ BALANCED (Equilibrium)",
-                unbalanced: "⚠️ UNBALANCED",
+                balanced: "BALANCED (Equilibrium)",
+                unbalanced: "UNBALANCED",
 
                 // Contexts
                 particle: "Particle Equilibrium",
@@ -215,22 +215,22 @@
                 remove: "Remove"
             },
             pl: {
-                title: "⚖️ Siły 2D i Stan Równowagi",
+                title: "Siły 2D i Stan Równowagi",
                 subtitle: "Analiza sił zbieżnych, obliczanie wypadkowej i weryfikacja równowagi",
-                config: "⚙️ Konfiguracja",
+                config: "Konfiguracja",
                 addForce: "Dodaj Siłę",
                 magLabel: "Wartość (N)",
                 angleLabel: "Kąt (stopnie)",
                 forcesList: "Lista Sił",
                 vizTitle: "Diagram Sił",
-                resultsTitle: "📊 Wyniki Analizy",
+                resultsTitle: "Wyniki Analizy",
                 resultantForce: "Siła Wypadkowa (R)",
                 equilibrantForce: "Siła Równoważąca (E)",
                 equilibriumStatus: "Stan Równowagi",
                 eqCheckTitle: "Warunek Równowagi",
-                engContext: "🏗️ Kontekst Inżynierski",
-                balanced: "✅ W RÓWNOWADZE",
-                unbalanced: "⚠️ BRAK RÓWNOWAGI",
+                engContext: "Kontekst Inżynierski",
+                balanced: "W RÓWNOWADZE",
+                unbalanced: "BRAK RÓWNOWAGI",
                 particle: "Równowaga Punktu",
                 truss: "Węzeł Kratownicy",
                 bracket: "Wspornik",
@@ -242,22 +242,22 @@
                 remove: "Usuń"
             },
             fr: {
-                title: "⚖️ Forces 2D & Équilibre",
+                title: "Forces 2D & Équilibre",
                 subtitle: "Analysez les forces concourantes, calculez les résultantes et vérifiez l'équilibre",
-                config: "⚙️ Configuration",
+                config: "Configuration",
                 addForce: "Ajouter Force",
                 magLabel: "Magnitude (N)",
                 angleLabel: "Angle (degrés)",
                 forcesList: "Liste des Forces",
                 vizTitle: "Diagramme des Forces",
-                resultsTitle: "📊 Résultats",
+                resultsTitle: "Résultats",
                 resultantForce: "Force Résultante (R)",
                 equilibrantForce: "Force Équilibrante (E)",
                 equilibriumStatus: "État d'Équilibre",
                 eqCheckTitle: "Vérification d'Équilibre",
-                engContext: "🏗️ Contexte Ingénierie",
-                balanced: "✅ ÉQUILIBRÉ",
-                unbalanced: "⚠️ NON ÉQUILIBRÉ",
+                engContext: "Contexte Ingénierie",
+                balanced: "ÉQUILIBRÉ",
+                unbalanced: "NON ÉQUILIBRÉ",
                 particle: "Équilibre du Point",
                 truss: "Analyse de Treillis",
                 bracket: "Support",
@@ -269,22 +269,22 @@
                 remove: "Supprimer"
             },
             es: {
-                title: "⚖️ Fuerzas 2D y Equilibrio",
+                title: "Fuerzas 2D y Equilibrio",
                 subtitle: "Analiza fuerzas concurrentes, calcula resultantes y verifica el equilibrio",
-                config: "⚙️ Configuración",
+                config: "Configuración",
                 addForce: "Añadir Fuerza",
                 magLabel: "Magnitud (N)",
                 angleLabel: "Ángulo (grados)",
                 forcesList: "Lista de Fuerzas",
                 vizTitle: "Diagrama de Fuerzas",
-                resultsTitle: "📊 Resultados",
+                resultsTitle: "Resultados",
                 resultantForce: "Fuerza Resultante (R)",
                 equilibrantForce: "Fuerza Equilibrante (E)",
                 equilibriumStatus: "Estado de Equilibrio",
                 eqCheckTitle: "Verificación de Equilibrio",
-                engContext: "🏗️ Contexto de Ingeniería",
-                balanced: "✅ EQUILIBRADO",
-                unbalanced: "⚠️ DESEQUILIBRADO",
+                engContext: "Contexto de Ingeniería",
+                balanced: "EQUILIBRADO",
+                unbalanced: "DESEQUILIBRADO",
                 particle: "Equilibrio de Partícula",
                 truss: "Análisis de Armadura",
                 bracket: "Soporte",
@@ -296,22 +296,22 @@
                 remove: "Eliminar"
             },
             pt: {
-                title: "⚖️ Forças 2D e Equilíbrio",
+                title: "Forças 2D e Equilíbrio",
                 subtitle: "Analise forças concorrentes, calcule resultantes e verifique o equilíbrio",
-                config: "⚙️ Configuração",
+                config: "Configuração",
                 addForce: "Adicionar Força",
                 magLabel: "Magnitude (N)",
                 angleLabel: "Ângulo (graus)",
                 forcesList: "Lista de Forças",
                 vizTitle: "Diagrama de Forças",
-                resultsTitle: "📊 Resultados",
+                resultsTitle: "Resultados",
                 resultantForce: "Força Resultante (R)",
                 equilibrantForce: "Força Equilibrante (E)",
                 equilibriumStatus: "Estado de Equilíbrio",
                 eqCheckTitle: "Verificação de Equilíbrio",
-                engContext: "🏗️ Contexto de Engenharia",
-                balanced: "✅ EQUILIBRADO",
-                unbalanced: "⚠️ DESEQUILIBRADO",
+                engContext: "Contexto de Engenharia",
+                balanced: "EQUILIBRADO",
+                unbalanced: "DESEQUILIBRADO",
                 particle: "Equilíbrio de Partícula",
                 truss: "Análise de Treliça",
                 bracket: "Suporte",
@@ -323,22 +323,22 @@
                 remove: "Remover"
             },
             de: {
-                title: "⚖️ 2D Kräfte & Gleichgewicht",
+                title: "2D Kräfte & Gleichgewicht",
                 subtitle: "Analysieren Sie Kräfte, berechnen Sie Resultierende und prüfen Sie das Gleichgewicht",
-                config: "⚙️ Konfiguration",
+                config: "Konfiguration",
                 addForce: "Kraft Hinzufügen",
                 magLabel: "Betrag (N)",
                 angleLabel: "Winkel (Grad)",
                 forcesList: "Liste der Kräfte",
                 vizTitle: "Kraftdiagramm",
-                resultsTitle: "📊 Ergebnisse",
+                resultsTitle: "Ergebnisse",
                 resultantForce: "Resultierende Kraft (R)",
                 equilibrantForce: "Gleichgewichtskraft (E)",
                 equilibriumStatus: "Gleichgewichtsstatus",
                 eqCheckTitle: "Gleichgewichtsprüfung",
-                engContext: "🏗️ Technischer Kontext",
-                balanced: "✅ IM GLEICHGEWICHT",
-                unbalanced: "⚠️ UNAUSGEGLICHEN",
+                engContext: "Technischer Kontext",
+                balanced: "IM GLEICHGEWICHT",
+                unbalanced: "UNAUSGEGLICHEN",
                 particle: "Punktgleichgewicht",
                 truss: "Fachwerkanalyse",
                 bracket: "Halterung",
@@ -350,22 +350,22 @@
                 remove: "Entfernen"
             },
             ua: {
-                title: "⚖️ 2D Сили та Рівновага",
+                title: "2D Сили та Рівновага",
                 subtitle: "Аналіз збіжних сил, розрахунок рівнодійної та перевірка рівноваги",
-                config: "⚙️ Конфігурація",
+                config: "Конфігурація",
                 addForce: "Додати Силу",
                 magLabel: "Величина (Н)",
                 angleLabel: "Кут (градуси)",
                 forcesList: "Список Сил",
                 vizTitle: "Діаграма Сил",
-                resultsTitle: "📊 Результати Аналізу",
+                resultsTitle: "Результати Аналізу",
                 resultantForce: "Рівнодійна Сила (R)",
                 equilibrantForce: "Зрівноважуюча Сила (E)",
                 equilibriumStatus: "Стан Рівноваги",
                 eqCheckTitle: "Перевірка Рівноваги",
-                engContext: "🏗️ Інженерний Контекст",
-                balanced: "✅ В РІВНОВАЗІ",
-                unbalanced: "⚠️ НЕ В РІВНОВАЗІ",
+                engContext: "Інженерний Контекст",
+                balanced: "В РІВНОВАЗІ",
+                unbalanced: "НЕ В РІВНОВАЗІ",
                 particle: "Рівновага Точки",
                 truss: "Вузол Ферми",
                 bracket: "Кронштейн",
@@ -377,22 +377,22 @@
                 remove: "Видалити"
             },
             be: {
-                title: "⚖️ 2D Сілы і Раўнавага",
+                title: "2D Сілы і Раўнавага",
                 subtitle: "Аналіз збежных сіл, разлік раўнодзейнай і праверка раўнавагі",
-                config: "⚙️ Канфігурацыя",
+                config: "Канфігурацыя",
                 addForce: "Дадаць Сілу",
                 magLabel: "Велічыня (Н)",
                 angleLabel: "Вугал (градусы)",
                 forcesList: "Спіс Сіл",
                 vizTitle: "Дыяграма Сіл",
-                resultsTitle: "📊 Вынікі Аналізу",
+                resultsTitle: "Вынікі Аналізу",
                 resultantForce: "Раўнодзейная Сіла (R)",
                 equilibrantForce: "Ураўнаважвальная Сіла (E)",
                 equilibriumStatus: "Стан Раўнавагі",
                 eqCheckTitle: "Праверка Раўнавагі",
-                engContext: "🏗️ Інжынерны Кантэкст",
-                balanced: "✅ У РАЎНАВАЗЕ",
-                unbalanced: "⚠️ НЕ У РАЎНАВАЗЕ",
+                engContext: "Інжынерны Кантэкст",
+                balanced: "У РАЎНАВАЗЕ",
+                unbalanced: "НЕ У РАЎНАВАЗЕ",
                 particle: "Раўнавага Кропкі",
                 truss: "Вузел Фермы",
                 bracket: "Кранштэйн",

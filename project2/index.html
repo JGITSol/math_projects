@@ -1043,7 +1043,7 @@
                 const scenarios = contextScenarios[ctx];
                 const engineeringText = scenarios[t];
 
-                html += `<h4>⚡ ${app.state.context.charAt(0).toUpperCase() + app.state.context.slice(1)} Application</h4>`;
+                html += `<h4>${app.state.context.charAt(0).toUpperCase() + app.state.context.slice(1)} Application</h4>`;
                 html += `<p>${engineeringText}</p>`;
 
                 // Add property interpretation
@@ -1055,7 +1055,7 @@
                 html += `<span class="value-display">det(M) = ${det.toFixed(4)} (volume scale)</span>`;
                 html += `<span class="value-display">λ₁ = ${l1.toFixed(4)}, λ₂ = ${l2.toFixed(4)} (eigenvalues)</span>`;
                 if (det < 0.1) {
-                    html += `<p style="color: var(--warning); margin-top: 8px;"><strong>⚠️</strong> Singular matrix detected (det ≈ 0). Dimension collapsed.</p>`;
+                    html += `<p style="color: var(--warning); margin-top: 8px;"><strong></strong> Singular matrix detected (det ≈ 0). Dimension collapsed.</p>`;
                 }
                 html += `</div>`;
 

@@ -814,7 +814,7 @@
                 const tPos = toScr(tx, ty);
                 ctx.fillStyle = '#10b981'; // Green flag
                 ctx.font = '24px Arial';
-                ctx.fillText('⚑', tPos.x - 5, tPos.y);
+                ctx.fillText('Target', tPos.x - 20, tPos.y);
 
                 const currentCost = prob.f(s.x, s.y);
                 document.getElementById('currentCost').textContent = currentCost.toFixed(4);
