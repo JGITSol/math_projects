@@ -314,14 +314,16 @@
 
                 <!-- Engineering Context -->
                 <div class="form-group">
-                    <label for="context" data-i18n="context">Engineering Context</label>
-                    <select id="context">
-                        <option value="generic">Generic Transformation</option>
-                        <option value="robotics">Robotics (Joint Angles)</option>
-                        <option value="circuit">Circuit (State Variables)</option>
-                        <option value="mechanical">Mechanical (Forces)</option>
-                        <option value="graphics">Graphics (Rendering)</option>
-                    </select>
+                    <label data-i18n="context">Engineering Context</label>
+                    <div class="tab-container" id="contextTabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-value="generic" data-i18n="c_generic">Generic</button>
+                            <button class="tab-btn" data-value="robotics" data-i18n="c_robotics">Robotics</button>
+                            <button class="tab-btn" data-value="circuit" data-i18n="c_circuit">Circuits</button>
+                            <button class="tab-btn" data-value="mechanical" data-i18n="c_mech">Mechanical</button>
+                            <button class="tab-btn" data-value="graphics" data-i18n="c_graph">Graphics</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Matrix Entry Parameters -->
@@ -647,9 +649,14 @@
                     app.update();
                 });
 
-                document.getElementById('context').addEventListener('change', (e) => {
-                    app.state.context = e.target.value;
-                    app.update();
+                // Tab handling for Engineering Context
+                document.querySelectorAll('#contextTabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#contextTabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        app.state.context = e.target.getAttribute('data-value');
+                        app.update();
+                    });
                 });
 
                 document.getElementById('sliderScaleX').addEventListener('input', (e) => {
@@ -918,9 +925,14 @@
                 app.ctx.stroke();
 
                 // Draw transformed grid/square
-                app.ctx.fillStyle = colors.transGrid;
+                // HIGH VISIBILITY MODE for Attention Deficient Audience
+                app.ctx.fillStyle = isDark ? 'rgba(34, 211, 238, 0.3)' : 'rgba(8, 145, 178, 0.2)'; // More opaque fill
                 app.ctx.strokeStyle = colors.transBasis2;
-                app.ctx.lineWidth = 2;
+                app.ctx.lineWidth = 4; // Thicker line
+                
+                // Add Glow Effect
+                app.ctx.shadowBlur = 15;
+                app.ctx.shadowColor = colors.transBasis2;
 
                 const corners = [
                     [1, 1], [1, -1], [-1, -1], [-1, 1]
@@ -935,7 +947,11 @@
                     app.ctx.lineTo(centerX + c[0] * scale, centerY - c[1] * scale);
                 }
                 app.ctx.closePath();
+                app.ctx.fill(); // Fill the square
                 app.ctx.stroke();
+                
+                // Reset Shadow
+                app.ctx.shadowBlur = 0;
 
                 // Labels (2D only)
                 app.ctx.textAlign = 'left';

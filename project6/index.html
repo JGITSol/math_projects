@@ -30,13 +30,15 @@
 
                 <!-- Circuit Topology -->
                 <div class="form-group">
-                    <label for="topology">Circuit Topology</label>
-                    <select id="topology">
-                        <option value="series">Series RLC</option>
-                        <option value="parallel">Parallel RLC</option>
-                        <option value="rl">RL Only (1st Order)</option>
-                        <option value="rc">RC Only (1st Order)</option>
-                    </select>
+                    <label>Circuit Topology</label>
+                    <div class="tab-container" id="topologyTabs">
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-value="series">Series RLC</button>
+                            <button class="tab-btn" data-value="parallel">Parallel RLC</button>
+                            <button class="tab-btn" data-value="rl">RL Only</button>
+                            <button class="tab-btn" data-value="rc">RC Only</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Input Signal Type -->
@@ -498,21 +500,40 @@
 
             // Evaluate transfer function at complex frequency s = jw
             evaluateTF: (tf, w) => {
-                const s = { real: 0, imag: w };
-                let num_real = tf.b[0];
-                let num_imag = 0;
-                let den_real = tf.a[0] * s.real * s.real - tf.a[0] * s.imag * s.imag;
-                let den_imag = 2 * tf.a[0] * s.real * s.imag;
+                // Numerator B(s) = b[0]*s^m + ... (Here b is just [1], so B(s) = 1)
+                // Denominator A(s) = a[0]*s^n + a[1]*s^(n-1) + ... + a[n]
+                
+                // Evaluate Polynomial P(s) at s = jw
+                const evalPoly = (coeffs, w) => {
+                    let real = 0;
+                    let imag = 0;
+                    const n = coeffs.length - 1;
+                    
+                    for (let i = 0; i <= n; i++) {
+                        const power = n - i;
+                        const coeff = coeffs[i];
+                        // (jw)^k
+                        // k=0: 1
+                        // k=1: jw
+                        // k=2: -w^2
+                        // k=3: -jw^3
+                        // k=4: w^4
+                        const w_pow = Math.pow(w, power);
+                        if (power % 4 === 0) real += coeff * w_pow;
+                        else if (power % 4 === 1) imag += coeff * w_pow;
+                        else if (power % 4 === 2) real -= coeff * w_pow;
+                        else if (power % 4 === 3) imag -= coeff * w_pow;
+                    }
+                    return { real, imag };
+                };
 
-                for (let i = 1; i < tf.a.length; i++) {
-                    den_real += tf.a[i] * s.real;
-                    den_imag += tf.a[i] * s.imag;
-                }
+                const num = evalPoly(tf.b, w);
+                const den = evalPoly(tf.a, w);
 
                 // Complex division: num / den
-                const den_mag_sq = den_real * den_real + den_imag * den_imag;
-                const real = (num_real * den_real + num_imag * den_imag) / den_mag_sq;
-                const imag = (num_imag * den_real - num_real * den_imag) / den_mag_sq;
+                const den_mag_sq = den.real * den.real + den.imag * den.imag;
+                const real = (num.real * den.real + num.imag * den.imag) / den_mag_sq;
+                const imag = (num.imag * den.real - num.real * den.imag) / den_mag_sq;
 
                 const magnitude = Math.sqrt(real * real + imag * imag);
                 const phase = Math.atan2(imag, real) * 180 / Math.PI;
@@ -563,10 +584,15 @@
                 const schematicCanvas = document.getElementById('schematicCanvas');
                 app.schematicCtx = schematicCanvas ? schematicCanvas.getContext('2d') : null;
 
-                document.getElementById('topology').addEventListener('change', (e) => {
-                    app.state.topology = e.target.value;
-                    app.updateFormDisplay();
-                    app.update();
+                // Tab handling for Topology
+                document.querySelectorAll('#topologyTabs .tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        document.querySelectorAll('#topologyTabs .tab-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        app.state.topology = e.target.getAttribute('data-value');
+                        app.updateFormDisplay();
+                        app.update();
+                    });
                 });
 
                 document.getElementById('inputType').addEventListener('change', (e) => {
