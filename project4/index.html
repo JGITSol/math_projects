@@ -26,34 +26,34 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header">Add Forces</div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
 
                 <div class="form-group">
-                    <label>Magnitude (N): <span id="valMag">100</span></label>
+                    <label><span data-i18n="magLabel">Magnitude (N)</span>: <span id="valMag">100</span></label>
                     <input type="number" id="inputMag" value="100" min="1" max="500" step="10">
                 </div>
 
                 <div class="form-group">
-                    <label>Angle (°): <span id="valAngle">0</span></label>
+                    <label><span data-i18n="angleLabel">Angle (degrees)</span>: <span id="valAngle">0</span></label>
                     <input type="number" id="inputAngle" value="0" min="0" max="360" step="5">
                 </div>
 
                 <div class="form-group">
-                    <label>Point X (m): <span id="valX">0</span></label>
+                    <label><span data-i18n="pointXLabel">Point X (m)</span>: <span id="valX">0</span></label>
                     <input type="number" id="inputX" value="0" min="-10" max="10" step="0.5">
                 </div>
 
                 <div class="form-group">
-                    <label>Point Y (m): <span id="valY">0</span></label>
+                    <label><span data-i18n="pointYLabel">Point Y (m)</span>: <span id="valY">0</span></label>
                     <input type="number" id="inputY" value="0" min="-10" max="10" step="0.5">
                 </div>
 
-                <button id="btnAddForce">Add Force (Click Canvas)</button>
-                <button id="btnClear" style="background-color: var(--warning);">Clear All</button>
+                <button id="btnAddForce" data-i18n="addForce">Add Force</button>
+                <button id="btnClear" style="background-color: var(--warning);" data-i18n="clearAll">Clear All</button>
 
-                <div class="badge">Forces</div>
-                <div class="badge">Equilibrium</div>
-                <div class="badge">Moments</div>
+                <div class="badge" data-i18n="badgeForces">Forces</div>
+                <div class="badge" data-i18n="badgeEquilibrium">Equilibrium</div>
+                <div class="badge" data-i18n="badgeMoments">Moments</div>
 
                 <!-- Forces List -->
                 <div style="margin-top: 16px;">
@@ -188,6 +188,11 @@
                 addForce: "Add Force",
                 magLabel: "Magnitude (N)",
                 angleLabel: "Angle (degrees)",
+                pointXLabel: "Point X (m)",
+                pointYLabel: "Point Y (m)",
+                badgeForces: "Forces",
+                badgeEquilibrium: "Equilibrium",
+                badgeMoments: "Moments",
                 forcesList: "Forces List",
                 vizTitle: "Force Diagram",
                 resultsTitle: "Analysis Results",
@@ -221,6 +226,11 @@
                 addForce: "Dodaj Siłę",
                 magLabel: "Wartość (N)",
                 angleLabel: "Kąt (stopnie)",
+                pointXLabel: "Punkt X (m)",
+                pointYLabel: "Punkt Y (m)",
+                badgeForces: "Siły",
+                badgeEquilibrium: "Równowaga",
+                badgeMoments: "Momenty",
                 forcesList: "Lista Sił",
                 vizTitle: "Diagram Sił",
                 resultsTitle: "Wyniki Analizy",

@@ -26,52 +26,52 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header">Configuration</div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
 
                 <!-- Signal Type -->
                 <div class="form-group">
-                    <label for="signalType">Signal Type</label>
+                    <label for="signalType" data-i18n="signalType">Signal Type</label>
                     <select id="signalType">
-                        <option value="sine">Pure Sine Wave</option>
-                        <option value="composite">Composite (Multi-Freq)</option>
-                        <option value="square">Square Wave</option>
-                        <option value="sawtooth">Sawtooth Wave</option>
-                        <option value="noise">White Noise</option>
+                        <option value="sine" data-i18n="sine">Pure Sine Wave</option>
+                        <option value="composite" data-i18n="composite">Composite (Multi-Freq)</option>
+                        <option value="square" data-i18n="square">Square Wave</option>
+                        <option value="sawtooth" data-i18n="sawtooth">Sawtooth Wave</option>
+                        <option value="noise" data-i18n="noise">White Noise</option>
                     </select>
                 </div>
 
                 <!-- Frequency 1 -->
                 <div class="form-group">
-                    <label>Primary Freq (Hz): <span id="valFreq1">10</span></label>
+                    <label><span data-i18n="freq1">Primary Freq (Hz)</span>: <span id="valFreq1">10</span></label>
                     <input type="range" id="sliderFreq1" min="1" max="50" step="1" value="10">
                 </div>
 
                 <!-- Frequency 2 (for composite) -->
                 <div class="form-group" id="groupFreq2">
-                    <label>Secondary Freq (Hz): <span id="valFreq2">20</span></label>
+                    <label><span data-i18n="freq2">Secondary Freq (Hz)</span>: <span id="valFreq2">20</span></label>
                     <input type="range" id="sliderFreq2" min="1" max="50" step="1" value="20">
                 </div>
 
                 <!-- Amplitude -->
                 <div class="form-group">
-                    <label>Amplitude: <span id="valAmplitude">1.0</span></label>
+                    <label><span data-i18n="amplitude">Amplitude</span>: <span id="valAmplitude">1.0</span></label>
                     <input type="range" id="sliderAmplitude" min="0.1" max="2" step="0.1" value="1">
                 </div>
 
                 <!-- Filter Type -->
                 <div class="form-group">
-                    <label for="filterType">Filter Type</label>
+                    <label for="filterType" data-i18n="filterType">Filter Type</label>
                     <select id="filterType">
-                        <option value="none">No Filter</option>
-                        <option value="lowpass">Low-Pass (Cut High)</option>
-                        <option value="highpass">High-Pass (Cut Low)</option>
-                        <option value="bandpass">Band-Pass (Isolate Mid)</option>
+                        <option value="none" data-i18n="none">No Filter</option>
+                        <option value="lowpass" data-i18n="lowpass">Low-Pass (Cut High)</option>
+                        <option value="highpass" data-i18n="highpass">High-Pass (Cut Low)</option>
+                        <option value="bandpass" data-i18n="bandpass">Band-Pass (Isolate Mid)</option>
                     </select>
                 </div>
 
                 <!-- Filter Cutoff -->
                 <div class="form-group" id="groupCutoff">
-                    <label>Cutoff Freq (Hz): <span id="valCutoff">15</span></label>
+                    <label><span data-i18n="cutoff">Cutoff Freq (Hz)</span>: <span id="valCutoff">15</span></label>
                     <input type="range" id="sliderCutoff" min="1" max="40" step="1" value="15">
                 </div>
 

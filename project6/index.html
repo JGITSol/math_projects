@@ -26,61 +26,61 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header">Configuration</div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
 
                 <!-- Circuit Topology -->
                 <div class="form-group">
-                    <label>Circuit Topology</label>
+                    <label data-i18n="topology">Circuit Topology</label>
                     <div class="tab-container" id="topologyTabs">
                         <div class="tab-header">
-                            <button class="tab-btn active" data-value="series">Series RLC</button>
-                            <button class="tab-btn" data-value="parallel">Parallel RLC</button>
-                            <button class="tab-btn" data-value="rl">RL Only</button>
-                            <button class="tab-btn" data-value="rc">RC Only</button>
+                            <button class="tab-btn active" data-value="series" data-i18n="series">Series RLC</button>
+                            <button class="tab-btn" data-value="parallel" data-i18n="parallel">Parallel RLC</button>
+                            <button class="tab-btn" data-value="rl" data-i18n="rl">RL Only</button>
+                            <button class="tab-btn" data-value="rc" data-i18n="rc">RC Only</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Input Signal Type -->
                 <div class="form-group">
-                    <label for="inputType">Input Signal</label>
+                    <label for="inputType" data-i18n="inputSignal">Input Signal</label>
                     <select id="inputType">
-                        <option value="step">Step Input</option>
-                        <option value="impulse">Impulse Input</option>
-                        <option value="sine">Sinusoid (Sweep)</option>
+                        <option value="step" data-i18n="step">Step Input</option>
+                        <option value="impulse" data-i18n="impulse">Impulse Input</option>
+                        <option value="sine" data-i18n="sine">Sinusoid (Sweep)</option>
                     </select>
                 </div>
 
                 <!-- Resistance -->
                 <div class="form-group">
-                    <label>Resistance R (Ω): <span id="valR">10</span></label>
+                    <label><span data-i18n="resistance">Resistance R (Ω)</span>: <span id="valR">10</span></label>
                     <input type="range" id="sliderR" min="1" max="100" step="1" value="10">
                 </div>
 
                 <!-- Inductance -->
                 <div class="form-group" id="groupL">
-                    <label>Inductance L (H): <span id="valL">0.1</span></label>
+                    <label><span data-i18n="inductance">Inductance L (H)</span>: <span id="valL">0.1</span></label>
                     <input type="range" id="sliderL" min="0.01" max="1" step="0.01" value="0.1">
                 </div>
 
                 <!-- Capacitance -->
                 <div class="form-group" id="groupC">
-                    <label>Capacitance C (F): <span id="valC">0.001</span></label>
+                    <label><span data-i18n="capacitance">Capacitance C (F)</span>: <span id="valC">0.001</span></label>
                     <input type="range" id="sliderC" min="0.0001" max="0.01" step="0.0001" value="0.001">
                 </div>
 
                 <!-- Voltage Input -->
                 <div class="form-group">
-                    <label>Input Voltage (V): <span id="valVin">10</span></label>
+                    <label><span data-i18n="inputVoltage">Input Voltage (V)</span>: <span id="valVin">10</span></label>
                     <input type="range" id="sliderVin" min="1" max="50" step="1" value="10">
                 </div>
 
                 <!-- Analysis Type -->
                 <div class="form-group">
-                    <label for="analysis">Analysis Type</label>
+                    <label for="analysis" data-i18n="analysisType">Analysis Type</label>
                     <select id="analysis">
-                        <option value="transient">Time-Domain Response</option>
-                        <option value="frequency">Frequency Response (Bode)</option>
+                        <option value="transient" data-i18n="transient">Time-Domain Response</option>
+                        <option value="frequency" data-i18n="frequency">Frequency Response (Bode)</option>
                     </select>
                 </div>
 
