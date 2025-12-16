@@ -140,6 +140,21 @@
             margin-right: 4px;
             margin-bottom: 8px;
         }
+
+        .circuit-schematic {
+            height: 300px;
+            width: 100%;
+            background: var(--grid-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        canvas.schematic {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
     </style>
 </head>
 
@@ -227,7 +242,7 @@
             <div>
                 <!-- Circuit Schematic -->
                 <div class="card">
-                    <div class="card-header">Circuit Topology</div>
+                    <div class="card-header" data-i18n="circuitDiagram">Circuit Topology</div>
                     <div class="circuit-schematic">
                         <canvas id="schematicCanvas" class="schematic"></canvas>
                     </div>
@@ -235,16 +250,16 @@
 
                 <!-- Bode Plot & Transient Response -->
                 <div class="card">
-                    <div class="card-header">Frequency Response (Bode Plot)</div>
+                    <div class="card-header" data-i18n="freqResponse">Frequency Response (Bode Plot)</div>
                     <div class="dual-chart">
                         <div>
-                            <div class="chart-label">Magnitude (dB)</div>
+                            <div class="chart-label" data-i18n="magLabel">Magnitude (dB)</div>
                             <div class="chart-container">
                                 <canvas id="magnitudeChart"></canvas>
                             </div>
                         </div>
                         <div>
-                            <div class="chart-label">Phase (degrees)</div>
+                            <div class="chart-label" data-i18n="phaseLabel">Phase (degrees)</div>
                             <div class="chart-container">
                                 <canvas id="phaseChart"></canvas>
                             </div>
@@ -254,7 +269,7 @@
 
                 <!-- Time-Domain Response -->
                 <div class="card">
-                    <div class="card-header">Time-Domain Response</div>
+                    <div class="card-header" data-i18n="timeResponse">Time-Domain Response</div>
                     <div class="chart-container">
                         <canvas id="transientChart"></canvas>
                     </div>
@@ -262,21 +277,21 @@
 
                 <!-- Transfer Function & Equations -->
                 <div class="card">
-                    <div class="card-header">Transfer Function & Differential Equations</div>
+                    <div class="card-header" data-i18n="tfTitle">Transfer Function & Differential Equations</div>
                     <div id="tfDisplay"></div>
                     <div class="info-section">
-                        <h3>Governing Differential Equation</h3>
+                        <h3 data-i18n="governingEq">Governing Differential Equation</h3>
                         <p id="deDisplay"></p>
                     </div>
                     <div id="resonanceSection" class="info-section">
-                        <h3>Resonance Properties</h3>
+                        <h3 data-i18n="resonanceProps">Resonance Properties</h3>
                         <div id="resonanceDisplay"></div>
                     </div>
                 </div>
 
                 <!-- Engineering Application -->
                 <div class="card">
-                    <div class="card-header">Real-World Impact</div>
+                    <div class="card-header" data-i18n="realWorld">Real-World Impact</div>
                     <div id="engineeringApp" class="engineering-box"></div>
                 </div>
             </div>
@@ -794,6 +809,15 @@
                     const key = el.getAttribute('data-i18n');
                     if (t[key]) el.innerHTML = t[key];
                 });
+
+                if (app.magChart) {
+                    app.magChart.options.scales.y.title.text = t.magLabel;
+                    app.magChart.update();
+                }
+                if (app.phaseChart) {
+                    app.phaseChart.options.scales.y.title.text = t.phaseLabel;
+                    app.phaseChart.update();
+                }
             },
 
             updateFormDisplay: () => {

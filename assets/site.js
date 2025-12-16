@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
         pl: {
             skip: 'Przejdź do treści',
             navAria: 'Nawigacja',
-            home: 'Start',
+            home: 'Strona główna',
             back: 'Wstecz',
             backAria: 'Wróć',
             docs: 'Dokumentacja',
