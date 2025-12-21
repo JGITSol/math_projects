@@ -274,10 +274,13 @@ select.pill option {
     flex: 0 0 auto;
 }
 
-.lab-nav select.pill option,
-.lab-nav select.pill optgroup {
-    background: var(--card-bg);
-    color: var(--text-main);
+.theme-toggle-btn {
+    min-width: 72px;
+}
+
+.theme-toggle-btn i {
+    width: 20px;
+    height: 20px;
 }
 
 [data-theme="light"] .pill {

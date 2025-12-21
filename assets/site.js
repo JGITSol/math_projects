@@ -227,11 +227,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem(THEME_KEY, theme);
 
-        const t = getT();
-        const label = theme === 'dark' ? t.light : t.dark;
         document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-            btn.textContent = label;
+            btn.innerHTML = `<i data-lucide="${theme === 'dark' ? 'sun' : 'moon'}"></i>`;
         });
+        if (window.lucide) window.lucide.createIcons();
 
         window.dispatchEvent(new CustomEvent('themechange', { detail: { theme } }));
     };
@@ -379,7 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="lab-current" data-i18n-name="page">${translatePageName()}</span>
         </div>
         <div class="lab-actions">
-            <button class="pill ghost" type="button" data-nav-back data-i18n-ui="back" data-i18n-ui-aria="backAria" aria-label="${getT().backAria}">${getT().back}</button>
             <select class="pill ghost" data-lang-select aria-label="${getT().langAria}">
                 <option value="en">EN</option>
                 <option value="pl">PL</option>
@@ -389,21 +387,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <option value="de">DE</option>
                 <option value="uk">UK</option>
             </select>
-            <button class="pill ghost" type="button" data-theme-toggle data-i18n-ui-aria="themeAria" aria-label="${getT().themeAria}">${theme === 'dark' ? getT().light : getT().dark}</button>
+            <button class="pill ghost theme-toggle-btn" type="button" data-theme-toggle data-i18n-ui-aria="themeAria" aria-label="${getT().themeAria}">
+                <i data-lucide="${theme === 'dark' ? 'sun' : 'moon'}"></i>
+            </button>
             ${guide ? `<a class="pill" href="${guide}" target="_blank" rel="noreferrer" data-i18n-ui="docs" data-i18n-ui-aria="docsAria" aria-label="${getT().docsAria}">${getT().docs}</a>` : ''}
         </div>
     `;
 
-    const backButtons = nav.querySelectorAll('[data-nav-back]');
-    backButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = home;
-            }
-        });
-    });
 
     nav.querySelectorAll('[data-theme-toggle]').forEach(btn => {
         btn.addEventListener('click', () => {
