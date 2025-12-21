@@ -7,14 +7,14 @@
     <title>Derivatives Explorer | Applied Mathematics</title>
     <link rel="stylesheet" href="../assets/site.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
         /* Typography override for project title */
         h1 {
             font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 0.5rem;
         }
-        
+
         #calcCanvas {
             width: 100%;
             height: 100%;
@@ -56,8 +56,8 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <a href="../index.html" class="back-link">
-                    <i data-lucide="arrow-left"></i> Back to Hub
+                <a href="../index.html" class="back-link" aria-label="Back to Labs Home">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Derivatives Explorer</h1>
                 <p class="subtitle" data-i18n="subtitle">Interactive visualization of derivatives and integrals</p>
@@ -67,7 +67,8 @@
             <!-- Control Panel -->
             <div class="card">
                 <div class="card-header">
-                    <i data-lucide="settings-2" style="margin-right: 8px;"></i> <span>Lab Controls</span>
+                    <i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i> <span>Lab
+                        Controls</span>
                 </div>
 
                 <!-- Mode Switcher -->
@@ -75,16 +76,17 @@
                     style="background: var(--surface-soft); padding: 12px; border-radius: 12px; border: 1px solid var(--border);">
                     <label
                         style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: 700;">
-                        <i data-lucide="flask-conical" size="18"></i> Experiment Mode
+                        <i data-lucide="flask-conical" size="18" aria-hidden="true"></i> Experiment Mode
                     </label>
                     <div style="display: flex; gap: 10px;">
                         <button id="modeDeriv" class="pill primary"
                             style="margin: 0; flex: 1; justify-content: center;">
-                            <i data-lucide="trending-up" size="16"></i> <span data-i18n="slope">Slope</span>
+                            <i data-lucide="trending-up" size="16" aria-hidden="true"></i> <span
+                                data-i18n="slope">Slope</span>
                         </button>
-                        <button id="modeInteg" class="pill ghost"
-                            style="margin: 0; flex: 1; justify-content: center;">
-                            <i data-lucide="area-chart" size="16"></i> <span data-i18n="area">Area</span>
+                        <button id="modeInteg" class="pill ghost" style="margin: 0; flex: 1; justify-content: center;">
+                            <i data-lucide="area-chart" size="16" aria-hidden="true"></i> <span
+                                data-i18n="area">Area</span>
                         </button>
                     </div>
                 </div>
@@ -92,7 +94,7 @@
                 <!-- Function Selection -->
                 <div class="form-group">
                     <label for="functionType">Target Function f(x)</label>
-                    <select id="functionType">
+                    <select id="functionType" aria-label="Select Target Function">
                         <option value="quadratic">Quadratic: ax² + bx + c</option>
                         <option value="cubic">Cubic: ax³ + bx + c</option>
                         <option value="sine">Wave: a·sin(bx)</option>
@@ -102,21 +104,25 @@
 
                 <!-- Interactive Slider -->
                 <div class="form-group">
-                    <label><span data-i18n="explorePoint">Explore Point (x)</span>: <span id="valX">0.0</span></label>
-                    <input type="range" id="sliderX" min="-5" max="5" step="0.1" value="0">
+                    <label id="labelSliderX"><span data-i18n="explorePoint">Explore Point (x)</span>: <span
+                            id="valX">0.0</span></label>
+                    <input type="range" id="sliderX" min="-5" max="5" step="0.1" value="0"
+                        aria-labelledby="labelSliderX">
                 </div>
 
                 <!-- Integral Controls (Hidden by default) -->
                 <div id="controlsInteg" class="hidden">
                     <div class="form-group">
-                        <label><span data-i18n="lowerLimit">Lower Limit (a)</span>: <span
+                        <label id="labelLimitA"><span data-i18n="lowerLimit">Lower Limit (a)</span>: <span
                                 id="valLimitA">0</span></label>
-                        <input type="range" id="limitA" min="-5" max="5" step="0.5" value="0">
+                        <input type="range" id="limitA" min="-5" max="5" step="0.5" value="0"
+                            aria-labelledby="labelLimitA">
                     </div>
                     <div class="form-group">
-                        <label><span data-i18n="upperLimit">Upper Limit (b)</span>: <span
+                        <label id="labelLimitB"><span data-i18n="upperLimit">Upper Limit (b)</span>: <span
                                 id="valLimitB">2</span></label>
-                        <input type="range" id="limitB" min="-5" max="5" step="0.5" value="2">
+                        <input type="range" id="limitB" min="-5" max="5" step="0.5" value="2"
+                            aria-labelledby="labelLimitB">
                     </div>
                 </div>
 
@@ -144,8 +150,8 @@
             <!-- Visualization -->
             <div>
                 <div class="card">
-                    <div class="card-header"><i data-lucide="monitor" style="margin-right: 8px;"></i> <span
-                            data-i18n="visualizer">Visualizer</span></div>
+                    <div class="card-header"><i data-lucide="monitor" style="margin-right: 8px;" aria-hidden="true"></i>
+                        <span data-i18n="visualizer">Visualizer</span></div>
                     <div class="chart-container">
                         <canvas id="calcCanvas"></canvas>
                         <div id="visualOverlay" class="visualizer-overlay">
@@ -159,8 +165,8 @@
 
                 <!-- Math Traceability -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation Details</span></div>
+                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"
+                            aria-hidden="true"></i> <span data-i18n="calcDetails">Calculation Details</span></div>
                     <div id="mathTrace" class="formula">
                         <!-- Content populated by JS -->
                     </div>
@@ -168,8 +174,8 @@
 
                 <!-- Explanation -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="brain-circuit" style="margin-right: 8px;"></i> <span
-                            data-i18n="intuition">Intuition</span>
+                    <div class="card-header"><i data-lucide="brain-circuit" style="margin-right: 8px;"
+                            aria-hidden="true"></i> <span data-i18n="intuition">Intuition</span>
                     </div>
                     <div class="info-section">
                         <h3 id="explainTitle">The Slope (Rate of Change)</h3>
@@ -459,7 +465,7 @@
                     // Toggle Buttons
                     const btnDeriv = document.getElementById('modeDeriv');
                     const btnInteg = document.getElementById('modeInteg');
-                    
+
                     if (isDeriv) {
                         btnDeriv.className = 'pill primary';
                         btnInteg.className = 'pill ghost';
@@ -535,7 +541,7 @@
                     ctx.stroke();
 
                     // Axes
-                    ctx.strokeStyle = app.getVar('--text-light') || '#94a3b8'; 
+                    ctx.strokeStyle = app.getVar('--text-light') || '#94a3b8';
                     ctx.lineWidth = 2;
                     ctx.beginPath();
                     // Y Axis (x=0)
@@ -575,7 +581,7 @@
                     }
 
                     // Draw Function
-                    ctx.strokeStyle = app.getVar('--primary') || '#0f766e'; 
+                    ctx.strokeStyle = app.getVar('--primary') || '#0f766e';
                     ctx.lineWidth = 3;
                     ctx.beginPath();
                     // Draw only within view + padding
@@ -607,7 +613,7 @@
                         const x1 = cx - dx; const y1 = cy - slope * dx;
                         const x2 = cx + dx; const y2 = cy + slope * dx;
 
-                        ctx.strokeStyle = app.getVar('--error') || '#ef4444'; 
+                        ctx.strokeStyle = app.getVar('--error') || '#ef4444';
                         ctx.lineWidth = 2;
                         ctx.beginPath();
                         ctx.moveTo(toScreenX(x1), toScreenY(y1));
@@ -715,5 +721,6 @@
 
             window.onload = app.init;
         </script>
-    <script src="../assets/site.js"></script>
+        <script src="../assets/site.js"></script>
+
 </html>

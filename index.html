@@ -229,16 +229,17 @@
     data-tags="Math, Simulation, Calculus, Linear Algebra, Optimization, Signals, Circuits">
     <div class="lab-shell">
         <section class="hero lab-card soft" style="display: block;">
-            <div>
-                <h1 data-i18n="heroTitle">Applied Mathematics Laboratory</h1>
+            <div role="region" aria-labelledby="hero-title">
+                <h1 id="hero-title" data-i18n="heroTitle">Applied Mathematics Laboratory</h1>
                 <p data-i18n="heroDesc">Interactive sandboxes for applied math and engineering fundamentals: calculus,
                     matrix transformations, optimization, statics, Fourier analysis, and circuits (Bode plots).
                     Optimized for mobile and desktop.</p>
-                <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span class="chip" data-i18n="chipInteractive">Interactive Visuals</span>
-                    <span class="chip" data-i18n="chipTheme">Dark/Light Theme</span>
-                    <span class="chip" data-i18n="chipMathjax">MathJax</span>
-                    <span class="chip" data-i18n="chipPortable">Static + Portable</span>
+                <div class="chip-row" style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;" role="list"
+                    aria-label="Key features">
+                    <span class="chip" data-i18n="chipInteractive" role="listitem">Interactive Visuals</span>
+                    <span class="chip" data-i18n="chipTheme" role="listitem">Dark/Light Theme</span>
+                    <span class="chip" data-i18n="chipMathjax" role="listitem">MathJax</span>
+                    <span class="chip" data-i18n="chipPortable" role="listitem">Static + Portable</span>
                 </div>
             </div>
         </section>
@@ -249,61 +250,66 @@
             <span data-i18n="sectionSubtitle">Pick a sandbox to start experimenting</span>
         </div>
 
-        <div class="lab-grid">
-            <div class="lab-card lab-tile">
+        <div class="lab-grid" role="list" aria-label="Labs Collection">
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile1Chip">Calculus · Visualization</div>
                 <h3 data-i18n="tile1Title">The Calculus Lab</h3>
                 <p data-i18n="tile1Desc">Derivatives and integrals with interactive plots and numerical vs analytical
                     comparisons.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project1/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project1/index.html" data-i18n="openLab"
+                        aria-label="Launch The Calculus Lab">Open Lab</a>
                 </div>
-            </div>
-            <div class="lab-card lab-tile">
+            </article>
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile2Chip">Linear Algebra · Geometry</div>
                 <h3 data-i18n="tile2Title">Matrices as Transformations</h3>
                 <p data-i18n="tile2Desc">2D/3D matrix transformations: rotations, scaling, shearing, and geometric
                     intuition.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project2/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project2/index.html" data-i18n="openLab"
+                        aria-label="Launch Matrices as Transformations Lab">Open Lab</a>
                 </div>
-            </div>
-            <div class="lab-card lab-tile">
+            </article>
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile3Chip">Optimization · GD/Adam</div>
                 <h3 data-i18n="tile3Title">Optimization Playground</h3>
                 <p data-i18n="tile3Desc">Gradient descent family and optimizer behavior on 2D surfaces with visual
                     feedback.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project3/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project3/index.html" data-i18n="openLab"
+                        aria-label="Launch Optimization Playground Lab">Open Lab</a>
                 </div>
-            </div>
-            <div class="lab-card lab-tile">
+            </article>
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile4Chip">Statics · Equilibrium</div>
                 <h3 data-i18n="tile4Title">2D Forces & Equilibrium</h3>
                 <p data-i18n="tile4Desc">Force vectors, moments, and equilibrium checks using interactive diagrams.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project4/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project4/index.html" data-i18n="openLab"
+                        aria-label="Launch 2D Forces & Equilibrium Lab">Open Lab</a>
                 </div>
-            </div>
-            <div class="lab-card lab-tile">
+            </article>
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile5Chip">Signals · FFT</div>
                 <h3 data-i18n="tile5Title">Signals & Fourier Playground</h3>
                 <p data-i18n="tile5Desc">Time vs frequency domain intuition, FFT-based spectrum exploration and
                     filtering concepts.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project5/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project5/index.html" data-i18n="openLab"
+                        aria-label="Launch Signals & Fourier Playground Lab">Open Lab</a>
                 </div>
-            </div>
-            <div class="lab-card lab-tile">
+            </article>
+            <article class="lab-card lab-tile" role="listitem">
                 <div class="chip" data-i18n="tile6Chip">Circuits · Bode</div>
                 <h3 data-i18n="tile6Title">Circuit Equations & Bode Plots</h3>
                 <p data-i18n="tile6Desc">RLC circuits, transfer functions, resonance and frequency response visualized
                     with Bode plots.</p>
                 <div class="tile-actions">
-                    <a class="pill primary" href="./project6/index.html" data-i18n="openLab">Open Lab</a>
+                    <a class="pill primary" href="./project6/index.html" data-i18n="openLab"
+                        aria-label="Launch Circuit Equations & Bode Plots Lab">Open Lab</a>
                 </div>
-            </div>
-
+            </article>
         </div>
     </div>
 

@@ -227,8 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem(THEME_KEY, theme);
 
+        const t = getT();
         document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
             btn.innerHTML = `<i data-lucide="${theme === 'dark' ? 'sun' : 'moon'}"></i>`;
+            // Dynamic accessibility label
+            btn.setAttribute('aria-label', t.themeAria);
         });
         if (window.lucide) window.lucide.createIcons();
 

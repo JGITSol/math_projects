@@ -45,8 +45,8 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <a href="../index.html" class="back-link">
-                    <i data-lucide="arrow-left"></i> Back to Hub
+                <a href="../index.html" class="back-link" aria-label="Back to Labs Home">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Optimization & Gradient Descent</h1>
                 <p class="subtitle" data-i18n="subtitle">Visualize how algorithms minimize cost functions in complex 3D
@@ -57,25 +57,24 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
-                        data-i18n="config">Optimization Config</span>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i>
+                    <span data-i18n="config">Optimization Config</span>
                 </div>
 
                 <!-- Optimization Goal -->
                 <div class="form-group">
-                    <label data-i18n="prob">Function Landscape</label>
-                    <select id="functionProb">
+                    <label for="functionProb" data-i18n="prob">Function Landscape</label>
+                    <select id="functionProb" aria-label="Select Function Landscape">
                         <option value="bowl">Simple Bowl (x² + y²)</option>
                         <option value="rosenbrock">Rosenbrock (Banana Valley)</option>
                         <option value="rastrigin">Rastrigin (Many Local Minima)</option>
                         <option value="saddle">Saddle Point (x² - y²)</option>
                     </select>
                 </div>
-
                 <!-- Algorithm -->
                 <div class="form-group">
-                    <label data-i18n="algo">Optimizer Algorithm</label>
-                    <select id="optimizer">
+                    <label for="optimizer" data-i18n="algo">Optimizer Algorithm</label>
+                    <select id="optimizer" aria-label="Select Optimizer Algorithm">
                         <option value="gd">Gradient Descent (Standard)</option>
                         <option value="momentum">Momentum (Heavy Ball)</option>
                         <option value="adam">Adam (Adaptive)</option>
@@ -84,25 +83,31 @@
 
                 <!-- Hyperparameters -->
                 <div class="form-group">
-                    <label><span data-i18n="lr">Learning Rate (α)</span>: <span id="valLR">0.1</span></label>
-                    <input type="range" id="sliderLR" min="0.001" max="1.0" step="0.001" value="0.1">
+                    <label id="labelLR"><span data-i18n="lr">Learning Rate (α)</span>: <span
+                            id="valLR">0.1</span></label>
+                    <input type="range" id="sliderLR" min="0.001" max="1.0" step="0.001" value="0.1"
+                        aria-labelledby="labelLR">
                 </div>
 
                 <div class="form-group" id="groupMomentum">
-                    <label><span data-i18n="momentum">Momentum (β)</span>: <span id="valBeta">0.9</span></label>
-                    <input type="range" id="sliderBeta" min="0" max="0.99" step="0.01" value="0.9">
+                    <label id="labelBeta"><span data-i18n="momentum">Momentum (β)</span>: <span
+                            id="valBeta">0.9</span></label>
+                    <input type="range" id="sliderBeta" min="0" max="0.99" step="0.01" value="0.9"
+                        aria-labelledby="labelBeta">
                 </div>
 
                 <div class="form-group">
                     <label data-i18n="iter">Iterations</label>
                     <div style="display: flex; gap: 8px;">
-                        <button type="button" id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step">Step
+                        <button type="button" id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step"
+                            aria-label="Take one optimization step">Step
                             (+1)</button>
-                        <button type="button" id="runBtn" style="flex: 1; margin: 0;" data-i18n="run">Run
+                        <button type="button" id="runBtn" style="flex: 1; margin: 0;" data-i18n="run"
+                            aria-label="Run optimization automatically">Run
                             (Auto)</button>
                     </div>
-                    <button type="button" id="resetBtn" style="background-color: var(--warning);"
-                        data-i18n="reset">Reset
+                    <button type="button" id="resetBtn" style="background-color: var(--warning);" data-i18n="reset"
+                        aria-label="Reset position to random start">Reset
                         Position</button>
                 </div>
 
@@ -113,8 +118,8 @@
             <!-- Visualization & Analysis -->
             <div>
                 <div class="card">
-                    <div class="card-header"><i data-lucide="activity" style="margin-right: 8px;"></i> <span
-                            data-i18n="vizTitle">Gradient Descent
+                    <div class="card-header"><i data-lucide="activity" style="margin-right: 8px;"
+                            aria-hidden="true"></i> <span data-i18n="vizTitle">Gradient Descent
                             Visualizer</span></div>
                     <div class="chart-container" style="position: relative;">
                         <!-- We will use a Canvas for custom 2D contour/surface rendering -->
@@ -128,8 +133,8 @@
 
                 <!-- Math Traceability -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation Details</span></div>
+                    <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"
+                            aria-hidden="true"></i> <span data-i18n="calcDetails">Calculation Details</span></div>
                     <div id="mathTrace" class="formula">
                         <!-- Content populated by JS -->
                     </div>
@@ -137,16 +142,16 @@
 
                 <!-- Algorithm Details -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="brain-circuit" style="margin-right: 8px;"></i> <span
-                            data-i18n="algoLogic">Algorithm
+                    <div class="card-header"><i data-lucide="brain-circuit" style="margin-right: 8px;"
+                            aria-hidden="true"></i> <span data-i18n="algoLogic">Algorithm
                             Logic</span></div>
                     <div id="algoDisplay"></div>
                 </div>
 
                 <!-- Engineering Application -->
                 <div class="card">
-                    <div class="card-header"><i data-lucide="zap" style="margin-right: 8px;"></i> <span
-                            data-i18n="engApps">Engineering
+                    <div class="card-header"><i data-lucide="zap" style="margin-right: 8px;" aria-hidden="true"></i>
+                        <span data-i18n="engApps">Engineering
                             Applications</span></div>
                     <div class="engineering-box">
                         <h4 data-i18n="why">Why Tolerance & Optimizers Matter?</h4>

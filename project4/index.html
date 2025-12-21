@@ -115,8 +115,8 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <a href="../index.html" class="back-link">
-                    <i data-lucide="arrow-left"></i> Back to Hub
+                <a href="../index.html" class="back-link" aria-label="Back to Labs Home">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">2D Forces & Equilibrium Analyzer</h1>
                 <p class="subtitle" data-i18n="subtitle">Analyze concurrent forces, calculate resultants, and verify
@@ -127,31 +127,38 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
-                        data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i>
+                    <span data-i18n="config">Configuration</span></div>
 
                 <div class="form-group">
-                    <label><span data-i18n="magLabel">Magnitude (N)</span>: <span id="valMag">100</span></label>
-                    <input type="number" id="inputMag" value="100" min="1" max="500" step="10">
+                    <label id="labelMag"><span data-i18n="magLabel">Magnitude (N)</span>: <span
+                            id="valMag">100</span></label>
+                    <input type="number" id="inputMag" value="100" min="1" max="500" step="10"
+                        aria-labelledby="labelMag">
                 </div>
 
                 <div class="form-group">
-                    <label><span data-i18n="angleLabel">Angle (degrees)</span>: <span id="valAngle">0</span></label>
-                    <input type="number" id="inputAngle" value="0" min="0" max="360" step="5">
+                    <label id="labelAngle"><span data-i18n="angleLabel">Angle (degrees)</span>: <span
+                            id="valAngle">0</span></label>
+                    <input type="number" id="inputAngle" value="0" min="0" max="360" step="5"
+                        aria-labelledby="labelAngle">
                 </div>
 
                 <div class="form-group">
-                    <label><span data-i18n="pointXLabel">Point X (m)</span>: <span id="valX">0</span></label>
-                    <input type="number" id="inputX" value="0" min="-10" max="10" step="0.5">
+                    <label id="labelX"><span data-i18n="pointXLabel">Point X (m)</span>: <span
+                            id="valX">0</span></label>
+                    <input type="number" id="inputX" value="0" min="-10" max="10" step="0.5" aria-labelledby="labelX">
                 </div>
 
                 <div class="form-group">
-                    <label><span data-i18n="pointYLabel">Point Y (m)</span>: <span id="valY">0</span></label>
-                    <input type="number" id="inputY" value="0" min="-10" max="10" step="0.5">
+                    <label id="labelY"><span data-i18n="pointYLabel">Point Y (m)</span>: <span
+                            id="valY">0</span></label>
+                    <input type="number" id="inputY" value="0" min="-10" max="10" step="0.5" aria-labelledby="labelY">
                 </div>
 
-                <button id="btnAddForce" data-i18n="addForce">Add Force</button>
-                <button id="btnClear" style="background-color: var(--warning);" data-i18n="clearAll">Clear All</button>
+                <button id="btnAddForce" data-i18n="addForce" aria-label="Add force to the system">Add Force</button>
+                <button id="btnClear" style="background-color: var(--warning);" data-i18n="clearAll"
+                    aria-label="Clear all forces from the system">Clear All</button>
 
                 <div class="badge" data-i18n="badgeForces">Forces</div>
                 <div class="badge" data-i18n="badgeEquilibrium">Equilibrium</div>

@@ -72,8 +72,8 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <a href="../index.html" class="back-link">
-                    <i data-lucide="arrow-left"></i> Back to Hub
+                <a href="../index.html" class="back-link" aria-label="Back to Labs Home">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Circuit Equations & Bode Plots</h1>
                 <p class="subtitle" data-i18n="subtitle">RLC circuits, transfer functions, resonance, and frequency
@@ -84,18 +84,22 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
-                        data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i>
+                    <span data-i18n="config">Configuration</span></div>
 
                 <!-- Circuit Topology -->
                 <div class="form-group">
                     <label data-i18n="topology">Circuit Topology</label>
-                    <div class="tab-container" id="topologyTabs">
+                    <div class="tab-container" id="topologyTabs" role="tablist" aria-label="Circuit Topology Selection">
                         <div class="tab-header">
-                            <button class="tab-btn active" data-value="series" data-i18n="series">Series RLC</button>
-                            <button class="tab-btn" data-value="parallel" data-i18n="parallel">Parallel RLC</button>
-                            <button class="tab-btn" data-value="rl" data-i18n="rl">RL Only</button>
-                            <button class="tab-btn" data-value="rc" data-i18n="rc">RC Only</button>
+                            <button class="tab-btn active" data-value="series" data-i18n="series" role="tab"
+                                aria-selected="true" aria-controls="topologyTabs">Series RLC</button>
+                            <button class="tab-btn" data-value="parallel" data-i18n="parallel" role="tab"
+                                aria-selected="false" aria-controls="topologyTabs">Parallel RLC</button>
+                            <button class="tab-btn" data-value="rl" data-i18n="rl" role="tab" aria-selected="false"
+                                aria-controls="topologyTabs">RL Only</button>
+                            <button class="tab-btn" data-value="rc" data-i18n="rc" role="tab" aria-selected="false"
+                                aria-controls="topologyTabs">RC Only</button>
                         </div>
                     </div>
                 </div>
@@ -103,7 +107,7 @@
                 <!-- Input Signal Type -->
                 <div class="form-group">
                     <label for="inputType" data-i18n="inputSignal">Input Signal</label>
-                    <select id="inputType">
+                    <select id="inputType" aria-label="Select Input Signal Type">
                         <option value="step" data-i18n="step">Step Input</option>
                         <option value="impulse" data-i18n="impulse">Impulse Input</option>
                         <option value="sine" data-i18n="sine">Sinusoid (Sweep)</option>
@@ -112,38 +116,45 @@
 
                 <!-- Resistance -->
                 <div class="form-group">
-                    <label><span data-i18n="resistance">Resistance R (Ω)</span>: <span id="valR">10</span></label>
-                    <input type="range" id="sliderR" min="1" max="100" step="1" value="10">
+                    <label id="labelR"><span data-i18n="resistance">Resistance R (Ω)</span>: <span
+                            id="valR">10</span></label>
+                    <input type="range" id="sliderR" min="1" max="100" step="1" value="10" aria-labelledby="labelR">
                 </div>
 
                 <!-- Inductance -->
                 <div class="form-group" id="groupL">
-                    <label><span data-i18n="inductance">Inductance L (H)</span>: <span id="valL">0.1</span></label>
-                    <input type="range" id="sliderL" min="0.01" max="1" step="0.01" value="0.1">
+                    <label id="labelL"><span data-i18n="inductance">Inductance L (H)</span>: <span
+                            id="valL">0.1</span></label>
+                    <input type="range" id="sliderL" min="0.01" max="1" step="0.01" value="0.1"
+                        aria-labelledby="labelL">
                 </div>
 
                 <!-- Capacitance -->
                 <div class="form-group" id="groupC">
-                    <label><span data-i18n="capacitance">Capacitance C (F)</span>: <span id="valC">0.001</span></label>
-                    <input type="range" id="sliderC" min="0.0001" max="0.01" step="0.0001" value="0.001">
+                    <label id="labelC"><span data-i18n="capacitance">Capacitance C (F)</span>: <span
+                            id="valC">0.001</span></label>
+                    <input type="range" id="sliderC" min="0.0001" max="0.01" step="0.0001" value="0.001"
+                        aria-labelledby="labelC">
                 </div>
 
                 <!-- Voltage Input -->
                 <div class="form-group">
-                    <label><span data-i18n="inputVoltage">Input Voltage (V)</span>: <span id="valVin">10</span></label>
-                    <input type="range" id="sliderVin" min="1" max="50" step="1" value="10">
+                    <label id="labelVin"><span data-i18n="inputVoltage">Input Voltage (V)</span>: <span
+                            id="valVin">10</span></label>
+                    <input type="range" id="sliderVin" min="1" max="50" step="1" value="10" aria-labelledby="labelVin">
                 </div>
 
                 <!-- Analysis Type -->
                 <div class="form-group">
                     <label for="analysis" data-i18n="analysisType">Analysis Type</label>
-                    <select id="analysis">
+                    <select id="analysis" aria-label="Select Analysis Type">
                         <option value="transient" data-i18n="transient">Time-Domain Response</option>
                         <option value="frequency" data-i18n="frequency">Frequency Response (Bode)</option>
                     </select>
                 </div>
 
-                <button id="btnSimulate" data-i18n="simulateBtn">Simulate & Analyze</button>
+                <button id="btnSimulate" data-i18n="simulateBtn"
+                    aria-label="Run circuit simulation and analysis">Simulate & Analyze</button>
 
                 <div class="badge" data-i18n="badgeTF">Transfer Function</div>
                 <div class="badge" data-i18n="badgeBode">Bode Plot</div>

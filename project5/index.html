@@ -55,8 +55,8 @@
     <div class="container">
         <header>
             <div class="header-content">
-                <a href="../index.html" class="back-link">
-                    <i data-lucide="arrow-left"></i> Back to Hub
+                <a href="../index.html" class="back-link" aria-label="Back to Labs Home">
+                    <i data-lucide="arrow-left" aria-hidden="true"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Signals & Fourier Playground</h1>
                 <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and
@@ -67,13 +67,13 @@
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
-                        data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i>
+                    <span data-i18n="config">Configuration</span></div>
 
                 <!-- Signal Type -->
                 <div class="form-group">
                     <label for="signalType" data-i18n="signalType">Signal Type</label>
-                    <select id="signalType">
+                    <select id="signalType" aria-label="Select Signal Waveform Type">
                         <option value="sine" data-i18n="sine">Pure Sine Wave</option>
                         <option value="composite" data-i18n="composite">Composite (Multi-Freq)</option>
                         <option value="square" data-i18n="square">Square Wave</option>
@@ -81,29 +81,34 @@
                         <option value="noise" data-i18n="noise">White Noise</option>
                     </select>
                 </div>
-
                 <!-- Frequency 1 -->
                 <div class="form-group">
-                    <label><span data-i18n="freq1">Primary Freq (Hz)</span>: <span id="valFreq1">10</span></label>
-                    <input type="range" id="sliderFreq1" min="1" max="50" step="1" value="10">
+                    <label id="labelFreq1"><span data-i18n="freq1">Primary Freq (Hz)</span>: <span
+                            id="valFreq1">10</span></label>
+                    <input type="range" id="sliderFreq1" min="1" max="50" step="1" value="10"
+                        aria-labelledby="labelFreq1">
                 </div>
 
                 <!-- Frequency 2 (for composite) -->
                 <div class="form-group" id="groupFreq2">
-                    <label><span data-i18n="freq2">Secondary Freq (Hz)</span>: <span id="valFreq2">20</span></label>
-                    <input type="range" id="sliderFreq2" min="1" max="50" step="1" value="20">
+                    <label id="labelFreq2"><span data-i18n="freq2">Secondary Freq (Hz)</span>: <span
+                            id="valFreq2">20</span></label>
+                    <input type="range" id="sliderFreq2" min="1" max="50" step="1" value="20"
+                        aria-labelledby="labelFreq2">
                 </div>
 
                 <!-- Amplitude -->
                 <div class="form-group">
-                    <label><span data-i18n="amplitude">Amplitude</span>: <span id="valAmplitude">1.0</span></label>
-                    <input type="range" id="sliderAmplitude" min="0.1" max="2" step="0.1" value="1">
+                    <label id="labelAmplitude"><span data-i18n="amplitude">Amplitude</span>: <span
+                            id="valAmplitude">1.0</span></label>
+                    <input type="range" id="sliderAmplitude" min="0.1" max="2" step="0.1" value="1"
+                        aria-labelledby="labelAmplitude">
                 </div>
 
                 <!-- Filter Type -->
                 <div class="form-group">
                     <label for="filterType" data-i18n="filterType">Filter Type</label>
-                    <select id="filterType">
+                    <select id="filterType" aria-label="Select Signal Filter Type">
                         <option value="none" data-i18n="none">No Filter</option>
                         <option value="lowpass" data-i18n="lowpass">Low-Pass (Cut High)</option>
                         <option value="highpass" data-i18n="highpass">High-Pass (Cut Low)</option>
@@ -113,11 +118,14 @@
 
                 <!-- Filter Cutoff -->
                 <div class="form-group" id="groupCutoff">
-                    <label><span data-i18n="cutoff">Cutoff Freq (Hz)</span>: <span id="valCutoff">15</span></label>
-                    <input type="range" id="sliderCutoff" min="1" max="40" step="1" value="15">
+                    <label id="labelCutoff"><span data-i18n="cutoff">Cutoff Freq (Hz)</span>: <span
+                            id="valCutoff">15</span></label>
+                    <input type="range" id="sliderCutoff" min="1" max="40" step="1" value="15"
+                        aria-labelledby="labelCutoff">
                 </div>
 
-                <button id="btnUpdate" data-i18n="updateBtn">Update Visualization</button>
+                <button id="btnUpdate" data-i18n="updateBtn" aria-label="Update signal visualization">Update
+                    Visualization</button>
 
                 <div class="badge" data-i18n="badgeSignal">Signal</div>
                 <div class="badge" data-i18n="badgeFourier">Fourier</div>
