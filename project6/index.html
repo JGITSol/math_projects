@@ -10,155 +10,65 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../assets/site.css">
     <style>
-        /* Control Panel Styles matching Projects 1-3 */
-        .grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button:not(.pill):not(.tab-btn) {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:not(.pill):not(.tab-btn):hover {
-            background-color: var(--primary-light);
-        }
-
-        button:not(.pill):not(.tab-btn):active {
-            background-color: var(--primary-dark);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
+        /* Typography override for project title */
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
 
         .circuit-schematic {
             height: 300px;
             width: 100%;
             background: var(--grid-bg);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
         }
-        
+
         canvas.schematic {
             width: 100%;
             height: 100%;
             display: block;
         }
+
+        .dual-chart {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dual-chart {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin-bottom: 12px;
+            background: var(--surface-soft);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border);
+        }
     </style>
 </head>
 
-<body data-lab-name="Math Lab" data-page-name="Circuit Equations & Bode Plots" data-home="../index.html" class="project-page">
+<body data-lab-name="Math Lab" data-page-name="Circuit Equations & Bode Plots" data-home="../index.html"
+    class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
@@ -166,14 +76,16 @@
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Circuit Equations & Bode Plots</h1>
-                <p class="subtitle" data-i18n="subtitle">RLC circuits, transfer functions, resonance, and frequency response analysis</p>
+                <p class="subtitle" data-i18n="subtitle">RLC circuits, transfer functions, resonance, and frequency
+                    response analysis</p>
             </div>
         </header>
 
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
+                        data-i18n="config">Configuration</span></div>
 
                 <!-- Circuit Topology -->
                 <div class="form-group">
@@ -649,13 +561,13 @@
             evaluateTF: (tf, w) => {
                 // Numerator B(s) = b[0]*s^m + ... (Here b is just [1], so B(s) = 1)
                 // Denominator A(s) = a[0]*s^n + a[1]*s^(n-1) + ... + a[n]
-                
+
                 // Evaluate Polynomial P(s) at s = jw
                 const evalPoly = (coeffs, w) => {
                     let real = 0;
                     let imag = 0;
                     const n = coeffs.length - 1;
-                    
+
                     for (let i = 0; i <= n; i++) {
                         const power = n - i;
                         const coeff = coeffs[i];
@@ -784,7 +696,7 @@
                         app.update();
                     }
                 });
-                
+
                 window.addEventListener('langchange', (e) => {
                     app.lang = e.detail.lang;
                     app.updateTranslations();
@@ -864,10 +776,10 @@
 
             updateChartTheme: () => {
                 const colors = app.getChartColors();
-                
+
                 const updateChart = (chart) => {
                     if (!chart) return;
-                    
+
                     if (chart.options.scales.x) {
                         chart.options.scales.x.title.color = colors.text;
                         chart.options.scales.x.grid.color = colors.grid;
@@ -878,7 +790,7 @@
                         chart.options.scales.y.grid.color = colors.grid;
                         chart.options.scales.y.ticks.color = colors.text;
                     }
-                    
+
                     if (chart.options.plugins.legend) {
                         chart.options.plugins.legend.labels.color = colors.text;
                     }
@@ -1074,7 +986,7 @@
 
                 if (t === 'series') {
                     ctx.fillText(translations[app.lang]?.series || 'Series RLC Circuit', 20, 30);
-                    
+
                     // Layout: Source Left, R Top, L Top, C Right (Loop)
                     // Let's do a simple rectangular loop
                     const lx = cx - 100;
@@ -1111,17 +1023,17 @@
 
                 } else if (t === 'parallel') {
                     ctx.fillText(translations[app.lang]?.parallel || 'Parallel RLC Circuit', 20, 30);
-                    
+
                     const lx = cx - 120;
                     const rx = cx + 120;
                     const ty = cy - 60;
                     const by = cy + 60;
-                    
+
                     // Wires
                     ctx.beginPath();
                     ctx.moveTo(lx, ty); ctx.lineTo(rx, ty); // Top Rail
                     ctx.moveTo(lx, by); ctx.lineTo(rx, by); // Bottom Rail
-                    
+
                     // Vertical branches
                     ctx.moveTo(lx, ty); ctx.lineTo(lx, by); // Source
                     ctx.moveTo(cx - 40, ty); ctx.lineTo(cx - 40, by); // R
@@ -1150,7 +1062,7 @@
 
                 } else if (t === 'rl') {
                     ctx.fillText(translations[app.lang]?.rl || 'RL Circuit', 20, 30);
-                    
+
                     const lx = cx - 80;
                     const rx = cx + 80;
                     const ty = cy - 60;
@@ -1178,7 +1090,7 @@
 
                 } else if (t === 'rc') {
                     ctx.fillText(translations[app.lang]?.rc || 'RC Circuit', 20, 30);
-                    
+
                     const lx = cx - 80;
                     const rx = cx + 80;
                     const ty = cy - 60;

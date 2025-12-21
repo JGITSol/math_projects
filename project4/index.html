@@ -10,140 +10,108 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../assets/site.css">
     <style>
-        /* Control Panel Styles matching Projects 1-3 */
-        .grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 24px;
-            align-items: start;
+        /* Typography override for project title */
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
 
-        @media (max-width: 900px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
+        .forces-list {
+            margin-top: 12px;
+            max-height: 200px;
+            overflow-y: auto;
             border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface-soft);
         }
 
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
+        .force-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
-            width: 100%;
             padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
             color: var(--text-main);
         }
 
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        .force-item:last-child {
+            border-bottom: none;
         }
 
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button:not(.pill):not(.tab-btn) {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:not(.pill):not(.tab-btn):hover {
-            background-color: var(--primary-light);
-        }
-
-        button:not(.pill):not(.tab-btn):active {
-            background-color: var(--primary-dark);
-        }
-        
-        .badge {
-            display: inline-block;
+        .force-item button {
+            width: auto;
             padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
+            margin: 0;
+            background: var(--error);
             font-size: 0.75rem;
+        }
+
+        .equilibrium-status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
             font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .equilibrium-status.balanced {
+            background: rgba(22, 163, 74, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .equilibrium-status.unbalanced {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            background: var(--grid-bg);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .result-item {
+            padding: 12px;
+            background: var(--card-alt);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .result-item strong {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .result-item span {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
         }
     </style>
 </head>
 
-<body data-lab-name="Math Lab" data-page-name="2D Forces & Equilibrium Analyzer" data-home="../index.html" class="project-page">
+<body data-lab-name="Math Lab" data-page-name="2D Forces & Equilibrium Analyzer" data-home="../index.html"
+    class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
@@ -151,14 +119,16 @@
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">2D Forces & Equilibrium Analyzer</h1>
-                <p class="subtitle" data-i18n="subtitle">Analyze concurrent forces, calculate resultants, and verify equilibrium conditions</p>
+                <p class="subtitle" data-i18n="subtitle">Analyze concurrent forces, calculate resultants, and verify
+                    equilibrium conditions</p>
             </div>
         </header>
 
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
+                        data-i18n="config">Configuration</span></div>
 
                 <div class="form-group">
                     <label><span data-i18n="magLabel">Magnitude (N)</span>: <span id="valMag">100</span></label>
@@ -206,18 +176,14 @@
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <h2 data-i18n="vizTitle">Force Diagram</h2>
-                        <div style="font-size: 0.9rem; color: var(--text-light);">
-                            <span style="color:var(--primary)">● Force</span>
-                            <span style="color:var(--error)">● Resultant</span>
-                            <span style="color:var(--success)">● Equilibrant</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); display: flex; gap: 12px;">
+                            <span style="color:var(--primary); font-weight: 600;">● Force</span>
+                            <span style="color:var(--error); font-weight: 600;">● Resultant</span>
+                            <span style="color:var(--success); font-weight: 600;">● Equilibrant</span>
                         </div>
                     </div>
-                    <!-- Canvas -->
-                    <div class="card">
-                        <div class="card-header">Force Diagram (Free-Body Diagram)</div>
-                        <div class="canvas-container" style="height: 450px;">
-                            <canvas id="forceCanvas"></canvas>
-                        </div>
+                    <div class="canvas-container" style="height: 500px;">
+                        <canvas id="forceCanvas"></canvas>
                     </div>
                 </div>
 
@@ -625,7 +591,7 @@
                     app.state.theme = e.detail.theme;
                     app.draw();
                 });
-                
+
                 window.addEventListener('langchange', (e) => {
                     app.state.lang = e.detail.lang;
                     // Need to manually update translations here since setLang is gone
@@ -642,7 +608,7 @@
                 // Initial sync
                 app.state.theme = document.documentElement.getAttribute('data-theme') || 'light';
                 app.state.lang = document.documentElement.getAttribute('lang') || 'en';
-                
+
                 // Initial translation apply
                 const dict = translations[app.state.lang] || translations.en;
                 document.querySelectorAll('[data-i18n]').forEach(el => {

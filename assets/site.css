@@ -26,12 +26,12 @@
     --primary-light: #0369a1;
     --accent: #f97316;
     --surface: #f8fafc;
-    --surface-soft: #eef2ff;
+    --surface-soft: #f1f5f9;
     --card-bg: #ffffff;
     --card-alt: #f1f5f9;
     --text-main: #0f172a;
     --text-light: #475569;
-    --border: rgba(15, 23, 42, 0.10);
+    --border: rgba(15, 23, 42, 0.12);
     --shadow: 0 20px 60px rgba(2, 6, 23, 0.12);
     --success: #16a34a;
     --warning: #d97706;
@@ -43,7 +43,9 @@
     box-sizing: border-box;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     background-color: var(--input-bg);
     color: var(--text-main);
     border: 1px solid var(--border);
@@ -53,7 +55,9 @@ input, select, textarea {
     font-size: 0.9rem;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
     outline: 2px solid var(--primary);
     border-color: transparent;
 }
@@ -101,7 +105,7 @@ body {
 [data-theme="light"] body {
     background: radial-gradient(circle at 15% 20%, rgba(14, 165, 233, 0.18), transparent 35%),
         radial-gradient(circle at 85% 10%, rgba(249, 115, 22, 0.14), transparent 30%),
-        linear-gradient(135deg, #f8fafc 0%, #eef2ff 55%, #f1f5f9 100%);
+        linear-gradient(135deg, #f8fafc 0%, #f1f5f9 55%, #f1f5f9 100%);
 }
 
 a {
@@ -139,7 +143,7 @@ a:hover {
 }
 
 [data-theme="light"] .lab-card.soft {
-    background: linear-gradient(145deg, rgba(14, 165, 233, 0.10), rgba(255, 255, 255, 0.75));
+    background: linear-gradient(145deg, rgba(14, 165, 233, 0.08), rgba(255, 255, 255, 0.8));
     border-color: var(--border);
 }
 
@@ -197,7 +201,7 @@ a:hover {
 .lab-current {
     color: var(--primary-light);
     font-weight: 600;
-    display: none; /* Hide current page name on mobile/small screens if needed, or keep it */
+    display: none;
 }
 
 @media (min-width: 768px) {
@@ -252,10 +256,10 @@ select.pill {
     font: inherit;
     appearance: none;
     -webkit-appearance: none;
-    padding-right: 16px; /* Balance padding since arrow is removed/hidden */
+    padding-right: 16px;
     text-align: center;
     text-align-last: center;
-    background-color: transparent; /* Override global select bg */
+    background-color: transparent;
 }
 
 select.pill option {
@@ -433,12 +437,10 @@ h4,
     opacity: 1;
 }
 
-.lab-tile > * {
+.lab-tile>* {
     position: relative;
     z-index: 1;
 }
-
-
 
 .chip {
     display: inline-flex;
@@ -446,9 +448,15 @@ h4,
     gap: 6px;
     padding: 6px 10px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(148, 163, 184, 0.12);
     color: var(--text-light);
     font-size: 0.85rem;
+    font-weight: 500;
+}
+
+[data-theme="light"] .chip {
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--text-light);
 }
 
 h1,
@@ -519,17 +527,20 @@ header h1,
     body {
         padding: 16px 14px 90px;
     }
+
     .lab-nav {
         flex-direction: column;
         align-items: flex-start;
         gap: 10px;
     }
+
     .hero {
         grid-template-columns: 1fr;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     *,
     *::before,
     *::after {
@@ -582,8 +593,15 @@ header h1,
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Project Control Panel Styles */
@@ -658,7 +676,7 @@ input[type='range']::-webkit-slider-thumb {
     background: var(--primary-light);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    margin-top: -6px; /* Adjust for track height */
+    margin-top: -6px;
 }
 
 input[type='range']::-moz-range-thumb {
@@ -679,7 +697,6 @@ input[type='range']::-webkit-slider-runnable-track {
     border-radius: 3px;
 }
 
-/* Primary Action Button */
 button:not(.pill):not(.tab-btn) {
     width: 100%;
     padding: 10px 16px;
@@ -801,3 +818,45 @@ button:not(.pill):not(.tab-btn):active {
     background: var(--card-alt);
 }
 
+/* Lab Utilities */
+.formula {
+    background: var(--surface-soft);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    margin: 12px 0;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    color: var(--text-main);
+}
+
+.comparison {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.comparison-item {
+    padding: 14px;
+    background: var(--card-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 0.85rem;
+}
+
+.comparison-item strong {
+    color: var(--primary);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.text-on-primary {
+    color: #061020 !important;
+}

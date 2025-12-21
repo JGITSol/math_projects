@@ -9,149 +9,10 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--surface);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* Typography override for project title */
         h1 {
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:hover {
-            background-color: var(--primary-light);
-        }
-
-        button:active {
-            background-color: var(--primary-dark);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
 
         .canvas-container {
@@ -160,119 +21,63 @@
             height: 450px;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             margin-bottom: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
         }
 
         canvas {
             display: block;
             width: 100%;
             height: 100%;
-        }
-
-        .info-section {
-            background-color: var(--surface);
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-
-        .info-section h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.95rem;
-            color: var(--primary-dark);
-        }
-
-        .info-section p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.6;
+            cursor: move;
         }
 
         .matrix-display {
-            background: var(--surface);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            margin: 8px 0;
+            background: var(--surface-soft);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            margin: 12px 0;
             text-align: center;
             border: 1px solid var(--border);
+            color: var(--text-main);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .properties-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
-            margin-top: 12px;
+            margin-top: 14px;
         }
 
         .property-item {
-            padding: 12px;
-            background: var(--card-bg);
+            padding: 14px;
+            background: var(--card-alt);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.8rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            transition: transform 0.2s;
+        }
+
+        .property-item:hover {
+            transform: translateY(-2px);
         }
 
         .property-item strong {
             color: var(--primary);
             display: block;
-            margin-bottom: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
-        }
-
-        .engineering-box {
-            background: var(--surface);
-            border: 2px solid var(--primary-light);
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .engineering-box h4 {
-            margin: 0 0 8px 0;
-            color: var(--primary-dark);
-            font-size: 0.95rem;
-        }
-
-        .engineering-box p {
-            margin: 0 0 8px 0;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        .value-display {
+            margin-bottom: 6px;
             font-size: 0.9rem;
-            padding: 8px 12px;
-            background: var(--surface);
-            border-radius: 6px;
-            margin: 4px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--primary-dark);
-        }
-
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 
-<body data-lab-name="Math Lab" data-page-name="Matrices as Transformations" data-home="../index.html" class="project-page">
+<body data-lab-name="Math Lab" data-page-name="Matrices as Transformations" data-home="../index.html"
+    class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
@@ -280,7 +85,8 @@
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Matrices as Transformations</h1>
-                <p class="subtitle" data-i18n="subtitle">Visualize 2D/3D matrix transformations: rotations, scalings, projections, and engineering applications</p>
+                <p class="subtitle" data-i18n="subtitle">Visualize 2D/3D matrix transformations: rotations, scalings,
+                    projections, and engineering applications</p>
             </div>
         </header>
 
@@ -353,10 +159,8 @@
                 <!-- Math Traceability -->
                 <div class="card">
                     <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation
-                            Details</span></div>
-                    <div id="mathTrace" class="matrix-display"
-                        style="text-align: left; font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main);">
+                            data-i18n="calcDetails">Calculation Details</span></div>
+                    <div id="mathTrace" class="formula">
                         <!-- Content populated by JS -->
                     </div>
                 </div>
@@ -394,9 +198,8 @@
                 <!-- Engineering Application -->
                 <div class="card">
                     <div class="card-header"><i data-lucide="zap" style="margin-right: 8px;"></i> <span
-                            data-i18n="engApps">Engineering
-                            Applications</span></div>
-                    <div id="contextTabs" class="tab-header" style="margin-bottom: 16px;">
+                            data-i18n="engApps">Engineering Applications</span></div>
+                    <div id="contextTabs" class="tab-header">
                         <button class="tab-btn active" data-value="generic" data-i18n="c_generic">Generic</button>
                         <button class="tab-btn" data-value="robotics" data-i18n="c_robotics">Robotics</button>
                         <button class="tab-btn" data-value="circuit" data-i18n="c_circuit">Circuits</button>
@@ -879,7 +682,7 @@
                 app.ctx.fillStyle = isDark ? 'rgba(34, 211, 238, 0.3)' : 'rgba(8, 145, 178, 0.2)'; // More opaque fill
                 app.ctx.strokeStyle = colors.transBasis2;
                 app.ctx.lineWidth = 4; // Thicker line
-                
+
                 // Add Glow Effect
                 app.ctx.shadowBlur = 15;
                 app.ctx.shadowColor = colors.transBasis2;
@@ -899,7 +702,7 @@
                 app.ctx.closePath();
                 app.ctx.fill(); // Fill the square
                 app.ctx.stroke();
-                
+
                 // Reset Shadow
                 app.ctx.shadowBlur = 0;
 
@@ -950,10 +753,10 @@
                 app.ctx.textAlign = 'left';
                 app.ctx.textBaseline = 'top';
                 app.ctx.font = 'bold 14px Inter';
-                
+
                 app.ctx.fillStyle = colors.origBasis;
                 app.ctx.fillText('Original (orange)', 15, 15);
-                
+
                 app.ctx.fillStyle = colors.textHighlight;
                 app.ctx.fillText('Transformed (color)', 15, 35);
             },

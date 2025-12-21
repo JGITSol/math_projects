@@ -9,255 +9,45 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--surface);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.5;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* Typography override for project title */
         h1 {
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
-
-        .subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
+        
+        #calcCanvas {
             width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        .visualizer-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--card-bg);
+            color: var(--text-main);
             padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:hover {
-            background-color: var(--primary-light);
-        }
-
-        button:active {
-            background-color: var(--primary-dark);
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            margin-bottom: 24px;
-        }
-
-        .info-section {
-            background-color: var(--surface);
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-
-        .info-section h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.95rem;
-            color: var(--primary-dark);
-        }
-
-        .info-section p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .formula {
-            background: var(--surface);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            margin: 8px 0;
-            overflow-x: auto;
-        }
-
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .comparison-item {
-            padding: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-
-        .comparison-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
-        }
-
-        .engineering-box {
-            background: var(--surface);
-            border: 2px solid var(--primary-light);
-            padding: 16px;
             border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .engineering-box h4 {
-            margin: 0 0 8px 0;
-            color: var(--primary-dark);
-            font-size: 0.95rem;
-        }
-
-        .engineering-box p {
-            margin: 0;
+            pointer-events: none;
+            border: 1px solid var(--border);
             font-size: 0.85rem;
-            color: var(--text-main);
-            line-height: 1.6;
+            box-shadow: var(--shadow);
+            z-index: 10;
         }
 
-        .value-display {
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            background: var(--surface);
+        .scroll-hint {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            background: var(--card-bg);
+            opacity: 0.9;
+            padding: 6px 10px;
             border-radius: 6px;
-            margin: 4px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--primary-dark);
-        }
-
-        .hidden {
-            display: none;
+            border: 1px solid var(--border);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -282,20 +72,19 @@
 
                 <!-- Mode Switcher -->
                 <div class="form-group"
-                    style="background: var(--surface); padding: 8px; border-radius: 6px; border: 1px solid var(--border);">
+                    style="background: var(--surface-soft); padding: 12px; border-radius: 12px; border: 1px solid var(--border);">
                     <label
-                        style="color: var(--primary-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
-                        <i data-lucide="flask-conical" size="16"></i> Experiment Mode
+                        style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; font-weight: 700;">
+                        <i data-lucide="flask-conical" size="18"></i> Experiment Mode
                     </label>
-                    <div style="display: flex; gap: 8px;">
-                        <button id="modeDeriv"
-                            style="margin: 0; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <i data-lucide="trending-up" size="16"></i> <span
-                                style="color: var(--text-on-primary)">Slope</span>
+                    <div style="display: flex; gap: 10px;">
+                        <button id="modeDeriv" class="pill primary"
+                            style="margin: 0; flex: 1; justify-content: center;">
+                            <i data-lucide="trending-up" size="16"></i> <span data-i18n="slope">Slope</span>
                         </button>
-                        <button id="modeInteg"
-                            style="margin: 0; background-color: var(--text-light); display: flex; align-items: center; justify-content: center; gap: 6px;">
-                            <i data-lucide="area-chart" size="16"></i> Area
+                        <button id="modeInteg" class="pill ghost"
+                            style="margin: 0; flex: 1; justify-content: center;">
+                            <i data-lucide="area-chart" size="16"></i> <span data-i18n="area">Area</span>
                         </button>
                     </div>
                 </div>
@@ -359,12 +148,10 @@
                             data-i18n="visualizer">Visualizer</span></div>
                     <div class="chart-container">
                         <canvas id="calcCanvas"></canvas>
-                        <div id="visualOverlay"
-                            style="position: absolute; top: 10px; right: 10px; background: var(--card-bg); color: var(--text-main); padding: 8px; border-radius: 4px; pointer-events: none; border: 1px solid var(--border); font-size: 0.85rem;">
+                        <div id="visualOverlay" class="visualizer-overlay">
                             <span id="overlayText">Slope = 0.0</span>
                         </div>
-                        <div style="position: absolute; bottom: 10px; right: 10px; font-size: 0.75rem; color: var(--text-light); background: var(--card-bg); opacity: 0.8; padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border);"
-                            data-i18n="scrollZoom">
+                        <div class="scroll-hint" data-i18n="scrollZoom">
                             Scroll to Zoom • Drag to Pan
                         </div>
                     </div>
@@ -373,10 +160,8 @@
                 <!-- Math Traceability -->
                 <div class="card">
                     <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation
-                            Details</span></div>
-                    <div id="mathTrace" class="formula"
-                        style="font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main);">
+                            data-i18n="calcDetails">Calculation Details</span></div>
+                    <div id="mathTrace" class="formula">
                         <!-- Content populated by JS -->
                     </div>
                 </div>
@@ -672,8 +457,16 @@
                     const isDeriv = m === 'derivative';
 
                     // Toggle Buttons
-                    document.getElementById('modeDeriv').style.backgroundColor = isDeriv ? 'var(--primary)' : 'var(--text-light)';
-                    document.getElementById('modeInteg').style.backgroundColor = isDeriv ? 'var(--text-light)' : 'var(--primary)';
+                    const btnDeriv = document.getElementById('modeDeriv');
+                    const btnInteg = document.getElementById('modeInteg');
+                    
+                    if (isDeriv) {
+                        btnDeriv.className = 'pill primary';
+                        btnInteg.className = 'pill ghost';
+                    } else {
+                        btnDeriv.className = 'pill ghost';
+                        btnInteg.className = 'pill primary';
+                    }
 
                     // Toggle Controls
                     document.getElementById('controlsDeriv').classList.toggle('hidden', !isDeriv);

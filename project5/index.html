@@ -10,140 +10,48 @@
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <link rel="stylesheet" href="../assets/site.css">
     <style>
-        /* Control Panel Styles matching Projects 1-3 */
-        .grid {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 24px;
-            align-items: start;
+        /* Typography override for project title */
+        h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
 
-        @media (max-width: 900px) {
-            .grid {
+        .dual-chart {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dual-chart {
                 grid-template-columns: 1fr;
             }
         }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .card-header {
-            font-size: 1.1rem;
+        .chart-label {
+            font-size: 0.8rem;
             font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button:not(.pill):not(.tab-btn) {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:not(.pill):not(.tab-btn):hover {
-            background-color: var(--primary-light);
-        }
-
-        button:not(.pill):not(.tab-btn):active {
-            background-color: var(--primary-dark);
-        }
-        
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
+            color: var(--text-light);
+            text-transform: uppercase;
             margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 12px;
+            background: var(--surface-soft);
+            border-radius: 8px;
+            padding: 8px;
+            border: 1px solid var(--border);
         }
     </style>
 </head>
 
-<body data-lab-name="Math Lab" data-page-name="Signals & Fourier Playground" data-home="../index.html" class="project-page">
+<body data-lab-name="Math Lab" data-page-name="Signals & Fourier Playground" data-home="../index.html"
+    class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
@@ -151,14 +59,16 @@
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Signals & Fourier Playground</h1>
-                <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and signal filtering in real-world applications</p>
+                <p class="subtitle" data-i18n="subtitle">Explore time-domain signals, frequency-domain transforms, and
+                    signal filtering in real-world applications</p>
             </div>
         </header>
 
         <div class="grid">
             <!-- Control Panel -->
             <div class="card">
-                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span data-i18n="config">Configuration</span></div>
+                <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;"></i> <span
+                        data-i18n="config">Configuration</span></div>
 
                 <!-- Signal Type -->
                 <div class="form-group">
@@ -723,7 +633,7 @@
                     app.updateChartTheme();
                     app.update(); // Re-render charts
                 });
-                
+
                 window.addEventListener('langchange', (e) => {
                     app.lang = e.detail.lang;
                     app.updateTranslations();
@@ -760,7 +670,7 @@
                 let r = 0, g = 0, b = 0;
                 // Handle rgb/rgba strings
                 if (hex.startsWith('rgb')) return hex.replace(')', `, ${alpha})`).replace('rgb', 'rgba');
-                
+
                 if (hex.length === 4) {
                     r = parseInt(hex[1] + hex[1], 16);
                     g = parseInt(hex[2] + hex[2], 16);
@@ -779,7 +689,7 @@
                 const primary = app.getVar('--primary');
                 const accent = app.getVar('--accent');
                 const success = app.getVar('--success');
-                
+
                 return {
                     text: app.getVar('--text-light'),
                     grid: app.getVar('--border'),
@@ -794,10 +704,10 @@
 
             updateChartTheme: () => {
                 const colors = app.getChartColors();
-                
+
                 const updateChart = (chart) => {
                     if (!chart) return;
-                    
+
                     if (chart.options.scales.x) {
                         chart.options.scales.x.title.color = colors.text;
                         chart.options.scales.x.grid.color = colors.grid;
@@ -808,7 +718,7 @@
                         chart.options.scales.y.grid.color = colors.grid;
                         chart.options.scales.y.ticks.color = colors.text;
                     }
-                    
+
                     if (chart.options.plugins.legend) {
                         chart.options.plugins.legend.labels.color = colors.text;
                     }

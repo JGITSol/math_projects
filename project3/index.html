@@ -10,272 +10,38 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--surface);
-            color: var(--text-main);
-            margin: 0;
-            padding: 40px 20px;
-            line-height: 1.5;
-            overscroll-behavior: none;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* Typography override for project title */
         h1 {
-            color: var(--primary-dark);
-            font-size: 2.5rem;
-            margin: 0;
-            font-weight: 700;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: 380px 1fr;
-            gap: 24px;
-            align-items: start;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
+        .opt-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background: var(--card-bg);
-            border-radius: 12px;
-            padding: 24px;
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            z-index: 10;
+            pointer-events: none;
         }
 
-        .card-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid var(--surface);
-            padding-bottom: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        label {
+        #optCanvas {
+            width: 100%;
+            height: 100%;
             display: block;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: var(--text-main);
-        }
-
-        input[type="number"],
-        select:not(.pill) {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            box-sizing: border-box;
-            transition: border-color 0.2s;
-            background-color: var(--input-bg);
-            color: var(--text-main);
-        }
-
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: 3px;
-            background: var(--border);
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: var(--primary-light);
-            cursor: pointer;
-            border: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            width: 100%;
-            padding: 10px 16px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 8px;
-        }
-
-        button:hover {
-            background-color: var(--primary-light);
-        }
-
-        button:active {
-            background-color: var(--primary-dark);
-        }
-
-        .chart-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            margin-bottom: 24px;
-        }
-
-        .info-section {
-            background-color: var(--surface);
-            border-left: 4px solid var(--primary);
-            padding: 16px;
-            border-radius: 6px;
-            margin-bottom: 16px;
-        }
-
-        .info-section h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.95rem;
-            color: var(--primary-dark);
-        }
-
-        .info-section p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .formula {
-            background: var(--surface);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: 'Courier New', monospace;
-            margin: 8px 0;
-            overflow-x: auto;
-        }
-
-        .comparison {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .comparison-item {
-            padding: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.8rem;
-        }
-
-        .comparison-item strong {
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background-color: var(--surface);
-            color: var(--primary-dark);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 4px;
-            margin-bottom: 8px;
-        }
-
-        .engineering-box {
-            background: var(--surface);
-            border: 2px solid var(--primary-light);
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 16px;
-        }
-
-        .engineering-box h4 {
-            margin: 0 0 8px 0;
-            color: var(--primary-dark);
-            font-size: 0.95rem;
-        }
-
-        .engineering-box p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
-        .value-display {
-            font-size: 0.9rem;
-            padding: 8px 12px;
-            background: var(--surface);
-            border-radius: 6px;
-            margin: 4px 0;
-            font-family: 'Courier New', monospace;
-            color: var(--primary-dark);
-        }
-
-        .shaded-region {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 
-<body data-lab-name="Math Lab" data-page-name="Optimization & Gradient Descent" data-home="../index.html" class="project-page">
+<body data-lab-name="Math Lab" data-page-name="Optimization & Gradient Descent" data-home="../index.html"
+    class="project-page">
     <div class="container">
         <header>
             <div class="header-content">
@@ -283,7 +49,8 @@
                     <i data-lucide="arrow-left"></i> Back to Hub
                 </a>
                 <h1 data-i18n="title">Optimization & Gradient Descent</h1>
-                <p class="subtitle" data-i18n="subtitle">Visualize how algorithms minimize cost functions in complex 3D landscapes.</p>
+                <p class="subtitle" data-i18n="subtitle">Visualize how algorithms minimize cost functions in complex 3D
+                    landscapes.</p>
             </div>
         </header>
 
@@ -329,10 +96,13 @@
                 <div class="form-group">
                     <label data-i18n="iter">Iterations</label>
                     <div style="display: flex; gap: 8px;">
-                        <button type="button" id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step">Step (+1)</button>
-                        <button type="button" id="runBtn" style="flex: 1; margin: 0;" data-i18n="run">Run (Auto)</button>
+                        <button type="button" id="stepBtn" style="flex: 1; margin: 0;" data-i18n="step">Step
+                            (+1)</button>
+                        <button type="button" id="runBtn" style="flex: 1; margin: 0;" data-i18n="run">Run
+                            (Auto)</button>
                     </div>
-                    <button type="button" id="resetBtn" style="background-color: var(--warning);" data-i18n="reset">Reset
+                    <button type="button" id="resetBtn" style="background-color: var(--warning);"
+                        data-i18n="reset">Reset
                         Position</button>
                 </div>
 
@@ -349,12 +119,9 @@
                     <div class="chart-container" style="position: relative;">
                         <!-- We will use a Canvas for custom 2D contour/surface rendering -->
                         <canvas id="optCanvas"></canvas>
-                        <div id="costOverlay"
-                            style="position: absolute; top: 10px; right: 10px; background: var(--card-bg); color: var(--text-main); padding: 8px; border-radius: 4px; font-family: monospace; font-size: 0.8rem; border: 1px solid var(--border);">
+                        <div id="costOverlay" class="opt-overlay">
                             <span data-i18n="cost">Cost</span>: <span id="currentCost">0.00</span><br>
                             <span data-i18n="steps">Steps</span>: <span id="currentStep">0</span>
-                            Cost: <span id="currentCost">0.00</span><br>
-                            Steps: <span id="currentStep">0</span>
                         </div>
                     </div>
                 </div>
@@ -362,10 +129,8 @@
                 <!-- Math Traceability -->
                 <div class="card">
                     <div class="card-header"><i data-lucide="calculator" style="margin-right: 8px;"></i> <span
-                            data-i18n="calcDetails">Calculation
-                            Details</span></div>
-                    <div id="mathTrace" class="formula"
-                        style="font-size: 0.9rem; line-height: 1.6; background: var(--surface); color: var(--text-main); overflow-x:auto;">
+                            data-i18n="calcDetails">Calculation Details</span></div>
+                    <div id="mathTrace" class="formula">
                         <!-- Content populated by JS -->
                     </div>
                 </div>
@@ -547,7 +312,7 @@
                     optim.theme = e.detail.theme;
                     optim.updateViz();
                 });
-                
+
                 window.addEventListener('langchange', (e) => {
                     optim.lang = e.detail.lang;
                     optim.updateTranslations();
@@ -754,7 +519,7 @@
                 const startY = Math.floor(yMin / step) * step;
 
                 ctx.lineWidth = 1;
-                
+
                 // Vertical Lines
                 for (let x = startX; x <= xMax; x += step) {
                     const scrX = toScr(x, 0).x;
