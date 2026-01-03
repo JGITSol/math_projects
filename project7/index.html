@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDE & Dynamical Systems | Applied Mathematics</title>
+    <link rel="stylesheet" href="../assets/site.css">
+    <link rel="stylesheet" href="css/pde.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.PAGE_TRANSLATIONS = {
+            en: {
+                title: 'PDE & Dynamical Systems',
+                desc: 'Interactive sandboxes for the 1D heat equation and nonlinear ODE systems.',
+                heatTitle: '1D Heat Equation',
+                heatDesc: 'Explicit finite differences on a rod with Dirichlet boundaries.',
+                odeTitle: 'Nonlinear ODE System',
+                odeDesc: 'Lotka–Volterra predator–prey with phase portrait and trajectories.'
+            },
+            pl: {
+                title: 'Równania Różniczkowe i Systemy Dynamiczne',
+                desc: 'Interaktywne symulacje równania ciepła i nieliniowych układów ODE.',
+                heatTitle: 'Równanie Ciepła 1D',
+                heatDesc: 'Jawne różnice skończone na pręcie z warunkami Dirichleta.',
+                odeTitle: 'Nieliniowy Układ ODE',
+                odeDesc: 'Model drapieżnik-ofiara Lotka–Volterra z portretem fazowym.'
+            }
+        };
+    </script>
+</head>
+
+<body data-lab-name="Math Lab" data-page-name="Dynamical Systems" data-home="../index.html"
+    data-tags="PDE, ODE, Chaos, Math">
+    <div class="lab-shell">
+        <header class="lab-card soft" style="margin-bottom: 24px;">
+            <h1 data-i18n="title">PDE & Dynamical Systems</h1>
+            <p style="color:var(--text-light)" data-i18n="desc">Interactive sandboxes for the 1D heat equation and
+                nonlinear ODE systems.</p>
+        </header>
+
+        <section class="lab-grid">
+            <!-- Heat equation card -->
+            <article class="lab-card" aria-labelledby="heat-title">
+                <div class="card-header">
+                    <div>
+                        <h3 id="heat-title" data-i18n="heatTitle">1D Heat Equation</h3>
+                        <p style="font-size:0.9rem; color:var(--text-light);" data-i18n="heatDesc">Explicit finite
+                            differences on a rod with Dirichlet boundaries.</p>
+                    </div>
+                </div>
+
+                <div class="controls-grid">
+                    <div class="control">
+                        <label>Grid points \(N\) <span id="heat-n-label">201</span></label>
+                        <input id="heat-n" type="range" min="51" max="401" step="50" value="201">
+                    </div>
+                    <div class="control">
+                        <label>Diffusivity \( \alpha \) <span id="heat-alpha-label">0.5</span></label>
+                        <input id="heat-alpha" type="range" min="0.1" max="1.0" step="0.1" value="0.5">
+                    </div>
+                    <div class="control">
+                        <label>CFL factor <span id="heat-cfl-label">0.8</span></label>
+                        <input id="heat-cfl" type="range" min="0.1" max="0.9" step="0.1" value="0.8">
+                    </div>
+                    <div class="control">
+                        <label>Initial condition</label>
+                        <select id="heat-mode">
+                            <option value="bump">Centered bump</option>
+                            <option value="sin">Sine mode</option>
+                            <option value="random">Random noise</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn primary" id="heat-toggle">▶ Run</button>
+                    <button class="btn btn-secondary" id="heat-step">Step</button>
+                    <button class="btn btn-secondary" id="heat-reset">Reset IC</button>
+                    <span class="chip" id="heat-stability-pill">Stable (CFL &lt; 1)</span>
+                </div>
+
+                <div class="canvas-row">
+                    <div>
+                        <canvas id="heat-canvas" width="480" height="260"></canvas>
+                        <div class="meta">
+                            <span>Time \(t\) ≈ <span id="heat-time">0.00</span></span>
+                            <span>\(\Delta x\) ≈ <span id="heat-dx">0.00</span>, \(\Delta t\) ≈ <span
+                                    id="heat-dt">0.0000</span></span>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="heat-color" width="260" height="260"></canvas>
+                        <div class="meta">
+                            <span>Space–time heat map</span>
+                            <span>Cold → Hot</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="note">
+                    Scheme: \(u_i^{n+1} = u_i^n + \lambda (u_{i+1}^n - 2u_i^n + u_{i-1}^n)\) with \(\lambda = \alpha
+                    \frac{\Delta t}{\Delta x^2}\). Stable if \(\lambda \leq 1/2\).
+                </p>
+            </article>
+
+            <!-- ODE / Lotka-Volterra card -->
+            <article class="lab-card" aria-labelledby="ode-title">
+                <div class="card-header">
+                    <div>
+                        <h3 id="ode-title" data-i18n="odeTitle">Nonlinear ODE System</h3>
+                        <p style="font-size:0.9rem; color:var(--text-light);" data-i18n="odeDesc">Lotka–Volterra
+                            predator–prey with phase portrait.</p>
+                    </div>
+                </div>
+
+                <div class="controls-grid compact">
+                    <div class="control"><label>\(\alpha\) (Prey Birth)</label><input id="lv-alpha" type="number"
+                            step="0.1" value="1.1"></div>
+                    <div class="control"><label>\(\beta\) (Predation)</label><input id="lv-beta" type="number"
+                            step="0.05" value="0.4"></div>
+                    <div class="control"><label>\(\gamma\) (Pred Death)</label><input id="lv-gamma" type="number"
+                            step="0.1" value="0.4"></div>
+                    <div class="control"><label>\(\delta\) (Pred Growth)</label><input id="lv-delta" type="number"
+                            step="0.05" value="0.8"></div>
+                    <div class="control"><label>Init Prey \(x_0\)</label><input id="lv-x0" type="number" step="0.1"
+                            value="1.5"></div>
+                    <div class="control"><label>Init Pred \(y_0\)</label><input id="lv-y0" type="number" step="0.1"
+                            value="1.0"></div>
+                </div>
+
+                <div class="action-row">
+                    <button class="btn primary" id="lv-toggle">▶ Run</button>
+                    <button class="btn btn-secondary" id="lv-step">Step</button>
+                    <button class="btn btn-secondary" id="lv-clear"
+                        style="border-color:var(--error); color:var(--error);">Clear traj</button>
+                    <span class="chip" id="lv-time-pill">t = 0.00</span>
+                </div>
+
+                <div class="canvas-row">
+                    <div>
+                        <canvas id="lv-time" width="420" height="220"></canvas>
+                        <div class="legend">
+                            <span style="color:#38bdf8">Prey \(x(t)\)</span>
+                            <span style="color:#22c55e">Predators \(y(t)\)</span>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="lv-phase" width="260" height="220"></canvas>
+                        <div class="legend">
+                            <span style="color:#f97316">\((x(t),y(t))\) orbit</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="note">
+                    System: \(x' = \alpha x - \beta xy\), \(y' = -\gamma y + \delta xy\). Fixed points at \((0,0)\) and
+                    \((\gamma / \delta, \alpha / \beta)\).
+                </p>
+            </article>
+        </section>
+    </div>
+
+    <script src="../assets/site.js"></script>
+    <script src="js/pde-main.js"></script>
+</body>
+
+</html>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../assets/site.css">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.0/math.js"></script>
     <style>
         /* Typography override for project title */
         h1 {
@@ -99,7 +100,16 @@
                         <option value="cubic">Cubic: ax³ + bx + c</option>
                         <option value="sine">Wave: a·sin(bx)</option>
                         <option value="exponential">Growth/Decay: a·e^(bx)</option>
+                        <option value="custom">Custom Input...</option>
                     </select>
+                </div>
+
+                <!-- Custom Function Input (Hidden by default) -->
+                <div id="customInputGroup" class="form-group hidden">
+                    <label for="customExpression">f(x) =</label>
+                    <input type="text" id="customExpression" value="x^2 + sin(x)"
+                        style="width: 100%; padding: 8px; border: 1px solid var(--border); border-radius: 6px; font-family: monospace;"
+                        placeholder="e.g. x^2 + sin(x)">
                 </div>
 
                 <!-- Interactive Slider -->
@@ -151,7 +161,8 @@
             <div>
                 <div class="card">
                     <div class="card-header"><i data-lucide="monitor" style="margin-right: 8px;" aria-hidden="true"></i>
-                        <span data-i18n="visualizer">Visualizer</span></div>
+                        <span data-i18n="visualizer">Visualizer</span>
+                    </div>
                     <div class="chart-container">
                         <canvas id="calcCanvas"></canvas>
                         <div id="visualOverlay" class="visualizer-overlay">
@@ -289,6 +300,7 @@
                 state: {
                     mode: 'derivative', // or 'integral'
                     func: 'quadratic',
+                    customExpr: 'x^2 + sin(x)', // Default custom expression
                     x: 0,
                     a: 1, b: 0, c: 0,
                     limitA: 0,
@@ -308,7 +320,13 @@
                     quadratic: (x, s) => s.a * x * x + s.b * x + s.c,
                     cubic: (x, s) => s.a * x * x * x + s.b * x + s.c,
                     sine: (x, s) => s.a * Math.sin(s.b * x),
-                    exponential: (x, s) => s.a * Math.exp(s.b * x)
+                    exponential: (x, s) => s.a * Math.exp(s.b * x),
+                    custom: (x, s) => {
+                        try {
+                            const scope = { x: x, a: s.a, b: s.b, c: s.c, e: Math.E, pi: Math.PI };
+                            return math.evaluate(s.customExpr, scope);
+                        } catch (e) { return 0; }
+                    }
                 },
 
                 // Analytics (Derivatives/Integrals)
@@ -328,6 +346,34 @@
                     exponential: {
                         dt: (x, s) => s.a * s.b * Math.exp(s.b * x),
                         int: (x, s) => (s.b != 0) ? (s.a / s.b) * Math.exp(s.b * x) : s.a * x
+                    },
+                    custom: {
+                        dt: (x, s) => {
+                            try {
+                                const d = math.derivative(s.customExpr, 'x');
+                                return d.evaluate({ x: x, a: s.a, b: s.b, c: s.c, e: Math.E, pi: Math.PI });
+                            } catch (e) { return 0; }
+                        },
+                        int: (x, s) => {
+                            // Numerical Integration (Simpson's Rule) approximation from 0 to x
+                            // This is effectively F(x) - F(0).
+                            // For definite integral F(b) - F(a), we just need a consistent antiderivative approximation.
+                            // Let's integrate from 0 to x.
+                            const n = 100;
+                            const h = x / n;
+                            let sum = 0;
+                            const f = (val) => {
+                                try {
+                                    return math.evaluate(s.customExpr, { x: val, a: s.a, b: s.b, c: s.c, e: Math.E, pi: Math.PI });
+                                } catch (e) { return 0; }
+                            };
+
+                            sum += f(0) + f(x);
+                            for (let i = 1; i < n; i++) {
+                                sum += (i % 2 === 0 ? 2 : 4) * f(0 + i * h);
+                            }
+                            return (h / 3) * sum;
+                        }
                     }
                 },
 
@@ -384,6 +430,22 @@
 
                     document.getElementById('functionType').addEventListener('change', (e) => {
                         app.state.func = e.target.value;
+
+                        // Toggle Custom Input visibility
+                        const isCustom = app.state.func === 'custom';
+                        const customInput = document.getElementById('customInputGroup');
+                        if (isCustom) {
+                            customInput.classList.remove('hidden');
+                        } else {
+                            customInput.classList.add('hidden');
+                        }
+
+                        app.draw();
+                        app.displayInfo();
+                    });
+
+                    document.getElementById('customExpression').addEventListener('input', (e) => {
+                        app.state.customExpr = e.target.value;
                         app.draw();
                         app.displayInfo();
                     });
@@ -659,9 +721,21 @@
                             traceHtml += `<strong>f'(x)</strong> = ${s.a} · ${s.b} · cos(${s.b}x)<br>`;
                             traceHtml += `<strong>Eval at x=${cx.toFixed(1)}</strong>: ${(s.a * s.b).toFixed(2)} · cos(${s.b}*${cx.toFixed(1)})<br>`;
                             traceHtml += `<strong>Result</strong> = ${slope.toFixed(2)}`;
+                        } else if (s.func === 'custom') {
+                            try {
+                                const node = math.parse(s.customExpr);
+                                const d = math.derivative(node, 'x');
+                                traceHtml = `<strong>f(x)</strong> = $${node.toTex()}$<br>`;
+                                traceHtml += `<strong>f'(x)</strong> = $${d.toTex()}$ <span style="color:var(--text-light);">(Symbolic)</span><br>`;
+                                traceHtml += `<strong>Eval at x=${cx.toFixed(2)}</strong><br>`;
+                                traceHtml += `<strong>Result</strong> = ${slope.toFixed(3)}`;
+                            } catch (e) {
+                                traceHtml = `<span style="color:var(--error)">Error parsing function</span>`;
+                            }
                         }
 
                         document.getElementById('mathTrace').innerHTML = traceHtml;
+                        if (window.MathJax) MathJax.typesetPromise([document.getElementById('mathTrace')]);
 
                         // Title/Text handled by i18n logic unless dynamic? 
                         // No, static text updates via updateTranslations primarily, but here we switch dynamic content.

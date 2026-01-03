@@ -266,35 +266,35 @@
             // Problem Definitions (Cost function f(x,y) and Gradient df/dx, df/dy)
             probs: {
                 bowl: {
-                    f: (x, y) => x * x + y * y,
-                    grad: (x, y) => ({ dx: 2 * x, dy: 2 * y }),
+                    f: (x, y) => 0.1 * (x * x + y * y),
+                    grad: (x, y) => ({ dx: 0.2 * x, dy: 0.2 * y }),
                     range: 4,
                     name: 'Simple Bowl'
                 },
                 rosenbrock: {
                     // f = (1-x)^2 + 100(y-x^2)^2. Min at (1,1)
-                    // Scaled down for visualization ease: 0.01 factor or smaller range
-                    f: (x, y) => Math.pow(1 - x, 2) + 100 * Math.pow(y - x * x, 2),
+                    // Scaled by 0.0005 to prevent gradient explosion (max grad ~4000 -> ~2)
+                    f: (x, y) => 0.0005 * (Math.pow(1 - x, 2) + 100 * Math.pow(y - x * x, 2)),
                     grad: (x, y) => ({
-                        dx: -2 * (1 - x) - 400 * x * (y - x * x),
-                        dy: 200 * (y - x * x)
+                        dx: 0.0005 * (-2 * (1 - x) - 400 * x * (y - x * x)),
+                        dy: 0.0005 * (200 * (y - x * x))
                     }),
                     range: 2,
                     name: 'Rosenbrock'
                 },
                 rastrigin: {
-                    // A = 10. f = 20 + x^2 - 10cos(2pix) + y^2 - 10cos(2piy)
-                    f: (x, y) => 20 + x * x - 10 * Math.cos(2 * Math.PI * x) + y * y - 10 * Math.cos(2 * Math.PI * y),
+                    // A = 10. Scaled by 0.05
+                    f: (x, y) => 0.05 * (20 + x * x - 10 * Math.cos(2 * Math.PI * x) + y * y - 10 * Math.cos(2 * Math.PI * y)),
                     grad: (x, y) => ({
-                        dx: 2 * x + 20 * Math.PI * Math.sin(2 * Math.PI * x),
-                        dy: 2 * y + 20 * Math.PI * Math.sin(2 * Math.PI * y)
+                        dx: 0.05 * (2 * x + 20 * Math.PI * Math.sin(2 * Math.PI * x)),
+                        dy: 0.05 * (2 * y + 20 * Math.PI * Math.sin(2 * Math.PI * y))
                     }),
                     range: 3,
                     name: 'Rastrigin'
                 },
                 saddle: {
-                    f: (x, y) => x * x - y * y,
-                    grad: (x, y) => ({ dx: 2 * x, dy: -2 * y }),
+                    f: (x, y) => 0.1 * (x * x - y * y),
+                    grad: (x, y) => ({ dx: 0.2 * x, dy: -0.2 * y }),
                     range: 4,
                     name: 'Saddle Point'
                 }
