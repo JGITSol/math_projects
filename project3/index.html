@@ -152,7 +152,8 @@
                 <div class="card">
                     <div class="card-header"><i data-lucide="zap" style="margin-right: 8px;" aria-hidden="true"></i>
                         <span data-i18n="engApps">Engineering
-                            Applications</span></div>
+                            Applications</span>
+                    </div>
                     <div class="engineering-box">
                         <h4 data-i18n="why">Why Tolerance & Optimizers Matter?</h4>
                         <p><strong data-i18n="engApps">Training AI:</strong> <span data-i18n="whyText1">Neural networks
@@ -169,6 +170,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
     <script>
         const translations = {
             en: {
@@ -189,7 +191,8 @@
                 pos: "Current Position", gradVec: "Gradient Vector", next: "Next Step",
                 why: "Why Tolerance & Optimizers Matter?",
                 whyText1: "Neural networks \"learn\" by sliding down a cost surface with millions of dimensions. Optimizers like Adam are essential to avoid getting stuck in local minima.",
-                whyText2: "Finding optimal parameters for PID controllers or robotic trajectories often requires numerical optimization."
+                whyText2: "Finding optimal parameters for PID controllers or robotic trajectories often requires numerical optimization.",
+                view2d: "2D Map", view3d: "3D Landscape"
             },
             pl: {
                 title: "Optymalizacja i Gradient Prosty",
@@ -209,22 +212,21 @@
                 pos: "Pozycja", gradVec: "Wektor Gradientu", next: "Następny Krok",
                 why: "Dlaczego Optymalizatory są ważne?",
                 whyText1: "Sieci neuronowe \"uczą się\" zjeżdżając po powierzchni kosztu. Algorytmy takie jak Adam są kluczowe, by unikać minimów lokalnych.",
-                whyText2: "Dostrajanie kontrolerów PID i trajektorii robotów wymaga optymalizacji numerycznej."
+                whyText2: "Dostrajanie kontrolerów PID i trajektorii robotów wymaga optymalizacji numerycznej.",
+                view2d: "Mapa 2D", view3d: "Krajobraz 3D"
             },
-            fr: { title: "Optimisation et Descente de Gradient", subtitle: "Visualiser la minimisation des fonctions de coût.", config: "Config", prob: "Fonction", algo: "Algorithme", lr: "Taux d'apprentissage", momentum: "Momentum", iter: "Itérations", step: "Pas", run: "Lancer", stop: "Arrêt", reset: "Réinitialiser", vizTitle: "Visualisateur", cost: "Coût", steps: "Pas", calcDetails: "Détails", algoLogic: "Logique", engApps: "Applications", pos: "Position", gradVec: "Gradient", next: "Suivant", why: "Importance des Optimiseurs", whyText1: "Les réseaux de neurones apprennent en minimisant l'erreur.", whyText2: "Le contrôle optimal des robots utilise ces méthodes." },
-            es: { title: "Optimización y Descenso de Gradiente", subtitle: "Visualizar minimización de costos.", config: "Configuración", prob: "Función", algo: "Algoritmo", lr: "Tasa de Aprendizaje", momentum: "Momento", iter: "Iteraciones", step: "Paso", run: "Ejecutar", stop: "Parar", reset: "Reiniciar", vizTitle: "Visualizador", cost: "Costo", steps: "Pasos", calcDetails: "Detalles", algoLogic: "Lógica", engApps: "Aplicaciones", pos: "Posición", gradVec: "Gradiente", next: "Siguiente", why: "Importancia", whyText1: "Las redes neuronales aprenden minimizando el error.", whyText2: "El control de robots requiere optimización." },
-            pt: { title: "Otimização e Descida de Gradiente", subtitle: "Visualizar minimização de custos.", config: "Configuração", prob: "Função", algo: "Algoritmo", lr: "Taxa de Aprendizado", momentum: "Momento", iter: "Iterações", step: "Passo", run: "Executar", stop: "Parar", reset: "Reiniciar", vizTitle: "Visualizador", cost: "Custo", steps: "Passos", calcDetails: "Detalhes", algoLogic: "Lógica", engApps: "Aplicações", pos: "Posição", gradVec: "Gradiente", next: "Próximo", why: "Importância", whyText1: "Redes neurais aprendem minimizando o erro.", whyText2: "Controle de robôs requer otimização." },
-            de: { title: "Optimierung & Gradientenabstieg", subtitle: "Kostenminimierung visualisieren.", config: "Konfiguration", prob: "Funktionslandschaft", algo: "Algorithmus", lr: "Lernrate", momentum: "Momentum", iter: "Iterationen", step: "Schritt", run: "Start", stop: "Stopp", reset: "Reset", vizTitle: "Visualisierer", cost: "Kosten", steps: "Schritte", calcDetails: "Details", algoLogic: "Logik", engApps: "Anwendungen", pos: "Position", gradVec: "Gradient", next: "Nächster", why: "Wichtigkeit", whyText1: "Neuronale Netze lernen durch Fehlerminimierung.", whyText2: "Robotersteuerung benötigt Optimierung." },
-            uk: { title: "Оптимізація та Градієнтний Спуск", subtitle: "Візуалізація мінімізації витрат.", config: "Конфігурація", prob: "Ландшафт Функції", algo: "Алгоритм", lr: "Швидкість Навчання", momentum: "Імпульс", iter: "Ітерації", step: "Крок", run: "Старт", stop: "Стоп", reset: "Скидання", vizTitle: "Візуалізатор", cost: "Вартість", steps: "Кроки", calcDetails: "Деталі", algoLogic: "Логіка", engApps: "Застосування", pos: "Позиція", gradVec: "Градієнт", next: "Далі", why: "Важливість", whyText1: "Нейромережі навчаються мінімізуючи помилки.", whyText2: "Керування роботами вимагає оптимізації." },
-            be: { title: "Аптымізацыя і Градыентны Спуск", subtitle: "Візуалізацыя мінімізацыі выдаткаў.", config: "Канфігурацыя", prob: "Ландшафт Функцыі", algo: "Алгарытм", lr: "Хуткасць Навучання", momentum: "Імпульс", iter: "Ітэрацыі", step: "Крок", run: "Старт", stop: "Стоп", reset: "Скід", vizTitle: "Візуалізатар", cost: "Кошт", steps: "Крокі", calcDetails: "Дэталі", algoLogic: "Логіка", engApps: "Прымяненне", pos: "Пазіцыя", gradVec: "Градыент", next: "Далей", why: "Важнасць", whyText1: "Нейрасеткі вучацца мінімізуючы памылкі.", whyText2: "Кіраванне робатамі патрабуе аптымізацыі." }
+            fr: { title: "Optimisation et Descente de Gradient", subtitle: "Visualiser la minimisation des fonctions de coût.", config: "Config", prob: "Fonction", algo: "Algorithme", lr: "Taux d'apprentissage", momentum: "Momentum", iter: "Itérations", step: "Pas", run: "Lancer", stop: "Arrêt", reset: "Réinitialiser", vizTitle: "Visualisateur", cost: "Coût", steps: "Pas", calcDetails: "Détails", algoLogic: "Logique", engApps: "Applications", pos: "Position", gradVec: "Gradient", next: "Suivant", why: "Importance des Optimiseurs", whyText1: "Les réseaux de neurones apprennent en minimisant l'erreur.", whyText2: "Le contrôle optimal des robots utilise ces méthodes.", view2d: "Carte 2D", view3d: "Paysage 3D" },
+            es: { title: "Optimización y Descenso de Gradiente", subtitle: "Visualizar minimización de costos.", config: "Configuración", prob: "Función", algo: "Algoritmo", lr: "Tasa de Aprendizaje", momentum: "Momento", iter: "Iteraciones", step: "Paso", run: "Ejecutar", stop: "Parar", reset: "Reiniciar", vizTitle: "Visualizador", cost: "Costo", steps: "Pasos", calcDetails: "Detalles", algoLogic: "Lógica", engApps: "Aplicaciones", pos: "Posición", gradVec: "Gradiente", next: "Siguiente", why: "Importancia", whyText1: "Las redes neuronales aprenden minimizando el error.", whyText2: "El control de robots requiere optimización.", view2d: "Mapa 2D", view3d: "Paisaje 3D" },
+            pt: { title: "Otimização e Descida de Gradiente", subtitle: "Visualizar minimização de custos.", config: "Configuração", prob: "Função", algo: "Algoritmo", lr: "Taxa de Aprendizado", momentum: "Momento", iter: "Iterações", step: "Passo", run: "Executar", stop: "Parar", reset: "Reiniciar", vizTitle: "Visualizador", cost: "Custo", steps: "Passos", calcDetails: "Detalhes", algoLogic: "Lógica", engApps: "Aplicações", pos: "Posição", gradVec: "Gradiente", next: "Próximo", why: "Importância", whyText1: "Redes neurais aprendem minimizando o erro.", whyText2: "Controle de robôs requer otimização.", view2d: "Mapa 2D", view3d: "Paisagem 3D" },
+            de: { title: "Optimierung & Gradientenabstieg", subtitle: "Kostenminimierung visualisieren.", config: "Konfiguration", prob: "Funktionslandschaft", algo: "Algorithmus", lr: "Lernrate", momentum: "Momentum", iter: "Iterationen", step: "Schritt", run: "Start", stop: "Stopp", reset: "Reset", vizTitle: "Visualisierer", cost: "Kosten", steps: "Schritte", calcDetails: "Details", algoLogic: "Logik", engApps: "Anwendungen", pos: "Position", gradVec: "Gradient", next: "Nächster", why: "Wichtigkeit", whyText1: "Neuronale Netze lernen durch Fehlerminimierung.", whyText2: "Robotersteuerung benötigt Optimierung.", view2d: "2D Karte", view3d: "3D Landschaft" },
+            uk: { title: "Оптимізація та Градієнтний Спуск", subtitle: "Візуалізація мінімізації витрат.", config: "Конфігурація", prob: "Ландшафт Функції", algo: "Алгоритм", lr: "Швидкість Навчання", momentum: "Імпульс", iter: "Ітерації", step: "Крок", run: "Старт", stop: "Стоп", reset: "Скидання", vizTitle: "Візуалізатор", cost: "Вартість", steps: "Кроки", calcDetails: "Деталі", algoLogic: "Логіка", engApps: "Застосування", pos: "Позиція", gradVec: "Градієнт", next: "Далі", why: "Важливість", whyText1: "Нейромережі навчаються мінімізуючи помилки.", whyText2: "Керування роботами вимагає оптимізації.", view2d: "2D Карта", view3d: "3D Ландшафт" },
+            be: { title: "Аптымізацыя і Градыентны Спуск", subtitle: "Візуалізацыя мінімізацыі выдаткаў.", config: "Канфігурацыя", prob: "Ландшафт Функцыі", algo: "Алгарытм", lr: "Хуткасць Навучання", momentum: "Імпульс", iter: "Ітэрацыі", step: "Крок", run: "Старт", stop: "Стоп", reset: "Скід", vizTitle: "Візуалізатар", cost: "Кошт", steps: "Крокі", calcDetails: "Дэталі", algoLogic: "Логіка", engApps: "Прымяненне", pos: "Пазіцыя", gradVec: "Градыент", next: "Далей", why: "Важнасць", whyText1: "Нейрасеткі вучацца мінімізуючы памылкі.", whyText2: "Кіраванне робатамі патрабуе аптымізацыі.", view2d: "2D Карта", view3d: "3D Ландшафт" }
         };
 
         // Optimization Logic
         const optim = {
             lang: 'en',
             theme: 'light',
-
-            // setTheme and setLang removed - handled by site.js
 
             updateTranslations: () => {
                 const t = translations[optim.lang];
@@ -247,11 +249,9 @@
                 algo: 'gd',
                 lr: 0.1,
                 beta: 0.9,
-                x: 2.5, // Start pos
+                x: 2.5,
                 y: 2.0,
-                x: 2.5, // Start pos
-                y: 2.0,
-                vx: 0, // Velocity for momentum
+                vx: 0,
                 vy: 0,
                 iter: 0,
                 // View State
@@ -260,7 +260,8 @@
                 offsetY: 0,
                 isDragging: false,
                 lastX: 0,
-                lastY: 0
+                lastY: 0,
+                viewMode: '2d' // '2d' or '3d'
             },
 
             // Problem Definitions (Cost function f(x,y) and Gradient df/dx, df/dy)
@@ -304,6 +305,35 @@
                 optim.canvas = document.getElementById('optCanvas');
                 optim.ctx = optim.canvas.getContext('2d');
 
+                // Inject 3D container and toggle if not already present
+                if (!document.getElementById('opt3D')) {
+                    const container = optim.canvas.parentElement;
+                    const div3d = document.createElement('div');
+                    div3d.id = 'opt3D';
+                    div3d.style.width = '100%';
+                    div3d.style.height = '100%';
+                    div3d.style.display = 'none'; // Hidden by default
+                    container.appendChild(div3d);
+
+                    // Add Toggle Buttons to Card Header
+                    const header = container.parentElement.querySelector('.card-header');
+                    const toggleDiv = document.createElement('div');
+                    toggleDiv.className = 'view-toggle';
+                    toggleDiv.style.marginLeft = 'auto';
+                    toggleDiv.style.display = 'flex';
+                    toggleDiv.style.gap = '5px';
+
+                    toggleDiv.innerHTML = `
+                        <button class="btn-sm" id="btn2D" style="padding: 2px 8px; font-size: 0.8rem; background: var(--primary); color: white;">2D</button>
+                        <button class="btn-sm" id="btn3D" style="padding: 2px 8px; font-size: 0.8rem; background: var(--card-bg); border: 1px solid var(--border);">3D</button>
+                    `;
+                    header.appendChild(toggleDiv);
+
+                    // Toggle Logic
+                    document.getElementById('btn2D').addEventListener('click', () => optim.setViewMode('2d'));
+                    document.getElementById('btn3D').addEventListener('click', () => optim.setViewMode('3d'));
+                }
+
                 // Set canvas resolution
                 const container = optim.canvas.parentElement;
                 optim.canvas.width = container.clientWidth;
@@ -332,6 +362,32 @@
                 lucide.createIcons();
             },
 
+            setViewMode: (mode) => {
+                optim.state.viewMode = mode;
+                const btn2D = document.getElementById('btn2D');
+                const btn3D = document.getElementById('btn3D');
+                const canvas = document.getElementById('optCanvas');
+                const div3D = document.getElementById('opt3D');
+
+                if (mode === '2d') {
+                    canvas.style.display = 'block';
+                    div3D.style.display = 'none';
+                    btn2D.style.background = 'var(--primary)';
+                    btn2D.style.color = 'white';
+                    btn3D.style.background = 'var(--card-bg)';
+                    btn3D.style.color = 'var(--text-main)';
+                } else {
+                    canvas.style.display = 'none';
+                    div3D.style.display = 'block';
+                    btn3D.style.background = 'var(--primary)';
+                    btn3D.style.color = 'white';
+                    btn2D.style.background = 'var(--card-bg)';
+                    btn2D.style.color = 'var(--text-main)';
+                    optim.render3D(); // Trigger render
+                }
+                optim.updateViz();
+            },
+
             setupListeners: () => {
                 document.getElementById('functionProb').addEventListener('change', (e) => {
                     optim.state.prob = e.target.value;
@@ -354,8 +410,9 @@
                 document.getElementById('runBtn').addEventListener('click', optim.toggleRun);
                 document.getElementById('resetBtn').addEventListener('click', optim.reset);
 
-                // Zoom & Pan Listeners
+                // Zoom & Pan Listeners (2D only)
                 optim.canvas.addEventListener('wheel', (e) => {
+                    if (optim.state.viewMode === '3d') return;
                     e.preventDefault();
                     const zoomIntensity = 0.1;
                     const delta = e.deltaY > 0 ? (1 - zoomIntensity) : (1 + zoomIntensity);
@@ -365,6 +422,7 @@
                 }, { passive: false });
 
                 optim.canvas.addEventListener('mousedown', (e) => {
+                    if (optim.state.viewMode === '3d') return;
                     optim.state.isDragging = true;
                     optim.state.lastX = e.clientX;
                     optim.state.lastY = e.clientY;
@@ -372,7 +430,7 @@
                 });
 
                 window.addEventListener('mousemove', (e) => {
-                    if (optim.state.isDragging) {
+                    if (optim.state.isDragging && optim.state.viewMode === '2d') {
                         const dx = e.clientX - optim.state.lastX;
                         const dy = e.clientY - optim.state.lastY;
                         optim.state.lastX = e.clientX;
@@ -410,6 +468,11 @@
                 optim.state.offsetY = 0;
 
                 optim.history.push({ x: optim.state.x, y: optim.state.y });
+
+                // Reset 3D plot to initial camera or just fresh surface?
+                // We'll regenerate surface data on new prob/reset
+                if (optim.state.viewMode === '3d') optim.render3D();
+
                 optim.updateViz();
                 optim.updateAlgoDisplay();
             },
@@ -446,20 +509,6 @@
                     optim.state.x -= lr * optim.state.vx;
                     optim.state.y -= lr * optim.state.vy;
                 } else if (algo === 'adam') {
-                    // Simplified Adam (No bias corr for vis simplicity, or full logic?)
-                    // Let's do simple RMSprop style or quasi-Adam
-                    // m = beta1*m + (1-beta1)*g
-                    // v = beta2*v + (1-beta2)*g^2
-                    // theta -= lr * m / (sqrt(v) + epsilon)
-                    // Simplified impl for vis buffer
-                    const epsilon = 1e-8;
-                    optim.state.vx = 0.9 * optim.state.vx + 0.1 * g.dx; // First moment
-                    // Hack reusing vy for second moment sum to avoid adding more complexity
-                    // Real Adam needs separate second moment state.
-                    // Fallback to simple momentum if full Adam state is too much overhead for this snippet.
-                    // Let's stick to Momentum as the "Masters" feature and keep Adam label but use heavy momentum behavior if too complex
-                    // Actually, let's implement true Momentum 
-                    // Update: Just do momentum here, maybe call option "Momentum+"
                     const beta = 0.9;
                     optim.state.vx = beta * optim.state.vx + lr * g.dx;
                     optim.state.vy = beta * optim.state.vy + lr * g.dy;
@@ -476,6 +525,11 @@
             },
 
             updateViz: () => {
+                if (optim.state.viewMode === '3d') {
+                    optim.update3D();
+                    return;
+                }
+
                 const w = optim.canvas.width;
                 const h = optim.canvas.height;
                 const ctx = optim.ctx;
@@ -487,7 +541,7 @@
                 const colors = {
                     bg: isDark ? '#0f172a' : '#f8fafc',
                     gridMinor: isDark ? '#1e293b' : '#e2e8f0',
-                    gridMajor: isDark ? '#334155' : '#cbd5e1',
+                    gridMajor: isDark ? '#536175' : '#cbd5e1',
                     axis: isDark ? '#64748b' : '#94a3b8',
                     path: isDark ? 'rgba(45, 212, 191, 0.6)' : 'rgba(15, 118, 110, 0.6)'
                 };
@@ -547,13 +601,6 @@
                 ctx.beginPath(); ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, h); ctx.stroke();
                 ctx.beginPath(); ctx.moveTo(0, origin.y); ctx.lineTo(w, origin.y); ctx.stroke();
 
-                // Draw Contour Map Simulation (Isolines)
-                // We'll draw circles/ellipses for simple shapes or points for complex ones
-                // Drawing full contours is expensive (Marching Squares).
-                // Let's draw a few "rings" based on distance from optimum?
-                // For simplicity in this demo, we'll keep it clean with just the grid and path.
-                // Could draw some random sample points to show "height" via color? No, keep it clean.
-
                 // Draw History Path
                 ctx.beginPath();
                 ctx.strokeStyle = colors.path;
@@ -563,8 +610,6 @@
                     ctx.moveTo(start.x, start.y);
                     for (let i = 1; i < optim.history.length; i++) {
                         const p = toScr(optim.history[i].x, optim.history[i].y);
-                        // Clip line if way off screen? Canvas handles it, but performance might suffer.
-                        // Optimization: skip if both out.
                         ctx.lineTo(p.x, p.y);
                     }
                     ctx.stroke();
@@ -586,7 +631,124 @@
                 ctx.font = '24px Arial';
                 ctx.fillText('Target', tPos.x - 20, tPos.y);
 
+                optim.updateInfoPanel();
+            },
+
+            // New 3D Logic
+            render3D: () => {
+                const prob = optim.probs[optim.state.prob];
+                const r = prob.range;
+                const steps = 40; // Resolution
+                const x = [], y = [], z = [];
+
+                // Generate Mesh
+                for (let i = 0; i <= steps; i++) {
+                    const xi = -r * 1.5 + (i / steps) * (r * 3);
+                    const rowX = [];
+                    const rowY = [];
+                    const rowZ = [];
+                    for (let j = 0; j <= steps; j++) {
+                        const yi = -r * 1.5 + (j / steps) * (r * 3);
+                        rowX.push(xi);
+                        rowY.push(yi);
+                        // Clip very high values for visual sanity
+                        let val = prob.f(xi, yi);
+                        if (val > 10) val = 10;
+                        rowZ.push(val);
+                    }
+                    x.push(rowX);
+                    y.push(rowY);
+                    z.push(rowZ);
+                }
+
+                const isDark = optim.theme === 'dark';
+
+                const surfaceTrace = {
+                    type: 'surface',
+                    x: x, y: y, z: z,
+                    showscale: false,
+                    colorscale: 'Viridis',
+                    contours: {
+                        z: { show: true, usecolormap: true, highlightcolor: "#42f462", project: { z: true } }
+                    },
+                    opacity: 0.9,
+                    hoverinfo: "x+y+z"
+                };
+
+                // Add history path as a 3D line
+                const hx = [], hy = [], hz = [];
+                optim.history.forEach(p => {
+                    hx.push(p.x);
+                    hy.push(p.y);
+                    hz.push(prob.f(p.x, p.y) + 0.05); // Lift slightly above surface
+                });
+
+                const pathTrace = {
+                    type: 'scatter3d',
+                    mode: 'lines+markers',
+                    x: hx, y: hy, z: hz,
+                    line: { width: 6, color: 'red' },
+                    marker: { size: 4, color: 'red' },
+                    name: "Path"
+                };
+
+                // Head
+                const curZ = prob.f(optim.state.x, optim.state.y) + 0.05;
+                const headTrace = {
+                    type: 'scatter3d',
+                    mode: 'markers',
+                    x: [optim.state.x], y: [optim.state.y], z: [curZ],
+                    marker: { size: 8, color: '#ef4444' },
+                    name: "Current"
+                };
+
+                const layout = {
+                    margin: { l: 0, r: 0, b: 0, t: 0 },
+                    paper_bgcolor: "rgba(0,0,0,0)",
+                    plot_bgcolor: "rgba(0,0,0,0)",
+                    scene: {
+                        xaxis: { title: 'X', showgrid: true, zeroline: false, showline: true, color: isDark ? '#94a3b8' : '#334155' },
+                        yaxis: { title: 'Y', showgrid: true, zeroline: false, showline: true, color: isDark ? '#94a3b8' : '#334155' },
+                        zaxis: { title: 'Cost', showgrid: true, zeroline: false, showline: true, color: isDark ? '#94a3b8' : '#334155' },
+                        camera: {
+                            eye: { x: 1.5, y: 1.5, z: 1.2 }
+                        }
+                    },
+                    showlegend: false
+                };
+
+                Plotly.newPlot('opt3D', [surfaceTrace, pathTrace, headTrace], layout, { displayModeBar: false });
+            },
+
+            update3D: () => {
+                const prob = optim.probs[optim.state.prob];
+                const hx = [], hy = [], hz = [];
+                optim.history.forEach(p => {
+                    hx.push(p.x);
+                    hy.push(p.y);
+                    let val = prob.f(p.x, p.y);
+                    // if(val > 10) val = 10;
+                    hz.push(val + 0.05);
+                });
+
+                // Animate the path update efficiently using Plotly.animate or restyle
+                // For simplicity, we restyle the traces 1 (path) and 2 (head)
+                const curZ = prob.f(optim.state.x, optim.state.y) + 0.05;
+
+                Plotly.restyle('opt3D', {
+                    x: [hx, [optim.state.x]],
+                    y: [hy, [optim.state.y]],
+                    z: [hz, [curZ]]
+                }, [1, 2]); // Traces 1 and 2
+
+                optim.updateInfoPanel();
+            },
+
+            updateInfoPanel: () => {
+                const prob = optim.probs[optim.state.prob];
+                const s = optim.state;
                 const currentCost = prob.f(s.x, s.y);
+
                 document.getElementById('currentCost').textContent = currentCost.toFixed(4);
                 document.getElementById('currentStep').textContent = s.iter;
 

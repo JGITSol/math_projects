@@ -128,7 +128,8 @@
             <!-- Control Panel -->
             <div class="card">
                 <div class="card-header"><i data-lucide="settings-2" style="margin-right: 8px;" aria-hidden="true"></i>
-                    <span data-i18n="config">Configuration</span></div>
+                    <span data-i18n="config">Configuration</span>
+                </div>
 
                 <div class="form-group">
                     <label id="labelMag"><span data-i18n="magLabel">Magnitude (N)</span>: <span
@@ -246,7 +247,7 @@
                 <div class="card">
                     <div class="card-header">Real World Applications</div>
                     <div class="tab-header">
-                        <button class="tab-btn active" data-tab="truss">Truss</button>
+                        <button class="tab-btn active" data-tab="bracket">Bracket</button>
                         <button class="tab-btn" data-tab="beam">Beam</button>
                         <button class="tab-btn" data-tab="pulley">Pulley</button>
                         <button class="tab-btn" data-tab="landing">Landing Gear</button>
@@ -276,10 +277,7 @@
                 </div>
 
                 <!-- Engineering Applications -->
-                <div class="card">
-                    <div class="card-header">Real-World Applications</div>
-                    <div id="engineeringApp" class="engineering-box"></div>
-                </div>
+
             </div>
         </div>
     </div>
@@ -529,7 +527,7 @@
                 angle: 0,
                 x: 0,
                 y: 0,
-                context: 'truss',
+                context: 'bracket',
                 lang: 'en',
                 theme: 'light'
             },
@@ -767,6 +765,9 @@
                 const toScreenX = (x) => cx + (x - app.offsetX) * app.scale;
                 const toScreenY = (y) => cy - (y - app.offsetY) * app.scale;
 
+                // Draw Scenario Background
+                app.drawScenario(ctx, toScreenX, toScreenY, w, h);
+
                 // Draw Grid
                 ctx.lineWidth = 1;
                 ctx.strokeStyle = gridColor;
@@ -888,15 +889,160 @@
                 }
             },
 
+
+
+            drawScenario: (ctx, toX, toY, w, h) => {
+                const scenario = app.state.context;
+                // Colors
+                const wallColor = 'rgba(100, 116, 139, 0.2)';
+                const strokeColor = 'rgba(71, 85, 105, 0.5)';
+                const objectColor = 'rgba(148, 163, 184, 0.3)';
+
+                ctx.save();
+
+                if (scenario === 'bracket') {
+                    // Draw Wall (Vertical at x < 0)
+                    const wallX = toX(0); // Pivot at 0
+
+                    // Wall Pattern
+                    ctx.fillStyle = wallColor;
+                    ctx.fillRect(wallX - 40, 0, 40, h);
+
+                    ctx.beginPath();
+                    ctx.moveTo(wallX, 0);
+                    ctx.lineTo(wallX, h);
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+
+                    // Hatching
+                    ctx.beginPath();
+                    ctx.strokeStyle = strokeColor;
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i < h; i += 20) {
+                        ctx.moveTo(wallX - 20, i);
+                        ctx.lineTo(wallX, i + 20);
+                    }
+                    ctx.stroke();
+
+                    // Bracket/Hinge
+                    ctx.fillStyle = objectColor;
+                    ctx.beginPath();
+                    ctx.arc(toX(0), toY(0), 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = strokeColor;
+                    ctx.stroke();
+
+                    // Bolt
+                    ctx.fillStyle = '#cbd5e1';
+                    ctx.beginPath();
+                    ctx.arc(toX(0), toY(0), 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+
+                } else if (scenario === 'beam') {
+                    // Draw Beam
+                    const y = toY(0);
+                    const startX = toX(-5);
+                    const endX = toX(5);
+
+                    ctx.fillStyle = objectColor;
+                    ctx.fillRect(startX, y - 10, endX - startX, 20);
+                    ctx.strokeStyle = strokeColor;
+                    ctx.strokeRect(startX, y - 10, endX - startX, 20);
+
+                    // Support Pin (Left)
+                    ctx.beginPath();
+                    ctx.moveTo(startX, y + 10);
+                    ctx.lineTo(startX - 10, y + 30);
+                    ctx.lineTo(startX + 10, y + 30);
+                    ctx.closePath();
+                    ctx.fillStyle = wallColor;
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Support Roller (Right)
+                    ctx.beginPath();
+                    ctx.arc(endX, y + 20, 10, 0, Math.PI * 2);
+                    ctx.fillStyle = wallColor;
+                    ctx.fill();
+                    ctx.stroke();
+                    // Ground
+                    ctx.beginPath();
+                    ctx.moveTo(startX - 20, y + 30);
+                    ctx.lineTo(startX + 20, y + 30);
+                    ctx.moveTo(endX - 20, y + 30);
+                    ctx.lineTo(endX + 20, y + 30);
+                    ctx.stroke();
+
+                } else if (scenario === 'pulley') {
+                    // Ceiling
+                    const ceilY = toY(4);
+                    const centerX = toX(0);
+
+                    ctx.fillStyle = wallColor;
+                    ctx.fillRect(centerX - 50, toY(10), 100, ceilY - toY(10));
+
+                    // Rope
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, ceilY);
+                    ctx.lineTo(centerX, toY(2));
+                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = strokeColor;
+                    ctx.stroke();
+
+                    // Pulley Wheel
+                    ctx.beginPath();
+                    ctx.arc(centerX, toY(2), 30, 0, Math.PI * 2);
+                    ctx.fillStyle = objectColor;
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Inner
+                    ctx.beginPath();
+                    ctx.arc(centerX, toY(2), 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fff';
+                    ctx.fill();
+                    ctx.stroke();
+
+                } else if (scenario === 'landing') {
+                    // Ground
+                    const groundY = toY(-2);
+                    ctx.fillStyle = wallColor;
+                    ctx.fillRect(0, groundY, w, h - groundY);
+                    ctx.beginPath();
+                    ctx.moveTo(0, groundY);
+                    ctx.lineTo(w, groundY);
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = strokeColor;
+                    ctx.stroke();
+
+                    // Strut
+                    ctx.fillStyle = objectColor;
+                    const wheelX = toX(0);
+                    ctx.fillRect(wheelX - 10, toY(4), 20, toY(-1) - toY(4)); // Main strut
+                    ctx.strokeRect(wheelX - 10, toY(4), 20, toY(-1) - toY(4));
+
+                    // Wheel
+                    ctx.beginPath();
+                    ctx.arc(wheelX, toY(-1), 40, 0, Math.PI * 2);
+                    ctx.fillStyle = '#334155';
+                    ctx.fill();
+                }
+
+                ctx.restore();
+            },
+
             displayEngineering: () => {
                 const ctx = app.state.context;
                 let html = '';
 
                 const contexts = {
-                    truss: {
-                        title: '🏗️ Truss Joint Analysis',
-                        desc: 'Forces at pin joints must be in equilibrium. Find member forces (tension/compression) by solving ΣFx=0, ΣFy=0. Method of joints uses force equilibrium at each node.',
-                        example: 'At a truss joint, all forces must sum to zero for static equilibrium.'
+                    bracket: {
+                        title: '🔩 Wall Bracket Analysis',
+                        desc: 'A structural bracket mounted to a rigid wall. Forces applied at the pivot point must be supported by the mounting bolts. Calculate reaction forces to ensure the bracket doesn\'t shear off.',
+                        example: 'Ensure the resultant force doesn\'t exceed the shear strength of the bolts.'
                     },
                     beam: {
                         title: '🏢 Beam Support Reactions',
